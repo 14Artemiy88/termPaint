@@ -14,7 +14,7 @@ var symbols = map[string]pixel{
 	"3,5": {X: 3, Y: 5, symbol: "┏"}, "5,5": {X: 5, Y: 5, symbol: "┣"}, "7,5": {X: 7, Y: 5, symbol: "┳"}, "9,5": {X: 9, Y: 5, symbol: "━"}, "11,5": {X: 11, Y: 5, symbol: "┓"},
 	"3,7": {X: 3, Y: 7, symbol: "┗"}, "5,7": {X: 5, Y: 7, symbol: "┫"}, "7,7": {X: 7, Y: 7, symbol: "┻"}, "9,7": {X: 9, Y: 7, symbol: "┃"}, "11,7": {X: 11, Y: 7, symbol: "┛"}, "13,7": {X: 13, Y: 7, symbol: "╋"},
 	"3,9": {X: 3, Y: 9, symbol: "╭"}, "5,9": {X: 5, Y: 9, symbol: "╮"}, "7,9": {X: 7, Y: 9, symbol: "╯"}, "9,9": {X: 9, Y: 9, symbol: "╰"},
-	"3,11": {X: 3, Y: 11, symbol: "░"}, "5,15": {X: 5, Y: 11, symbol: "▒"}, "7,15": {X: 7, Y: 11, symbol: "▓"}, "9,15": {X: 9, Y: 11, symbol: "█"},
+	"3,11": {X: 3, Y: 11, symbol: "░"}, "5,11": {X: 5, Y: 11, symbol: "▒"}, "7,11": {X: 7, Y: 11, symbol: "▓"}, "9,11": {X: 9, Y: 11, symbol: "█"},
 }
 
 var colors = map[string]pixel{
