@@ -6,3 +6,14 @@ Drawing in the terminal
 ![2023-07-09_12-02.png](screenshots/2023-07-09_12-02.png)
 
 ![menu.png](screenshots/menu.png)   ![helpMenu.png](screenshots/helpMenu.png)
+
+
+## Requirements
+```agsl
+go 1.20
+```
+
+## Installation
+```bash
+go build
+```
