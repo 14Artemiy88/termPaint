@@ -63,7 +63,9 @@ var menu = []menuItem{
 		end:   "┤",
 		item: []string{
 			"Symbols - Click to select symbol",
-			"Colors  - Scroll to change color",
+			"Colors  - Hover and scroll to",
+			"          change color",
+			"          or input number",
 		},
 	},
 }

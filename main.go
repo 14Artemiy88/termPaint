@@ -10,16 +10,19 @@ import (
 )
 
 type screen struct {
-	X        int
-	Y        int
-	columns  int
-	rows     int
-	pixel    string
-	pixels   []pixel
-	color    clr
-	showMenu bool
-	showHelp bool
-	save     bool
+	X          int
+	Y          int
+	columns    int
+	rows       int
+	pixel      string
+	pixels     []pixel
+	color      clr
+	showMenu   bool
+	showHelp   bool
+	save       bool
+	inputLock  bool
+	input      string
+	inputColor string
 }
 
 type clr struct {
@@ -68,12 +71,36 @@ func (s screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			s.showHelp = !s.showHelp
 
 		case tea.KeyRunes:
-			s.pixel = string(msg.Runes)
+			if s.showMenu && s.inputLock {
+				if _, err := strconv.Atoi(string(msg.Runes)); err == nil {
+					s.input += string(msg.Runes)
+				}
+			} else {
+				s.pixel = string(msg.Runes)
+			}
 		}
 
 	case tea.MouseMsg:
 		switch msg.Type {
 		case tea.MouseMotion:
+			color, ok := colors[strconv.Itoa(msg.X)+","+strconv.Itoa(msg.Y)]
+			if ok {
+				s.inputLock = true
+				s.inputColor = color.symbol
+			} else {
+				s.inputLock = false
+				if len(s.input) > 0 {
+					switch s.inputColor {
+					case "R":
+						s.color.R = setColor(s.input)
+					case "G":
+						s.color.G = setColor(s.input)
+					case "B":
+						s.color.B = setColor(s.input)
+					}
+				}
+				s.input = ""
+			}
 			xMin := 0
 			if s.showMenu {
 				xMin = menuWidth
@@ -130,6 +157,15 @@ func (s screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	return s, nil
+}
+
+func setColor(color string) int {
+	c, _ := strconv.Atoi(color)
+	if c < 255 {
+		return c
+	}
+
+	return 255
 }
 
 func decrease(color int) int {
