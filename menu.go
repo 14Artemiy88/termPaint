@@ -51,9 +51,9 @@ var menu = []menuItem{
 		width: helpWidth,
 		end:   "┤",
 		item: []string{
-			"Left click   - Draw",
-			"Right click  - Erase",
-			"Middle click - Clear screen",
+			"Left   - Draw",
+			"Right  - Erase",
+			"Middle - Clear screen",
 		},
 	},
 	{
