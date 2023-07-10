@@ -48,7 +48,6 @@ func drawSymbolMenu(s screen, screen [][]string) [][]string {
 func drawColorMenu(s screen, screen [][]string) [][]string {
 	str := "Color " + strings.Repeat("─", menuWidth-2-len("Color ")) + "┤"
 	drawString(0, 13, str, screen)
-	var Y int
 	for y, line := range colors {
 		for x, color := range line {
 			drawString(x, y, strconv.Itoa(s.color[color]), screen)
@@ -61,14 +60,13 @@ func drawColorMenu(s screen, screen [][]string) [][]string {
 				screen[y][x] = fgRgb(0, 0, s.color[color], "█")
 			}
 		}
-		Y = y
 	}
-	screen[Y+2][3] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
-	screen[Y+2][4] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
-	screen[Y+2][5] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
-	screen[Y+3][3] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
-	screen[Y+3][4] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
-	screen[Y+3][5] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
+	screen[21][3] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
+	screen[21][4] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
+	screen[21][5] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
+	screen[22][3] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
+	screen[22][4] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
+	screen[22][5] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
 
 	return screen
 }

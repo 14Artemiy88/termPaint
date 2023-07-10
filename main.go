@@ -105,7 +105,10 @@ func (s screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case tea.MouseLeft:
 			if s.showMenu && msg.X < menuWidth {
-				s.pixel = symbols[msg.Y][msg.X]
+				symbol, ok := symbols[msg.Y][msg.X]
+				if ok {
+					s.pixel = symbol
+				}
 			} else {
 				s.pixels = append(s.pixels, pixel{X: msg.X, Y: msg.Y, symbol: fgRgb(s.color["R"], s.color["G"], s.color["B"], s.pixel)})
 			}
