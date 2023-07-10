@@ -16,69 +16,10 @@ var symbols = map[int]map[int]string{
 	9:  {3: "╭", 5: "╮", 7: "╯", 9: "╰"},
 	11: {3: "░", 5: "▒", 7: "▓", 9: "█"},
 }
-var colors = map[string]pixel{
-	"3,15": {X: 3, Y: 15, symbol: "R"},
-	"3,17": {X: 3, Y: 17, symbol: "G"},
-	"3,19": {X: 3, Y: 19, symbol: "B"},
-}
-
-type menuItem struct {
-	Y     int
-	width int
-	title string
-	item  []string
-	end   string
-}
-
-var menu = []menuItem{
-	{
-		Y:     0,
-		title: "Keys",
-		width: helpWidth,
-		end:   "┐",
-		item: []string{
-			"ESC      - Exit",
-			"Tab      - Menu",
-			"Ctrl+S   - Save in txt file",
-			"Enter    - Show this help menu",
-			"Any char - Set this symbol",
-		},
-	},
-	{
-		Y:     7,
-		title: "Mouse",
-		width: helpWidth,
-		end:   "┤",
-		item: []string{
-			"Left   - Draw",
-			"Right  - Erase",
-			"Middle - Clear screen",
-		},
-	},
-	{
-		Y:     12,
-		title: "Menu",
-		width: helpWidth,
-		end:   "┤",
-		item: []string{
-			"Symbols - Click to select symbol",
-			"Colors  - Hover and scroll to",
-			"          change color",
-			"          or input number",
-		},
-	},
-}
-
-func (m menuItem) drawMenuItem(board [][]string) [][]string {
-	var str string
-	str = m.title + " " + strings.Repeat("─", helpWidth-3-len(m.title)) + m.end
-	drawString(0, m.Y, str, board)
-	for k, i := range m.item {
-		str = i
-		drawString(1, m.Y+1+k, str, board)
-	}
-
-	return board
+var colors = map[int]map[int]string{
+	15: {3: "R"},
+	17: {3: "G"},
+	19: {3: "B"},
 }
 
 func drawMenu(s screen, board [][]string) [][]string {
@@ -97,7 +38,7 @@ func drawSymbolMenu(s screen, board [][]string) [][]string {
 	drawString(0, 0, str, board)
 	for y, line := range symbols {
 		for x, symbol := range line {
-			board[y][x] = fgRgb(s.color.R, s.color.G, s.color.B, symbol)
+			board[y][x] = fgRgb(s.color["R"], s.color["G"], s.color["B"], symbol)
 		}
 	}
 
@@ -107,26 +48,25 @@ func drawSymbolMenu(s screen, board [][]string) [][]string {
 func drawColorMenu(s screen, board [][]string) [][]string {
 	str := "Color " + strings.Repeat("─", menuWidth-2-len("Color ")) + "┤"
 	drawString(0, 13, str, board)
-	for _, c := range colors {
-		switch c.symbol {
-		case "R":
-			drawString(c.X, c.Y, strconv.Itoa(s.color.R), board)
-			board[c.Y][c.X] = fgRgb(s.color.R, 0, 0, "█")
-		case "G":
-			drawString(c.X, c.Y, strconv.Itoa(s.color.G), board)
-			board[c.Y][c.X] = fgRgb(0, s.color.G, 0, "█")
-		case "B":
-			drawString(c.X, c.Y, strconv.Itoa(s.color.B), board)
-			board[c.Y][c.X] = fgRgb(0, 0, s.color.B, "█")
+	for y, line := range colors {
+		for x, color := range line {
+			drawString(x, y, strconv.Itoa(s.color[color]), board)
+			switch color {
+			case "R":
+				board[y][x] = fgRgb(s.color[color], 0, 0, "█")
+			case "G":
+				board[y][x] = fgRgb(0, s.color[color], 0, "█")
+			case "B":
+				board[y][x] = fgRgb(0, 0, s.color[color], "█")
+			}
 		}
-
 	}
-	board[21][3] = fgRgb(s.color.R, s.color.G, s.color.B, "█")
-	board[21][4] = fgRgb(s.color.R, s.color.G, s.color.B, "█")
-	board[21][5] = fgRgb(s.color.R, s.color.G, s.color.B, "█")
-	board[22][3] = fgRgb(s.color.R, s.color.G, s.color.B, "█")
-	board[22][4] = fgRgb(s.color.R, s.color.G, s.color.B, "█")
-	board[22][5] = fgRgb(s.color.R, s.color.G, s.color.B, "█")
+	board[21][3] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
+	board[21][4] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
+	board[21][5] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
+	board[22][3] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
+	board[22][4] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
+	board[22][5] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
 
 	return board
 }
@@ -135,15 +75,6 @@ func drawString(X int, Y int, val string, board [][]string) [][]string {
 	r := strings.Split(val, "")
 	for k, i := range r {
 		board[Y][X+2+k] = i
-	}
-
-	return board
-}
-
-func drawHelpMenu(s screen, board [][]string) [][]string {
-	clearMenu(s, board, helpWidth)
-	for _, mi := range menu {
-		mi.drawMenuItem(board)
 	}
 
 	return board

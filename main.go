@@ -16,7 +16,7 @@ type screen struct {
 	rows       int
 	pixel      string
 	pixels     []pixel
-	color      clr
+	color      map[string]int
 	showMenu   bool
 	showHelp   bool
 	save       bool
@@ -25,11 +25,6 @@ type screen struct {
 	inputColor string
 }
 
-type clr struct {
-	R int
-	G int
-	B int
-}
 type pixel struct {
 	X      int
 	Y      int
@@ -39,7 +34,7 @@ type pixel struct {
 func main() {
 	p := tea.NewProgram(screen{
 		pixel: "#",
-		color: clr{R: 255, G: 255, B: 255},
+		color: map[string]int{"R": 255, "G": 255, "B": 255},
 	}, tea.WithAltScreen(), tea.WithMouseAllMotion())
 
 	if _, err := p.Run(); err != nil {
@@ -83,21 +78,14 @@ func (s screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.MouseMsg:
 		switch msg.Type {
 		case tea.MouseMotion:
-			color, ok := colors[strconv.Itoa(msg.X)+","+strconv.Itoa(msg.Y)]
+			color, ok := colors[msg.Y][msg.X]
 			if ok {
 				s.inputLock = true
-				s.inputColor = color.symbol
+				s.inputColor = color
 			} else {
 				s.inputLock = false
 				if len(s.input) > 0 {
-					switch s.inputColor {
-					case "R":
-						s.color.R = setColor(s.input)
-					case "G":
-						s.color.G = setColor(s.input)
-					case "B":
-						s.color.B = setColor(s.input)
-					}
+					s.color[s.inputColor] = setColor(s.input)
 				}
 				s.input = ""
 			}
@@ -119,7 +107,7 @@ func (s screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if s.showMenu && msg.X < menuWidth {
 				s.pixel = symbols[msg.Y][msg.X]
 			} else {
-				s.pixels = append(s.pixels, pixel{X: msg.X, Y: msg.Y, symbol: fgRgb(s.color.R, s.color.G, s.color.B, s.pixel)})
+				s.pixels = append(s.pixels, pixel{X: msg.X, Y: msg.Y, symbol: fgRgb(s.color["R"], s.color["G"], s.color["B"], s.pixel)})
 			}
 
 		case tea.MouseRight:
@@ -129,26 +117,12 @@ func (s screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			s.pixels = []pixel{}
 
 		case tea.MouseWheelDown:
-			color := colors[strconv.Itoa(msg.X)+","+strconv.Itoa(msg.Y)]
-			switch color.symbol {
-			case "R":
-				s.color.R = decrease(s.color.R)
-			case "G":
-				s.color.G = decrease(s.color.G)
-			case "B":
-				s.color.B = decrease(s.color.B)
-			}
+			color := colors[msg.Y][msg.X]
+			s.color[color] = decrease(s.color[color])
 
 		case tea.MouseWheelUp:
-			color := colors[strconv.Itoa(msg.X)+","+strconv.Itoa(msg.Y)]
-			switch color.symbol {
-			case "R":
-				s.color.R = increase(s.color.R)
-			case "G":
-				s.color.G = increase(s.color.G)
-			case "B":
-				s.color.B = increase(s.color.B)
-			}
+			color := colors[msg.Y][msg.X]
+			s.color[color] = increase(s.color[color])
 		}
 
 	case tea.WindowSizeMsg:
@@ -200,7 +174,7 @@ func (s screen) View() string {
 		screen[p.Y][p.X] = p.symbol
 	}
 
-	screen[s.Y][s.X] = fgRgb(s.color.R, s.color.G, s.color.B, s.pixel)
+	screen[s.Y][s.X] = fgRgb(s.color["R"], s.color["G"], s.color["B"], s.pixel)
 
 	if s.showMenu {
 		drawMenu(s, screen)
@@ -239,7 +213,7 @@ func save(image string) {
 	defer func(f *os.File) {
 		err := f.Close()
 		if err != nil {
-
+			log.Fatal(err)
 		}
 	}(f)
 	_, err = f.WriteString(image)
