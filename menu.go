@@ -8,15 +8,14 @@ import (
 const menuWidth = 15
 const helpWidth = 37
 
-var symbols = map[string]pixel{
-	"3,1": {X: 3, Y: 1, symbol: "┌"}, "5,1": {X: 5, Y: 1, symbol: "├"}, "7,1": {X: 7, Y: 1, symbol: "┬"}, "9,1": {X: 9, Y: 1, symbol: "─"}, "11,1": {X: 11, Y: 1, symbol: "┐"},
-	"3,3": {X: 3, Y: 3, symbol: "└"}, "5,3": {X: 5, Y: 3, symbol: "┤"}, "7,3": {X: 7, Y: 3, symbol: "┴"}, "9,3": {X: 9, Y: 3, symbol: "│"}, "11,3": {X: 11, Y: 3, symbol: "┘"}, "13,3": {X: 13, Y: 3, symbol: "┼"},
-	"3,5": {X: 3, Y: 5, symbol: "┏"}, "5,5": {X: 5, Y: 5, symbol: "┣"}, "7,5": {X: 7, Y: 5, symbol: "┳"}, "9,5": {X: 9, Y: 5, symbol: "━"}, "11,5": {X: 11, Y: 5, symbol: "┓"},
-	"3,7": {X: 3, Y: 7, symbol: "┗"}, "5,7": {X: 5, Y: 7, symbol: "┫"}, "7,7": {X: 7, Y: 7, symbol: "┻"}, "9,7": {X: 9, Y: 7, symbol: "┃"}, "11,7": {X: 11, Y: 7, symbol: "┛"}, "13,7": {X: 13, Y: 7, symbol: "╋"},
-	"3,9": {X: 3, Y: 9, symbol: "╭"}, "5,9": {X: 5, Y: 9, symbol: "╮"}, "7,9": {X: 7, Y: 9, symbol: "╯"}, "9,9": {X: 9, Y: 9, symbol: "╰"},
-	"3,11": {X: 3, Y: 11, symbol: "░"}, "5,11": {X: 5, Y: 11, symbol: "▒"}, "7,11": {X: 7, Y: 11, symbol: "▓"}, "9,11": {X: 9, Y: 11, symbol: "█"},
+var symbols = map[int]map[int]string{
+	1:  {3: "┌", 5: "├", 7: "┬", 9: "─", 11: "┐"},
+	3:  {3: "└", 5: "┤", 7: "┴", 9: "│", 11: "┘", 13: "┼"},
+	5:  {3: "┏", 5: "┣", 7: "┳", 9: "━", 11: "┓"},
+	7:  {3: "┗", 5: "┫", 7: "┻", 9: "┃", 11: "┛", 13: "╋"},
+	9:  {3: "╭", 5: "╮", 7: "╯", 9: "╰"},
+	11: {3: "░", 5: "▒", 7: "▓", 9: "█"},
 }
-
 var colors = map[string]pixel{
 	"3,15": {X: 3, Y: 15, symbol: "R"},
 	"3,17": {X: 3, Y: 17, symbol: "G"},
@@ -96,8 +95,10 @@ func drawMenu(s screen, board [][]string) [][]string {
 func drawSymbolMenu(s screen, board [][]string) [][]string {
 	str := "Symbol " + strings.Repeat("─", menuWidth-2-len("symbol ")) + "┐"
 	drawString(0, 0, str, board)
-	for _, symbol := range symbols {
-		board[symbol.Y][symbol.X] = fgRgb(s.color.R, s.color.G, s.color.B, symbol.symbol)
+	for y, line := range symbols {
+		for x, symbol := range line {
+			board[y][x] = fgRgb(s.color.R, s.color.G, s.color.B, symbol)
+		}
 	}
 
 	return board

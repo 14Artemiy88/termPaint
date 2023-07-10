@@ -117,7 +117,7 @@ func (s screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case tea.MouseLeft:
 			if s.showMenu && msg.X < menuWidth {
-				s.pixel = symbols[strconv.Itoa(msg.X)+","+strconv.Itoa(msg.Y)].symbol
+				s.pixel = symbols[msg.Y][msg.X]
 			} else {
 				s.pixels = append(s.pixels, pixel{X: msg.X, Y: msg.Y, symbol: fgRgb(s.color.R, s.color.G, s.color.B, s.pixel)})
 			}
@@ -236,7 +236,12 @@ func save(image string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer f.Close()
+	defer func(f *os.File) {
+		err := f.Close()
+		if err != nil {
+
+		}
+	}(f)
 	_, err = f.WriteString(image)
 	if err != nil {
 		log.Fatal(err)
