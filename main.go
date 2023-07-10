@@ -183,19 +183,19 @@ func (s screen) View() string {
 		drawHelpMenu(s, screen)
 	}
 
-	var boardString string
+	var screenString string
 	for i, line := range screen {
-		boardString += strings.Join(line, "")
+		screenString += strings.Join(line, "")
 		if i < len(screen)-1 {
-			boardString += "\n"
+			screenString += "\n"
 		}
 	}
 	if s.save {
-		save(boardString)
+		save(screenString)
 		s.save = false
 	}
 
-	return boardString
+	return screenString
 }
 
 type tickMsg time.Time
