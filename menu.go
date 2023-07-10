@@ -22,7 +22,7 @@ var colors = map[int]map[int]string{
 	19: {3: "B"},
 }
 
-func drawMenu(s screen, screen [][]string) [][]string {
+func drawMenu(s *screen, screen [][]string) [][]string {
 	clearMenu(s, screen, menuWidth)
 	drawSymbolMenu(s, screen)
 	drawColorMenu(s, screen)
@@ -33,7 +33,7 @@ func drawMenu(s screen, screen [][]string) [][]string {
 	return screen
 }
 
-func drawSymbolMenu(s screen, screen [][]string) [][]string {
+func drawSymbolMenu(s *screen, screen [][]string) [][]string {
 	str := "Symbol " + strings.Repeat("─", menuWidth-2-len("symbol ")) + "┐"
 	drawString(0, 0, str, screen)
 	for y, line := range symbols {
@@ -45,7 +45,7 @@ func drawSymbolMenu(s screen, screen [][]string) [][]string {
 	return screen
 }
 
-func drawColorMenu(s screen, screen [][]string) [][]string {
+func drawColorMenu(s *screen, screen [][]string) [][]string {
 	str := "Color " + strings.Repeat("─", menuWidth-2-len("Color ")) + "┤"
 	drawString(0, 13, str, screen)
 	for y, line := range colors {
@@ -80,7 +80,7 @@ func drawString(X int, Y int, val string, screen [][]string) [][]string {
 	return screen
 }
 
-func clearMenu(s screen, screen [][]string, width int) [][]string {
+func clearMenu(s *screen, screen [][]string, width int) [][]string {
 	for i := 0; i < s.rows; i++ {
 		for j := 0; j < width; j++ {
 			screen[i][j] = " "

@@ -32,7 +32,7 @@ type pixel struct {
 }
 
 func main() {
-	p := tea.NewProgram(screen{
+	p := tea.NewProgram(&screen{
 		pixel: "#",
 		color: map[string]int{"R": 255, "G": 255, "B": 255},
 	}, tea.WithAltScreen(), tea.WithMouseAllMotion())
@@ -46,7 +46,7 @@ func (s screen) Init() tea.Cmd {
 	return tick
 }
 
-func (s screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (s *screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 
 	case tea.KeyMsg:
@@ -60,6 +60,8 @@ func (s screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case tea.KeyCtrlS:
 			s.save = true
+			s.showMenu = false
+			s.showHelp = false
 
 		case tea.KeyEnter:
 			s.showMenu = false
@@ -161,7 +163,7 @@ func increase(color int) int {
 	return color
 }
 
-func (s screen) View() string {
+func (s *screen) View() string {
 	if s.rows == 0 {
 		return ""
 	}
@@ -177,7 +179,9 @@ func (s screen) View() string {
 		screen[p.Y][p.X] = p.symbol
 	}
 
-	screen[s.Y][s.X] = fgRgb(s.color["R"], s.color["G"], s.color["B"], s.pixel)
+	if !s.save {
+		screen[s.Y][s.X] = fgRgb(s.color["R"], s.color["G"], s.color["B"], s.pixel)
+	}
 
 	if s.showMenu {
 		drawMenu(s, screen)
@@ -194,8 +198,8 @@ func (s screen) View() string {
 		}
 	}
 	if s.save {
-		save(screenString)
 		s.save = false
+		saveImage(screenString)
 	}
 
 	return screenString
@@ -208,8 +212,8 @@ func tick() tea.Msg {
 	return tickMsg{}
 }
 
-func save(image string) {
-	f, err := os.Create(time.DateTime + ".txt")
+func saveImage(image string) {
+	f, err := os.Create(time.Now().Format("termPaint_01-02-2006_15:04:05.txt"))
 	if err != nil {
 		log.Fatal(err)
 	}

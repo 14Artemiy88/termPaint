@@ -45,7 +45,7 @@ var menu = []menuItem{
 	},
 }
 
-func drawHelpMenu(s screen, screen [][]string) [][]string {
+func drawHelpMenu(s *screen, screen [][]string) [][]string {
 	clearMenu(s, screen, helpWidth)
 	for _, mi := range menu {
 		mi.drawMenuItem(screen)
