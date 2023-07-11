@@ -18,12 +18,13 @@ var menu = []menuItem{
 			"ESC      - Exit",
 			"Tab      - Menu",
 			"Ctrl+S   - Save in txt file",
+			"Ctrl+O   - Load Image",
 			"Enter    - Show this help menu",
 			"Any char - Set this symbol",
 		},
 	},
 	{
-		Y:     7,
+		Y:     8,
 		title: "Mouse",
 		end:   "┤",
 		item: []string{
@@ -33,7 +34,7 @@ var menu = []menuItem{
 		},
 	},
 	{
-		Y:     12,
+		Y:     13,
 		title: "Menu",
 		end:   "┤",
 		item: []string{

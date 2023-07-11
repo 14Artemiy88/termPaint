@@ -43,7 +43,6 @@ func main() {
 		cursor:      "#",
 		cursorStore: "#",
 		color:       map[string]int{"R": 255, "G": 255, "B": 255},
-		showFile:    true,
 	}, tea.WithAltScreen(), tea.WithMouseAllMotion())
 
 	if _, err := p.Run(); err != nil {
