@@ -6,7 +6,7 @@ import (
 )
 
 const menuWidth = 15
-const helpWidth = 37
+const pointer = "❯"
 
 var symbols = map[int]map[int]string{
 	1:  {3: "┌", 5: "├", 7: "┬", 9: "─", 11: "┐"},
