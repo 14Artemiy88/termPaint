@@ -9,26 +9,33 @@ import (
 	"time"
 )
 
-const fileWidth = 40
-
 func fileList(s *screen, screen [][]string) [][]string {
-	clearMenu(s, screen, fileWidth)
 	files, err := os.ReadDir("./")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	y := 1
+	width := 0
 	filelist := make(map[int]string)
 	for _, file := range files {
 		fileName := file.Name()
+		if len(fileName) > width {
+			width = len(fileName)
+		}
 		if filepath.Ext(fileName) == ".txt" {
 			filelist[y] = fileName
-			drawString(1, y, fileName, screen)
 			y++
 		}
 	}
 	s.fileList = filelist
+	s.fileListWidth = width + 4
+	clearMenu(s, screen, s.fileListWidth)
+	str := "File " + strings.Repeat("─", s.fileListWidth-2-len("File ")) + "┐"
+	drawString(0, 0, str, screen)
+	for y, fileName := range filelist {
+		drawString(1, y, fileName, screen)
+	}
 
 	return screen
 }

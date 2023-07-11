@@ -10,22 +10,23 @@ import (
 )
 
 type screen struct {
-	X           int
-	Y           int
-	columns     int
-	rows        int
-	cursor      string
-	pixels      []pixel
-	color       map[string]int
-	showMenu    bool
-	showHelp    bool
-	showFile    bool
-	fileList    map[int]string
-	save        bool
-	inputLock   bool
-	input       string
-	inputColor  string
-	cursorStore string
+	X             int
+	Y             int
+	columns       int
+	rows          int
+	cursor        string
+	pixels        []pixel
+	color         map[string]int
+	showMenu      bool
+	showHelp      bool
+	showFile      bool
+	fileList      map[int]string
+	fileListWidth int
+	save          bool
+	inputLock     bool
+	input         string
+	inputColor    string
+	cursorStore   string
 }
 
 type pixel struct {
@@ -105,7 +106,7 @@ func (s *screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				xMin = helpWidth
 			}
 			if s.showFile {
-				xMin = fileWidth
+				xMin = s.fileListWidth
 			}
 			if s.showMenu && msg.X <= xMin {
 				s.cursor = " "
@@ -160,7 +161,7 @@ func (s *screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					s.cursorStore = symbol
 					s.cursor = symbol
 				}
-			} else if s.showFile && msg.X < fileWidth {
+			} else if s.showFile && msg.X < s.fileListWidth {
 				s.showFile = false
 				file, ok := s.fileList[msg.Y]
 				if ok {
