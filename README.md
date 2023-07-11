@@ -16,7 +16,7 @@ Drawing in the terminal
 
 ## Menus
 
-![menu.png](screenshots/menu.png)   ![helpMenu.png](screenshots/helpMenu.png)![file.png](screenshots/file.png)
+![menu.png](screenshots/menu.png)   ![helpMenu.png](screenshots/helpMenu.png)   ![file.png](screenshots/file.png)
 
 
 ## Requirements
