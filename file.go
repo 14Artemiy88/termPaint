@@ -75,6 +75,9 @@ func (s *screen) load(screenStrong string) {
 		x := 0
 		skip := 0
 		for _, symbol := range line {
+			if x >= s.columns-1 {
+				break
+			}
 			if skip > 0 {
 				skip--
 				continue
@@ -100,6 +103,8 @@ func (s *screen) load(screenStrong string) {
 			str += symbol
 		}
 		x++
-		s.pixels = append(s.pixels, pixel{X: x, Y: y, symbol: str})
+		if x < s.columns {
+			s.pixels = append(s.pixels, pixel{X: x, Y: y, symbol: str})
+		}
 	}
 }
