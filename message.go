@@ -2,7 +2,7 @@ package main
 
 import "strings"
 
-const liveTime = 300
+const liveTime = 200
 
 type message struct {
 	liveTime int

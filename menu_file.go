@@ -63,41 +63,45 @@ func saveImage(image string, s *screen) {
 }
 
 func (s *screen) loadImage(screenStrong string) {
-	if strings.Contains(screenStrong, "\u001B") {
-		loadColored(screenStrong, s)
-	} else {
-		loadWhite(screenStrong, s)
-	}
-}
-
-func loadWhite(screenStrong string, s *screen) {
 	s.pixels = []pixel{}
 	lines := strings.Split(screenStrong, "\n")
 	rows := len(lines)
 	errors := make(map[string]string, 2)
 	if rows > s.rows {
 		errors["rows"] = fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, s.rows)
-		rows = s.rows
 	}
-
-	for y := 0; y < rows; y++ {
-		line := strings.Split(lines[y], "")
-		for x, symbol := range line {
-			s.pixels = append(s.pixels, pixel{X: x, Y: y, symbol: symbol})
+	if strings.Contains(screenStrong, "\u001B") {
+		loadColored(lines, rows, s, errors)
+	} else {
+		loadWhite(lines, rows, s, errors)
+	}
+	if len(errors) > 0 {
+		for _, i := range errors {
+			s.setMessage(i)
 		}
 	}
 }
 
-func loadColored(screenStrong string, s *screen) {
-	s.pixels = []pixel{}
-	lines := strings.Split(screenStrong, "\n")
-	rows := len(lines)
-	errors := make(map[string]string, 2)
-	if rows > s.rows {
-		errors["rows"] = fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, s.rows)
-		rows = s.rows
+func loadWhite(lines []string, rows int, s *screen, errors map[string]string) map[string]string {
+	for y := 0; y < rows; y++ {
+		line := strings.Split(lines[y], "")
+		var maxX int
+		for x, symbol := range line {
+			if x >= s.columns-1 {
+				if maxX == 0 {
+					maxX = x
+					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, s.columns)
+				}
+				maxX++
+			}
+			s.pixels = append(s.pixels, pixel{X: x, Y: y, symbol: symbol})
+		}
 	}
 
+	return errors
+}
+
+func loadColored(lines []string, rows int, s *screen, errors map[string]string) map[string]string {
 	for y := 0; y < rows; y++ {
 		line := strings.Split(lines[y], "")
 		var str string
@@ -108,9 +112,9 @@ func loadColored(screenStrong string, s *screen) {
 			if x >= s.columns-1 {
 				if maxX == 0 {
 					maxX = x
+					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, s.columns)
 				}
 				maxX++
-				continue
 			}
 			if skip > 0 {
 				skip--
@@ -133,20 +137,17 @@ func loadColored(screenStrong string, s *screen) {
 				x++
 				continue
 			}
+			if len(str) == 0 {
+				x++
+				pixel := pixel{X: x, Y: y, symbol: symbol}
+				s.pixels = append(s.pixels, pixel)
+				continue
+			}
 			str += symbol
 		}
 		x++
-		if x < s.columns {
-			s.pixels = append(s.pixels, pixel{X: x, Y: y, symbol: str})
-		}
-		if maxX > 0 {
-			errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, s.columns)
-		}
+		s.pixels = append(s.pixels, pixel{X: x, Y: y, symbol: str})
 	}
 
-	if len(errors) > 0 {
-		for _, i := range errors {
-			s.setMessage(i)
-		}
-	}
+	return errors
 }
