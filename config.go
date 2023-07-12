@@ -19,7 +19,7 @@ type Config struct {
 }
 
 func initConfig() {
-	viper.SetConfigFile("./config.json")
+	viper.SetConfigFile("./config.yaml")
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading cfg file, %s", err)
 	}
