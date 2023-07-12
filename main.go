@@ -101,9 +101,7 @@ func (s *screen) View() string {
 	}
 
 	for _, p := range s.pixels {
-		if p.Y < len(screen) && p.X < len(screen[p.Y]) {
-			screen[p.Y][p.X] = p.symbol
-		}
+		setByKeys(p.X, p.Y, p.symbol, screen)
 	}
 	if s.showMenu {
 		drawMenu(s, screen)
@@ -150,4 +148,16 @@ func fgRgb(r int, g int, b int, symbol string) string {
 		return symbol
 	}
 	return "\033[38;2;" + strconv.Itoa(r) + ";" + strconv.Itoa(g) + ";" + strconv.Itoa(b) + "m" + symbol + reset
+}
+
+func isset(arr [][]string, first int, second int) bool {
+	return first < len(arr) && second < len(arr[first])
+}
+
+func setByKeys(X int, Y int, val string, screen [][]string) [][]string {
+	if isset(screen, Y, X) {
+		screen[Y][X] = val
+	}
+
+	return screen
 }

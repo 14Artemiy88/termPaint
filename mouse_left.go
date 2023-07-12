@@ -16,10 +16,9 @@ func mouseLeft(msg tea.MouseMsg, s *screen) {
 		}
 	} else if s.showFile && msg.X < s.fileListWidth {
 		if file, ok := s.fileList[msg.Y]; ok {
-			content, err := os.ReadFile(file)
+			content, err := os.ReadFile(s.dir + file)
 			if err != nil {
 				s.dir += file
-				//s.setMessage(err.Error())
 			} else {
 				s.showFile = false
 			}

@@ -8,10 +8,13 @@ import (
 	"time"
 )
 
+const fileX = 2
+
 func fileList(s *screen, screen [][]string, path string) [][]string {
 	files, err := os.ReadDir(path)
 	if err != nil {
 		s.setMessage(err.Error())
+		s.dir = "./"
 	}
 
 	var width int
@@ -30,21 +33,21 @@ func fileList(s *screen, screen [][]string, path string) [][]string {
 			fileList = append(fileList, fileName)
 		}
 	}
-	s.fileListWidth = width + 4
+	s.fileListWidth = width + 6
 	clearMenu(s, screen, s.fileListWidth)
 	str := "File " + strings.Repeat("─", s.fileListWidth-len("File ")) + "┐"
 	drawString(0, 0, str, screen)
 	s.fileList = make(map[int]string, len(fileList)+len(dirList)+1)
-	s.fileList[2] = "../"
-	drawString(2, 2, "[..]", screen)
-	Y := 3
+	s.fileList[1] = "../"
+	drawString(fileX, 1, "..", screen)
+	Y := 2
 	for _, dirName := range dirList {
-		drawString(2, Y, fmt.Sprintf("[%v]", dirName), screen)
+		drawString(fileX, Y, fmt.Sprintf("🗀 %v", dirName), screen)
 		s.fileList[Y] = dirName + "/"
 		Y++
 	}
 	for y, fileName := range fileList {
-		drawString(2, Y+y, fileName, screen)
+		drawString(fileX, Y+y, fmt.Sprintf("🖹 %v", fileName), screen)
 		s.fileList[Y+y] = fileName
 	}
 
@@ -140,7 +143,6 @@ func loadColored(lines []string, rows int, s *screen, errors map[string]string) 
 				if len(str) > 0 {
 					pixel := pixel{X: x, Y: y, symbol: str + reset}
 					s.pixels = append(s.pixels, pixel)
-					fmt.Println(x, y, pixel)
 					skip = len(reset) - 1
 					str = ""
 					continue

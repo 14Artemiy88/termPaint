@@ -27,7 +27,7 @@ const symbolX = 2
 
 func drawMenu(s *screen, screen [][]string) [][]string {
 	clearMenu(s, screen, menuWidth)
-	drawSymbolMenu(s, screen)
+	drawSymbolMenu(screen)
 	drawColorMenu(s, screen)
 	str := "Help " + strings.Repeat("─", menuWidth-len("Help ")) + "┤"
 	drawString(0, s.rows-2, str, screen)
@@ -36,12 +36,12 @@ func drawMenu(s *screen, screen [][]string) [][]string {
 	return screen
 }
 
-func drawSymbolMenu(s *screen, screen [][]string) [][]string {
+func drawSymbolMenu(screen [][]string) [][]string {
 	str := "Symbol " + strings.Repeat("─", menuWidth-len("symbol ")) + "┐"
 	drawString(0, 0, str, screen)
 	for y, line := range symbols {
 		for x, symbol := range line {
-			screen[y][x] = fgRgb(s.color["R"], s.color["G"], s.color["B"], symbol)
+			setByKeys(x, y, symbol, screen)
 		}
 	}
 
@@ -56,39 +56,39 @@ func drawColorMenu(s *screen, screen [][]string) [][]string {
 		drawString(3, y, strconv.Itoa(s.color[line]), screen)
 		switch line {
 		case "R":
-			screen[y][colorX] = fgRgb(s.color[line], 0, 0, "█")
+			setByKeys(colorX, y, fgRgb(s.color[line], 0, 0, "█"), screen)
 		case "G":
-			screen[y][colorX] = fgRgb(0, s.color[line], 0, "█")
+			setByKeys(colorX, y, fgRgb(0, s.color[line], 0, "█"), screen)
 		case "B":
-			screen[y][colorX] = fgRgb(0, 0, s.color[line], "█")
+			setByKeys(colorX, y, fgRgb(0, 0, s.color[line], "█"), screen)
 		}
 
 	}
-	screen[21][3] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
-	screen[21][4] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
-	screen[21][5] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
-	screen[22][3] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
-	screen[22][4] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
-	screen[22][5] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
+	setByKeys(3, 21, fgRgb(s.color["R"], s.color["G"], s.color["B"], "█"), screen)
+	setByKeys(4, 21, fgRgb(s.color["R"], s.color["G"], s.color["B"], "█"), screen)
+	setByKeys(5, 21, fgRgb(s.color["R"], s.color["G"], s.color["B"], "█"), screen)
+	setByKeys(3, 22, fgRgb(s.color["R"], s.color["G"], s.color["B"], "█"), screen)
+	setByKeys(4, 22, fgRgb(s.color["R"], s.color["G"], s.color["B"], "█"), screen)
+	setByKeys(5, 22, fgRgb(s.color["R"], s.color["G"], s.color["B"], "█"), screen)
 
 	return screen
 }
 
 func drawString(X int, Y int, val string, screen [][]string) [][]string {
 	str := strings.Split(val, "")
-	for k, i := range str {
-		screen[Y][X+k] = i
+	for k, symbol := range str {
+		setByKeys(X+k, Y, symbol, screen)
 	}
 
 	return screen
 }
 
 func clearMenu(s *screen, screen [][]string, width int) [][]string {
-	for i := 0; i < s.rows; i++ {
-		for j := 0; j < width; j++ {
-			screen[i][j] = " "
+	for y := 0; y < s.rows; y++ {
+		for x := 0; x < width; x++ {
+			setByKeys(x, y, " ", screen)
 		}
-		screen[i][width] = "│"
+		setByKeys(width, y, "│", screen)
 	}
 
 	return screen

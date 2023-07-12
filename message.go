@@ -26,11 +26,11 @@ func drawMsg(messages []message, width int, screen [][]string) [][]string {
 }
 
 func clearMessage(screen [][]string, width int, height int) [][]string {
-	for i := 0; i < height; i++ {
-		for j := 0; j < width; j++ {
-			screen[i][j] = " "
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
+			setByKeys(x, y, " ", screen)
 		}
-		screen[i][width] = "│"
+		setByKeys(width, y, "│", screen)
 	}
 	drawString(0, height, strings.Repeat("─", width)+"┘", screen)
 
