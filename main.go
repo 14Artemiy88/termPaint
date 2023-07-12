@@ -58,15 +58,15 @@ func (s *screen) Init() tea.Cmd {
 func (s *screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tickMsg:
-		var delCOunt int
+		var delCount int
 		for k, m := range s.messages {
 			if m.liveTime > 0 {
 				s.messages[k].liveTime--
 			} else {
-				delCOunt++
+				delCount++
 			}
 		}
-		s.messages = s.messages[delCOunt:]
+		s.messages = s.messages[delCount:]
 
 		return s, tick
 

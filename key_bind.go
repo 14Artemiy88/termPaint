@@ -31,6 +31,7 @@ func keyBind(msg tea.KeyMsg, s *screen) (tea.Model, tea.Cmd) {
 		s.showMenu = false
 		s.showHelp = false
 		s.showFile = false
+		s.messages = []message{}
 
 	case tea.KeyDelete:
 		if len(s.file) > 0 {
