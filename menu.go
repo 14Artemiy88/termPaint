@@ -9,12 +9,12 @@ const menuWidth = 15
 const pointer = "❯"
 
 var symbols = map[int]map[int]string{
-	1:  {3: "┌", 5: "├", 7: "┬", 9: "─", 11: "┐"},
-	3:  {3: "└", 5: "┤", 7: "┴", 9: "│", 11: "┘", 13: "┼"},
-	5:  {3: "┏", 5: "┣", 7: "┳", 9: "━", 11: "┓"},
-	7:  {3: "┗", 5: "┫", 7: "┻", 9: "┃", 11: "┛", 13: "╋"},
-	9:  {3: "╭", 5: "╮", 7: "╯", 9: "╰"},
-	11: {3: "░", 5: "▒", 7: "▓", 9: "█"},
+	1:  {symbolX: "┌", symbolX + 2: "├", symbolX + 4: "┬", symbolX + 6: "─", symbolX + 7: "┐"},
+	3:  {symbolX: "└", symbolX + 2: "┤", symbolX + 4: "┴", symbolX + 6: "│", symbolX + 7: "┘", symbolX + 9: "┼"},
+	5:  {symbolX: "┏", symbolX + 2: "┣", symbolX + 4: "┳", symbolX + 6: "━", symbolX + 7: "┓"},
+	7:  {symbolX: "┗", symbolX + 2: "┫", symbolX + 4: "┻", symbolX + 6: "┃", symbolX + 7: "┛", symbolX + 9: "╋"},
+	9:  {symbolX: "╭", symbolX + 2: "╮", symbolX + 4: "╯", symbolX + 6: "╰"},
+	11: {symbolX: "░", symbolX + 2: "▒", symbolX + 4: "▓", symbolX + 6: "█"},
 }
 var colors = map[int]string{
 	15: "R",
@@ -22,11 +22,14 @@ var colors = map[int]string{
 	19: "B",
 }
 
+const colorX = 2
+const symbolX = 2
+
 func drawMenu(s *screen, screen [][]string) [][]string {
 	clearMenu(s, screen, menuWidth)
 	drawSymbolMenu(s, screen)
 	drawColorMenu(s, screen)
-	str := "Help " + strings.Repeat("─", menuWidth-2-len("Help ")) + "┤"
+	str := "Help " + strings.Repeat("─", menuWidth-len("Help ")) + "┤"
 	drawString(0, s.rows-2, str, screen)
 	drawString(1, s.rows-1, "Press Enter", screen)
 
@@ -34,7 +37,7 @@ func drawMenu(s *screen, screen [][]string) [][]string {
 }
 
 func drawSymbolMenu(s *screen, screen [][]string) [][]string {
-	str := "Symbol " + strings.Repeat("─", menuWidth-2-len("symbol ")) + "┐"
+	str := "Symbol " + strings.Repeat("─", menuWidth-len("symbol ")) + "┐"
 	drawString(0, 0, str, screen)
 	for y, line := range symbols {
 		for x, symbol := range line {
@@ -46,18 +49,18 @@ func drawSymbolMenu(s *screen, screen [][]string) [][]string {
 }
 
 func drawColorMenu(s *screen, screen [][]string) [][]string {
-	str := "Color " + strings.Repeat("─", menuWidth-2-len("Color ")) + "┤"
+	str := "Color " + strings.Repeat("─", menuWidth-len("Color ")) + "┤"
 	drawString(0, 13, str, screen)
 	for y, line := range colors {
 
 		drawString(3, y, strconv.Itoa(s.color[line]), screen)
 		switch line {
 		case "R":
-			screen[y][3] = fgRgb(s.color[line], 0, 0, "█")
+			screen[y][colorX] = fgRgb(s.color[line], 0, 0, "█")
 		case "G":
-			screen[y][3] = fgRgb(0, s.color[line], 0, "█")
+			screen[y][colorX] = fgRgb(0, s.color[line], 0, "█")
 		case "B":
-			screen[y][3] = fgRgb(0, 0, s.color[line], "█")
+			screen[y][colorX] = fgRgb(0, 0, s.color[line], "█")
 		}
 
 	}
@@ -74,7 +77,7 @@ func drawColorMenu(s *screen, screen [][]string) [][]string {
 func drawString(X int, Y int, val string, screen [][]string) [][]string {
 	str := strings.Split(val, "")
 	for k, i := range str {
-		screen[Y][X+2+k] = i
+		screen[Y][X+k] = i
 	}
 
 	return screen

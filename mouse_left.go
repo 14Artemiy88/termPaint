@@ -2,7 +2,6 @@ package main
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
-	"log"
 	"os"
 )
 
@@ -20,7 +19,7 @@ func mouseLeft(msg tea.MouseMsg, s *screen) {
 		if file, ok := s.fileList[msg.Y]; ok {
 			content, err := os.ReadFile(file)
 			if err != nil {
-				log.Fatal(err)
+				s.setMessage(err.Error())
 			}
 			s.load(string(content))
 		}

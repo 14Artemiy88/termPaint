@@ -75,11 +75,11 @@ func drawHelpMenu(s *screen, screen [][]string) [][]string {
 
 func (m menuItem) drawMenuItem(screen [][]string) [][]string {
 	var str string
-	str = m.title + " " + strings.Repeat("─", helpWidth-3-len(m.title)) + m.end
+	str = m.title + " " + strings.Repeat("─", helpWidth-1-len(m.title)) + m.end
 	drawString(0, m.Y, str, screen)
 	for k, i := range m.item {
 		str = i
-		drawString(1, m.Y+1+k, str, screen)
+		drawString(2, m.Y+1+k, str, screen)
 	}
 
 	return screen

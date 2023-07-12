@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -12,7 +11,7 @@ import (
 func fileList(s *screen, screen [][]string) [][]string {
 	files, err := os.ReadDir("./")
 	if err != nil {
-		log.Fatal(err)
+		s.setMessage(err.Error())
 	}
 
 	y := 1
@@ -31,24 +30,24 @@ func fileList(s *screen, screen [][]string) [][]string {
 	s.fileList = filelist
 	s.fileListWidth = width + 4
 	clearMenu(s, screen, s.fileListWidth)
-	str := "File " + strings.Repeat("─", s.fileListWidth-2-len("File ")) + "┐"
+	str := "File " + strings.Repeat("─", s.fileListWidth-len("File ")) + "┐"
 	drawString(0, 0, str, screen)
 	for y, fileName := range filelist {
-		drawString(1, y, fileName, screen)
+		drawString(2, y, fileName, screen)
 	}
 
 	return screen
 }
 
-func saveImage(image string) {
+func saveImage(image string, s *screen) {
 	f, err := os.Create(time.Now().Format("termPaint_01-02-2006_15:04:05.txt"))
 	if err != nil {
-		log.Fatal(err)
+		s.setMessage(err.Error())
 	}
 	defer func(f *os.File) {
 		err := f.Close()
 		if err != nil {
-			log.Fatal(err)
+			s.setMessage(err.Error())
 		}
 	}(f)
 	lines := strings.Split(image, "\n")
@@ -58,8 +57,9 @@ func saveImage(image string) {
 	}
 	_, err = f.WriteString(newImage)
 	if err != nil {
-		log.Fatal(err)
+		s.setMessage(err.Error())
 	}
+	s.setMessage("Saved as " + f.Name())
 }
 
 func (s *screen) load(screenStrong string) {

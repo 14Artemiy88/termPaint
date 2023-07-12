@@ -41,6 +41,8 @@ func keyBind(msg tea.KeyMsg, s *screen) (tea.Model, tea.Cmd) {
 		if s.showMenu && s.inputLock {
 			if _, err := strconv.Atoi(string(msg.Runes)); err == nil {
 				s.input += string(msg.Runes)
+			} else {
+				s.setMessage(err.Error())
 			}
 		} else {
 			s.cursorStore = string(msg.Runes)

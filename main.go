@@ -9,24 +9,26 @@ import (
 )
 
 type screen struct {
-	X             int
-	Y             int
-	columns       int
-	rows          int
-	cursor        string
-	pixels        []pixel
-	color         map[string]int
-	showMenu      bool
-	showHelp      bool
-	showFile      bool
-	fileList      map[int]string
-	fileListWidth int
-	save          bool
-	inputLock     bool
-	input         string
-	inputColor    string
-	cursorStore   string
-	file          string
+	X               int
+	Y               int
+	columns         int
+	rows            int
+	cursor          string
+	pixels          []pixel
+	color           map[string]int
+	showMenu        bool
+	showHelp        bool
+	showFile        bool
+	fileList        map[int]string
+	fileListWidth   int
+	save            bool
+	inputLock       bool
+	input           string
+	inputColor      string
+	cursorStore     string
+	file            string
+	showMessageTime int
+	message         string
 }
 
 type pixel struct {
@@ -55,6 +57,12 @@ func (s *screen) Init() tea.Cmd {
 
 func (s *screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case tickMsg:
+		if s.showMessageTime > 0 {
+			s.showMessageTime--
+		}
+
+		return s, tick
 
 	case tea.KeyMsg:
 		return keyBind(msg, s)
@@ -63,6 +71,8 @@ func (s *screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		mouseBind(msg, s)
 
 	case tea.WindowSizeMsg:
+		s.X = msg.Width / 2
+		s.Y = msg.Height / 2
 		s.columns = msg.Width
 		s.rows = msg.Height
 	}
@@ -94,6 +104,9 @@ func (s *screen) View() string {
 	if s.showFile {
 		fileList(s, screen)
 	}
+	if s.showMessageTime > 0 {
+		drawMsg(s.message, screen)
+	}
 
 	if !s.save {
 		screen[s.Y][s.X] = fgRgb(s.color["R"], s.color["G"], s.color["B"], s.cursor)
@@ -109,7 +122,7 @@ func (s *screen) View() string {
 
 	if s.save {
 		s.save = false
-		saveImage(screenString)
+		saveImage(screenString, s)
 	}
 
 	return screenString
