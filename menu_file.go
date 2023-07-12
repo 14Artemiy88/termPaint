@@ -66,26 +66,25 @@ func (s *screen) loadImage(screenStrong string) {
 	s.pixels = []pixel{}
 	lines := strings.Split(screenStrong, "\n")
 	rows := len(lines)
-	var errors []string
+	errors := make(map[string]string, 2)
 	if rows > s.rows {
+		errors["rows"] = fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, s.rows)
 		rows = s.rows
-		errors = append(
-			errors,
-			fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, s.rows),
-		)
 	}
+
 	for y := 0; y < rows; y++ {
 		line := strings.Split(lines[y], "")
 		var str string
 		var x int
 		var skip int
+		var maxX int
 		for _, symbol := range line {
 			if x >= s.columns-1 {
-				errors = append(
-					errors,
-					fmt.Sprintf("Image columns more then terminal columns (%d > %d)", x, s.columns),
-				)
-				break
+				if maxX == 0 {
+					maxX = x
+				}
+				maxX++
+				continue
 			}
 			if skip > 0 {
 				skip--
@@ -93,7 +92,6 @@ func (s *screen) loadImage(screenStrong string) {
 			}
 			if symbol == " " {
 				x++
-				s.pixels = append(s.pixels, pixel{X: x, Y: y, symbol: " "})
 				continue
 			}
 			if symbol == "\u001B" {
@@ -115,7 +113,11 @@ func (s *screen) loadImage(screenStrong string) {
 		if x < s.columns {
 			s.pixels = append(s.pixels, pixel{X: x, Y: y, symbol: str})
 		}
+		if maxX > 0 {
+			errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, s.columns)
+		}
 	}
+
 	if len(errors) > 0 {
 		for _, i := range errors {
 			s.setMessage(i)

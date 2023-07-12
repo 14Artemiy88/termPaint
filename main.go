@@ -99,7 +99,9 @@ func (s *screen) View() string {
 	}
 
 	for _, p := range s.pixels {
-		screen[p.Y][p.X] = p.symbol
+		if p.Y < len(screen) && p.X < len(screen[p.Y]) {
+			screen[p.Y][p.X] = p.symbol
+		}
 	}
 	if s.showMenu {
 		drawMenu(s, screen)
