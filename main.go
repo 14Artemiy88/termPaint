@@ -41,12 +41,17 @@ type pixel struct {
 const reset = "\u001B[0m"
 
 func main() {
-	p := tea.NewProgram(&screen{
-		cursor:      "#",
-		cursorStore: "#",
-		color:       map[string]int{"R": 255, "G": 255, "B": 255},
-		dir:         "./",
-	}, tea.WithAltScreen(), tea.WithMouseAllMotion())
+	initConfig()
+	p := tea.NewProgram(
+		&screen{
+			cursor:      cfg.DefaultCursor,
+			cursorStore: cfg.DefaultCursor,
+			color:       cfg.DefaultColor,
+			dir:         cfg.DefaultDirectory,
+		},
+		tea.WithAltScreen(),
+		tea.WithMouseAllMotion(),
+	)
 
 	if _, err := p.Run(); err != nil {
 		log.Fatal(err)
@@ -117,7 +122,7 @@ func (s *screen) View() string {
 	}
 
 	if !s.save {
-		screen[s.Y][s.X] = fgRgb(s.color["R"], s.color["G"], s.color["B"], s.cursor)
+		screen[s.Y][s.X] = fgRgb(s.color["r"], s.color["g"], s.color["b"], s.cursor)
 	}
 
 	var screenString string

@@ -7,7 +7,7 @@ import (
 
 func mouseLeft(msg tea.MouseMsg, s *screen) {
 	if s.showMenu && msg.X < menuWidth {
-		if symbol, ok := symbols[msg.Y][msg.X]; ok {
+		if symbol, ok := cfg.Symbols[msg.Y][msg.X]; ok {
 			s.cursorStore = symbol
 			s.cursor = symbol
 		}
@@ -25,6 +25,6 @@ func mouseLeft(msg tea.MouseMsg, s *screen) {
 			s.loadImage(string(content))
 		}
 	} else {
-		s.pixels = append(s.pixels, pixel{X: msg.X, Y: msg.Y, symbol: fgRgb(s.color["R"], s.color["G"], s.color["B"], s.cursor)})
+		s.pixels = append(s.pixels, pixel{X: msg.X, Y: msg.Y, symbol: fgRgb(s.color["r"], s.color["g"], s.color["b"], s.cursor)})
 	}
 }

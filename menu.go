@@ -6,24 +6,14 @@ import (
 )
 
 const menuWidth = 15
-const pointer = "❯"
 
-var symbols = map[int]map[int]string{
-	1:  {symbolX: "┌", symbolX + 2: "├", symbolX + 4: "┬", symbolX + 6: "─", symbolX + 7: "┐"},
-	3:  {symbolX: "└", symbolX + 2: "┤", symbolX + 4: "┴", symbolX + 6: "│", symbolX + 7: "┘", symbolX + 9: "┼"},
-	5:  {symbolX: "┏", symbolX + 2: "┣", symbolX + 4: "┳", symbolX + 6: "━", symbolX + 7: "┓"},
-	7:  {symbolX: "┗", symbolX + 2: "┫", symbolX + 4: "┻", symbolX + 6: "┃", symbolX + 7: "┛", symbolX + 9: "╋"},
-	9:  {symbolX: "╭", symbolX + 2: "╮", symbolX + 4: "╯", symbolX + 6: "╰"},
-	11: {symbolX: "░", symbolX + 2: "▒", symbolX + 4: "▓", symbolX + 6: "█"},
-}
 var colors = map[int]string{
-	15: "R",
-	17: "G",
-	19: "B",
+	15: "r",
+	17: "g",
+	19: "b",
 }
 
 const colorX = 2
-const symbolX = 2
 
 func drawMenu(s *screen, screen [][]string) [][]string {
 	clearMenu(s, screen, menuWidth)
@@ -39,7 +29,7 @@ func drawMenu(s *screen, screen [][]string) [][]string {
 func drawSymbolMenu(screen [][]string) [][]string {
 	str := "Symbol " + strings.Repeat("─", menuWidth-len("symbol ")) + "┐"
 	drawString(0, 0, str, screen)
-	for y, line := range symbols {
+	for y, line := range cfg.Symbols {
 		for x, symbol := range line {
 			setByKeys(x, y, symbol, screen)
 		}
@@ -52,24 +42,22 @@ func drawColorMenu(s *screen, screen [][]string) [][]string {
 	str := "Color " + strings.Repeat("─", menuWidth-len("Color ")) + "┤"
 	drawString(0, 13, str, screen)
 	for y, line := range colors {
-
-		drawString(3, y, strconv.Itoa(s.color[line]), screen)
+		drawString(4, y, strconv.Itoa(s.color[line]), screen)
 		switch line {
-		case "R":
+		case "r":
 			setByKeys(colorX, y, fgRgb(s.color[line], 0, 0, "█"), screen)
-		case "G":
+		case "g":
 			setByKeys(colorX, y, fgRgb(0, s.color[line], 0, "█"), screen)
-		case "B":
+		case "b":
 			setByKeys(colorX, y, fgRgb(0, 0, s.color[line], "█"), screen)
 		}
-
 	}
-	setByKeys(3, 21, fgRgb(s.color["R"], s.color["G"], s.color["B"], "█"), screen)
-	setByKeys(4, 21, fgRgb(s.color["R"], s.color["G"], s.color["B"], "█"), screen)
-	setByKeys(5, 21, fgRgb(s.color["R"], s.color["G"], s.color["B"], "█"), screen)
-	setByKeys(3, 22, fgRgb(s.color["R"], s.color["G"], s.color["B"], "█"), screen)
-	setByKeys(4, 22, fgRgb(s.color["R"], s.color["G"], s.color["B"], "█"), screen)
-	setByKeys(5, 22, fgRgb(s.color["R"], s.color["G"], s.color["B"], "█"), screen)
+	setByKeys(3, 21, fgRgb(s.color["r"], s.color["g"], s.color["b"], "█"), screen)
+	setByKeys(4, 21, fgRgb(s.color["r"], s.color["g"], s.color["b"], "█"), screen)
+	setByKeys(5, 21, fgRgb(s.color["r"], s.color["g"], s.color["b"], "█"), screen)
+	setByKeys(3, 22, fgRgb(s.color["r"], s.color["g"], s.color["b"], "█"), screen)
+	setByKeys(4, 22, fgRgb(s.color["r"], s.color["g"], s.color["b"], "█"), screen)
+	setByKeys(5, 22, fgRgb(s.color["r"], s.color["g"], s.color["b"], "█"), screen)
 
 	return screen
 }

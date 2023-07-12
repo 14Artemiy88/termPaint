@@ -14,7 +14,7 @@ func fileList(s *screen, screen [][]string, path string) [][]string {
 	files, err := os.ReadDir(path)
 	if err != nil {
 		s.setMessage(err.Error())
-		s.dir = "./"
+		s.dir = cfg.DefaultDirectory
 	}
 
 	var width int
@@ -25,7 +25,7 @@ func fileList(s *screen, screen [][]string, path string) [][]string {
 		if len(fileName) > width {
 			width = len(fileName)
 		}
-		if file.IsDir() {
+		if file.IsDir() && (cfg.ShowHiddenFolder || string(fileName[0]) != ".") {
 			dirList = append(dirList, fileName)
 			continue
 		}
@@ -37,14 +37,19 @@ func fileList(s *screen, screen [][]string, path string) [][]string {
 	clearMenu(s, screen, s.fileListWidth)
 	str := "File " + strings.Repeat("─", s.fileListWidth-len("File ")) + "┐"
 	drawString(0, 0, str, screen)
-	s.fileList = make(map[int]string, len(fileList)+len(dirList)+1)
-	s.fileList[1] = "../"
-	drawString(fileX, 1, "..", screen)
+
 	Y := 2
-	for _, dirName := range dirList {
-		drawString(fileX, Y, fmt.Sprintf("🗀 %v", dirName), screen)
-		s.fileList[Y] = dirName + "/"
-		Y++
+	if cfg.ShowFolder {
+		s.fileList = make(map[int]string, len(fileList)+len(dirList)+1)
+		s.fileList[1] = "../"
+		drawString(fileX, 1, "..", screen)
+		for _, dirName := range dirList {
+			drawString(fileX, Y, fmt.Sprintf("🗀 %v", dirName), screen)
+			s.fileList[Y] = dirName + "/"
+			Y++
+		}
+	} else {
+		s.fileList = make(map[int]string, len(fileList)+1)
 	}
 	for y, fileName := range fileList {
 		drawString(fileX, Y+y, fmt.Sprintf("🖹 %v", fileName), screen)
