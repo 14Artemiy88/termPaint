@@ -8,32 +8,44 @@ import (
 	"time"
 )
 
-func fileList(s *screen, screen [][]string) [][]string {
-	files, err := os.ReadDir("./")
+func fileList(s *screen, screen [][]string, path string) [][]string {
+	files, err := os.ReadDir(path)
 	if err != nil {
 		s.setMessage(err.Error())
 	}
 
-	y := 1
 	var width int
-	filelist := make(map[int]string)
+	var fileList []string
+	var dirList []string
 	for _, file := range files {
 		fileName := file.Name()
 		if len(fileName) > width {
 			width = len(fileName)
 		}
+		if file.IsDir() {
+			dirList = append(dirList, fileName)
+			continue
+		}
 		if filepath.Ext(fileName) == ".txt" {
-			filelist[y] = fileName
-			y++
+			fileList = append(fileList, fileName)
 		}
 	}
-	s.fileList = filelist
 	s.fileListWidth = width + 4
 	clearMenu(s, screen, s.fileListWidth)
 	str := "File " + strings.Repeat("─", s.fileListWidth-len("File ")) + "┐"
 	drawString(0, 0, str, screen)
-	for y, fileName := range filelist {
-		drawString(2, y, fileName, screen)
+	s.fileList = make(map[int]string, len(fileList)+len(dirList)+1)
+	s.fileList[2] = "../"
+	drawString(2, 2, "[..]", screen)
+	Y := 3
+	for _, dirName := range dirList {
+		drawString(2, Y, fmt.Sprintf("[%v]", dirName), screen)
+		s.fileList[Y] = dirName + "/"
+		Y++
+	}
+	for y, fileName := range fileList {
+		drawString(2, Y+y, fileName, screen)
+		s.fileList[Y+y] = fileName
 	}
 
 	return screen

@@ -15,11 +15,13 @@ func mouseLeft(msg tea.MouseMsg, s *screen) {
 			s.color[color] = minMsxColor(s.color[color])
 		}
 	} else if s.showFile && msg.X < s.fileListWidth {
-		s.showFile = false
 		if file, ok := s.fileList[msg.Y]; ok {
 			content, err := os.ReadFile(file)
 			if err != nil {
-				s.setMessage(err.Error())
+				s.dir += file
+				//s.setMessage(err.Error())
+			} else {
+				s.showFile = false
 			}
 			s.loadImage(string(content))
 		}

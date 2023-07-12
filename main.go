@@ -29,6 +29,7 @@ type screen struct {
 	file          string
 	messages      []message
 	messageWidth  int
+	dir           string
 }
 
 type pixel struct {
@@ -44,6 +45,7 @@ func main() {
 		cursor:      "#",
 		cursorStore: "#",
 		color:       map[string]int{"R": 255, "G": 255, "B": 255},
+		dir:         "./",
 	}, tea.WithAltScreen(), tea.WithMouseAllMotion())
 
 	if _, err := p.Run(); err != nil {
@@ -110,7 +112,7 @@ func (s *screen) View() string {
 		drawHelpMenu(s, screen)
 	}
 	if s.showFile {
-		fileList(s, screen)
+		fileList(s, screen, s.dir)
 	}
 	if len(s.messages) > 0 {
 		drawMsg(s.messages, s.messageWidth, screen)
