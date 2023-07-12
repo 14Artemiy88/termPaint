@@ -12,6 +12,9 @@ func mouseLeft(msg tea.MouseMsg, s *screen) {
 			s.cursorStore = symbol
 			s.cursor = symbol
 		}
+		if color, ok := colors[msg.Y]; ok {
+			s.color[color] = minMsxColor(s.color[color])
+		}
 	} else if s.showFile && msg.X < s.fileListWidth {
 		s.showFile = false
 		if file, ok := s.fileList[msg.Y]; ok {

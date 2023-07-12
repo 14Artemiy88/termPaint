@@ -35,17 +35,24 @@ var menu = []menuItem{
 	},
 	{
 		Y:     13,
-		title: "Menu",
+		title: "Symbol",
 		end:   "┤",
 		item: []string{
-			"Symbols - Click to select symbol",
-			"Colors  - Hover and scroll to",
-			"          change color",
-			"          or input number",
+			"Click to select symbol",
 		},
 	},
 	{
-		Y:     19,
+		Y:     16,
+		title: "Color",
+		end:   "┤",
+		item: []string{
+			"Scroll      - Decrease/increase",
+			"Click       - Set 0/255",
+			"Press [0-9] - Set color",
+		},
+	},
+	{
+		Y:     21,
 		title: "File",
 		end:   "┤",
 		item: []string{

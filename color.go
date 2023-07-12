@@ -26,3 +26,11 @@ func increase(color int) int {
 
 	return color
 }
+
+func minMsxColor(color int) int {
+	if color > 0 {
+		return 0
+	}
+
+	return 255
+}

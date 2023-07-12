@@ -48,16 +48,16 @@ func onFile(msg tea.MouseMsg, s *screen) {
 
 func onMenu(msg tea.MouseMsg, s *screen) {
 	s.cursor = " "
-	_, okS := symbols[msg.Y][msg.X]
-	color, okC := colors[msg.Y][msg.X]
-	if okS {
+	_, okSymbol := symbols[msg.Y][msg.X]
+	color, okColor := colors[msg.Y]
+	if okSymbol {
 		s.X = msg.X - 1
 		s.cursor = fgRgb(170, 170, 170, pointer)
 	}
-	if okC {
+	if okColor && msg.X < menuWidth {
 		s.inputLock = true
 		s.inputColor = color
-		s.X = msg.X - 2
+		s.X = 1
 		s.cursor = fgRgb(170, 170, 170, pointer)
 	} else {
 		s.inputLock = false
@@ -66,7 +66,7 @@ func onMenu(msg tea.MouseMsg, s *screen) {
 		}
 		s.input = ""
 	}
-	if !okS && !okC {
+	if !okSymbol && !okColor {
 		s.X = menuWidth + 1
 		s.cursor = " "
 	}

@@ -16,10 +16,10 @@ var symbols = map[int]map[int]string{
 	9:  {3: "╭", 5: "╮", 7: "╯", 9: "╰"},
 	11: {3: "░", 5: "▒", 7: "▓", 9: "█"},
 }
-var colors = map[int]map[int]string{
-	15: {3: "R"},
-	17: {3: "G"},
-	19: {3: "B"},
+var colors = map[int]string{
+	15: "R",
+	17: "G",
+	19: "B",
 }
 
 func drawMenu(s *screen, screen [][]string) [][]string {
@@ -49,17 +49,17 @@ func drawColorMenu(s *screen, screen [][]string) [][]string {
 	str := "Color " + strings.Repeat("─", menuWidth-2-len("Color ")) + "┤"
 	drawString(0, 13, str, screen)
 	for y, line := range colors {
-		for x, color := range line {
-			drawString(x, y, strconv.Itoa(s.color[color]), screen)
-			switch color {
-			case "R":
-				screen[y][x] = fgRgb(s.color[color], 0, 0, "█")
-			case "G":
-				screen[y][x] = fgRgb(0, s.color[color], 0, "█")
-			case "B":
-				screen[y][x] = fgRgb(0, 0, s.color[color], "█")
-			}
+
+		drawString(3, y, strconv.Itoa(s.color[line]), screen)
+		switch line {
+		case "R":
+			screen[y][3] = fgRgb(s.color[line], 0, 0, "█")
+		case "G":
+			screen[y][3] = fgRgb(0, s.color[line], 0, "█")
+		case "B":
+			screen[y][3] = fgRgb(0, 0, s.color[line], "█")
 		}
+
 	}
 	screen[21][3] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")
 	screen[21][4] = fgRgb(s.color["R"], s.color["G"], s.color["B"], "█")

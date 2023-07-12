@@ -19,11 +19,13 @@ func mouseBind(msg tea.MouseMsg, s *screen) {
 		s.pixels = []pixel{}
 
 	case tea.MouseWheelDown:
-		color := colors[msg.Y][msg.X]
-		s.color[color] = decrease(s.color[color])
+		if color, ok := colors[msg.Y]; ok {
+			s.color[color] = decrease(s.color[color])
+		}
 
 	case tea.MouseWheelUp:
-		color := colors[msg.Y][msg.X]
-		s.color[color] = increase(s.color[color])
+		if color, ok := colors[msg.Y]; ok {
+			s.color[color] = increase(s.color[color])
+		}
 	}
 }
