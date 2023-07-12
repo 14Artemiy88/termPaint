@@ -44,6 +44,15 @@ var menu = []menuItem{
 			"          or input number",
 		},
 	},
+	{
+		Y:     19,
+		title: "File",
+		end:   "┤",
+		item: []string{
+			"Left   - Click to select file",
+			"Delete - Press to delete file",
+		},
+	},
 }
 
 const helpWidth = 37

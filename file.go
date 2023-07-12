@@ -16,7 +16,7 @@ func fileList(s *screen, screen [][]string) [][]string {
 	}
 
 	y := 1
-	width := 0
+	var width int
 	filelist := make(map[int]string)
 	for _, file := range files {
 		fileName := file.Name()
@@ -72,8 +72,8 @@ func (s *screen) load(screenStrong string) {
 	for y := 0; y < rows; y++ {
 		line := strings.Split(lines[y], "")
 		var str string
-		x := 0
-		skip := 0
+		var x int
+		var skip int
 		for _, symbol := range line {
 			if x >= s.columns-1 {
 				break
@@ -89,10 +89,10 @@ func (s *screen) load(screenStrong string) {
 			}
 			if symbol == "\u001B" {
 				if len(str) > 0 {
-					pixel := pixel{X: x, Y: y, symbol: str + "\u001B[0m"}
+					pixel := pixel{X: x, Y: y, symbol: str + reset}
 					s.pixels = append(s.pixels, pixel)
 					fmt.Println(x, y, pixel)
-					skip = len("\u001B[0m") - 1
+					skip = len(reset) - 1
 					str = ""
 					continue
 				}
