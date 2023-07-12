@@ -21,7 +21,7 @@ func mouseLeft(msg tea.MouseMsg, s *screen) {
 			if err != nil {
 				s.setMessage(err.Error())
 			}
-			s.load(string(content))
+			s.loadImage(string(content))
 		}
 	} else {
 		s.pixels = append(s.pixels, pixel{X: msg.X, Y: msg.Y, symbol: fgRgb(s.color["R"], s.color["G"], s.color["B"], s.cursor)})

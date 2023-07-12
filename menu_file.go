@@ -62,12 +62,17 @@ func saveImage(image string, s *screen) {
 	s.setMessage("Saved as " + f.Name())
 }
 
-func (s *screen) load(screenStrong string) {
+func (s *screen) loadImage(screenStrong string) {
 	s.pixels = []pixel{}
 	lines := strings.Split(screenStrong, "\n")
 	rows := len(lines)
+	var errors []string
 	if rows > s.rows {
 		rows = s.rows
+		errors = append(
+			errors,
+			fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, s.rows),
+		)
 	}
 	for y := 0; y < rows; y++ {
 		line := strings.Split(lines[y], "")
@@ -76,6 +81,10 @@ func (s *screen) load(screenStrong string) {
 		var skip int
 		for _, symbol := range line {
 			if x >= s.columns-1 {
+				errors = append(
+					errors,
+					fmt.Sprintf("Image columns more then terminal columns (%d > %d)", x, s.columns),
+				)
 				break
 			}
 			if skip > 0 {
@@ -105,6 +114,11 @@ func (s *screen) load(screenStrong string) {
 		x++
 		if x < s.columns {
 			s.pixels = append(s.pixels, pixel{X: x, Y: y, symbol: str})
+		}
+	}
+	if len(errors) > 0 {
+		for _, i := range errors {
+			s.setMessage(i)
 		}
 	}
 }

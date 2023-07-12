@@ -9,26 +9,26 @@ import (
 )
 
 type screen struct {
-	X               int
-	Y               int
-	columns         int
-	rows            int
-	cursor          string
-	pixels          []pixel
-	color           map[string]int
-	showMenu        bool
-	showHelp        bool
-	showFile        bool
-	fileList        map[int]string
-	fileListWidth   int
-	save            bool
-	inputLock       bool
-	input           string
-	inputColor      string
-	cursorStore     string
-	file            string
-	showMessageTime int
-	message         string
+	X             int
+	Y             int
+	columns       int
+	rows          int
+	cursor        string
+	pixels        []pixel
+	color         map[string]int
+	showMenu      bool
+	showHelp      bool
+	showFile      bool
+	fileList      map[int]string
+	fileListWidth int
+	save          bool
+	inputLock     bool
+	input         string
+	inputColor    string
+	cursorStore   string
+	file          string
+	messages      []message
+	messageWidth  int
 }
 
 type pixel struct {
@@ -58,9 +58,15 @@ func (s *screen) Init() tea.Cmd {
 func (s *screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tickMsg:
-		if s.showMessageTime > 0 {
-			s.showMessageTime--
+		var delCOunt int
+		for k, m := range s.messages {
+			if m.liveTime > 0 {
+				s.messages[k].liveTime--
+			} else {
+				delCOunt++
+			}
 		}
+		s.messages = s.messages[delCOunt:]
 
 		return s, tick
 
@@ -104,8 +110,8 @@ func (s *screen) View() string {
 	if s.showFile {
 		fileList(s, screen)
 	}
-	if s.showMessageTime > 0 {
-		drawMsg(s.message, screen)
+	if len(s.messages) > 0 {
+		drawMsg(s.messages, s.messageWidth, screen)
 	}
 
 	if !s.save {
