@@ -63,6 +63,32 @@ func saveImage(image string, s *screen) {
 }
 
 func (s *screen) loadImage(screenStrong string) {
+	if strings.Contains(screenStrong, "\u001B") {
+		loadColored(screenStrong, s)
+	} else {
+		loadWhite(screenStrong, s)
+	}
+}
+
+func loadWhite(screenStrong string, s *screen) {
+	s.pixels = []pixel{}
+	lines := strings.Split(screenStrong, "\n")
+	rows := len(lines)
+	errors := make(map[string]string, 2)
+	if rows > s.rows {
+		errors["rows"] = fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, s.rows)
+		rows = s.rows
+	}
+
+	for y := 0; y < rows; y++ {
+		line := strings.Split(lines[y], "")
+		for x, symbol := range line {
+			s.pixels = append(s.pixels, pixel{X: x, Y: y, symbol: symbol})
+		}
+	}
+}
+
+func loadColored(screenStrong string, s *screen) {
 	s.pixels = []pixel{}
 	lines := strings.Split(screenStrong, "\n")
 	rows := len(lines)
