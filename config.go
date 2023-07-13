@@ -20,7 +20,7 @@ type Config struct {
 }
 
 func initConfig() {
-	viper.SetConfigFile("./config.yaml")
+	viper.SetConfigFile("~/.config/termPaint/config.yaml")
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading cfg file, %s", err)
 	}
