@@ -11,21 +11,25 @@ func keyBind(msg tea.KeyMsg, s *screen) (tea.Model, tea.Cmd) {
 	case tea.KeyCtrlC, tea.KeyEsc:
 		return s, tea.Quit
 
+	// file
 	case tea.KeyCtrlO:
 		s.showHelp = false
 		s.showMenu = false
 		s.showFile = !s.showFile
 
+	// menu
 	case tea.KeyTab:
 		s.showHelp = false
 		s.showFile = false
 		s.showMenu = !s.showMenu
 
+	// help
 	case tea.KeyEnter:
 		s.showMenu = false
 		s.showFile = false
 		s.showHelp = !s.showHelp
 
+	// save
 	case tea.KeyCtrlS:
 		s.save = true
 		s.showMenu = false
@@ -33,11 +37,13 @@ func keyBind(msg tea.KeyMsg, s *screen) (tea.Model, tea.Cmd) {
 		s.showFile = false
 		s.messages = []message{}
 
+	// del file
 	case tea.KeyDelete:
 		if len(s.file) > 0 {
 			_ = os.Remove(s.file)
 		}
 
+	// set cursor or color
 	case tea.KeyRunes:
 		if s.showMenu && s.inputLock {
 			if _, err := strconv.Atoi(string(msg.Runes)); err == nil {

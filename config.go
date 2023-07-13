@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/spf13/viper"
 	"log"
+	"os"
 )
 
 var cfg Config
@@ -20,21 +21,16 @@ type Config struct {
 }
 
 func initConfig() {
-	viper.SetConfigFile("~/.config/termPaint/config.yaml")
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		log.Println("Cannot determine the user's home dir:", err)
+	}
+	viper.SetConfigFile(homeDir + "/.config/termPaint/config.yaml")
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading cfg file, %s", err)
 	}
-
-	err := viper.Unmarshal(&cfg)
+	err = viper.Unmarshal(&cfg)
 	if err != nil {
 		log.Fatalf("unable to decode into struct, %v", err)
 	}
-
-	//v := reflect.ValueOf(cfg)
-	//typeOfConfig := v.Type()
-	//
-	//for i := 0; i < v.NumField(); i++ {
-	//	fmt.Printf("\n%s\t: %v\n", typeOfConfig.Field(i).Name, v.Field(i).Interface())
-	//}
-	//log.Fatalf("unable to decode into struct, %v", err)
 }

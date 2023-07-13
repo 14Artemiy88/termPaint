@@ -25,21 +25,16 @@ go 1.20
 ```
 
 ## Installation
+
 ```bash
-go build
+curl https://raw.githubusercontent.com/14Artemiy88/termPaint/main/install.sh | bash
+```
+Make sure the Go executables directory ($GOPATH/bin) is added to your PATH environment variable. You can achieve this using the following command:
+```bash
+export PATH=$PATH:$(go env GOPATH)/bin
 ```
 
-[//]: # (## Installation)
-[//]: # (Make sure the Go executables directory &#40;$GOPATH/bin&#41; is added to your PATH environment variable. You can achieve this using the following command:)
-[//]: # (```bash)
-[//]: # (export PATH=$PATH:$&#40;go env GOPATH&#41;/bin)
-[//]: # (```)
-[//]: # (and then)
-[//]: # (```bash)
-[//]: # (go install github.com/14Artemiy88/termPaint@latest)
-[//]: # (```)
-[//]: # ()
-[//]: # (## Usage)
-[//]: # (```bash)
-[//]: # (termPaint)
-[//]: # (```)
+## Usage
+```bash
+termPaint
+```
