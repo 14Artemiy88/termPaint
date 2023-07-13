@@ -8,14 +8,15 @@ import (
 var cfg Config
 
 type Config struct {
-	DefaultCursor    string                 `mapstructure:"default_cursor"`
-	DefaultColor     map[string]int         `mapstructure:"default_color"`
-	Pointer          string                 `mapstructure:"pointer"`
-	PointerColor     map[string]int         `mapstructure:"pointer_color"`
-	Symbols          map[int]map[int]string `mapstructure:"symbols"`
-	DefaultDirectory string                 `mapstructure:"default_directory"`
-	ShowFolder       bool                   `mapstructure:"show_folder"`
-	ShowHiddenFolder bool                   `mapstructure:"show_hidden_folder"`
+	DefaultCursor       string                 `mapstructure:"default_cursor"`
+	DefaultColor        map[string]int         `mapstructure:"default_color"`
+	Pointer             string                 `mapstructure:"pointer"`
+	PointerColor        map[string]int         `mapstructure:"pointer_color"`
+	Symbols             map[int]map[int]string `mapstructure:"symbols"`
+	ShowFolder          bool                   `mapstructure:"show_folder"`
+	ShowHiddenFolder    bool                   `mapstructure:"show_hidden_folder"`
+	ImageSaveDirectory  string                 `mapstructure:"image_save_directory"`
+	ImageSaveNameFormat string                 `mapstructure:"image_save_name_format"`
 }
 
 func initConfig() {

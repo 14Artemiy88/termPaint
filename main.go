@@ -3,6 +3,7 @@ package main
 import (
 	tea "github.com/charmbracelet/bubbletea"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -42,16 +43,25 @@ const reset = "\u001B[0m"
 
 func main() {
 	initConfig()
+	s := &screen{
+		cursor:      cfg.DefaultCursor,
+		cursorStore: cfg.DefaultCursor,
+		color:       cfg.DefaultColor,
+		dir:         cfg.ImageSaveDirectory,
+	}
 	p := tea.NewProgram(
-		&screen{
-			cursor:      cfg.DefaultCursor,
-			cursorStore: cfg.DefaultCursor,
-			color:       cfg.DefaultColor,
-			dir:         cfg.DefaultDirectory,
-		},
+		s,
 		tea.WithAltScreen(),
 		tea.WithMouseAllMotion(),
 	)
+
+	if _, err := os.Stat(cfg.ImageSaveDirectory); os.IsNotExist(err) {
+		errDir := os.MkdirAll(cfg.ImageSaveDirectory, 0755)
+		if errDir != nil {
+			s.setMessage(err.Error())
+		}
+		s.setMessage("Directory " + cfg.ImageSaveDirectory + " successfully created.")
+	}
 
 	if _, err := p.Run(); err != nil {
 		log.Fatal(err)

@@ -48,6 +48,7 @@ symbols:
         6: "▓"
         8: "█"
 
-default_directory: "./"
 show_folder: true
 show_hidden_folder: false
+image_save_directory: './'
+image_save_name_format: "termPaint_01-02-2006_15:04:05.txt"

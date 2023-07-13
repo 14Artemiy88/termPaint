@@ -14,7 +14,7 @@ func fileList(s *screen, screen [][]string, path string) [][]string {
 	files, err := os.ReadDir(path)
 	if err != nil {
 		s.setMessage(err.Error())
-		s.dir = cfg.DefaultDirectory
+		s.dir = cfg.ImageSaveDirectory
 	}
 
 	var width int
@@ -60,7 +60,7 @@ func fileList(s *screen, screen [][]string, path string) [][]string {
 }
 
 func saveImage(image string, s *screen) {
-	f, err := os.Create(time.Now().Format("termPaint_01-02-2006_15:04:05.txt"))
+	f, err := os.Create(cfg.ImageSaveDirectory + time.Now().Format(cfg.ImageSaveNameFormat))
 	if err != nil {
 		s.setMessage(err.Error())
 	}
