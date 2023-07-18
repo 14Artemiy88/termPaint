@@ -33,7 +33,7 @@ func drawSymbolMenu(screen [][]string) [][]string {
 	DrawString(1, 1, str, screen)
 	for y, line := range config.Cfg.Symbols {
 		for x, symbol := range line {
-			utils.SetByKeys(x, y+1, symbol, screen)
+			utils.SetByKeys(x, y, symbol, screen)
 		}
 	}
 

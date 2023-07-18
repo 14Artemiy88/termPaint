@@ -48,6 +48,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 		if s.Cursor.Brush > 8 {
 			s.Cursor.Brush = 0
 		}
+		s.Cursor.Store.Brush = s.Cursor.Brush
 
 	// set cursor or color
 	case tea.KeyRunes:
