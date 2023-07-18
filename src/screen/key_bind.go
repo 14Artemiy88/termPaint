@@ -52,8 +52,8 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 				s.SetMessage(err.Error())
 			}
 		} else {
-			s.CursorStore = string(msg.Runes)
-			s.Cursor = string(msg.Runes)
+			s.Cursor.Store = string(msg.Runes)
+			s.Cursor.Symbol = string(msg.Runes)
 		}
 	}
 

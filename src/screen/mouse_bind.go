@@ -21,12 +21,12 @@ func MouseBind(msg tea.MouseMsg, s *Screen) {
 
 	case tea.MouseWheelDown:
 		if c, ok := Colors[msg.Y]; ok {
-			s.Color[c] = color.Decrease(s.Color[c])
+			s.Cursor.Color[c] = color.Decrease(s.Cursor.Color[c])
 		}
 
 	case tea.MouseWheelUp:
 		if c, ok := Colors[msg.Y]; ok {
-			s.Color[c] = color.Increase(s.Color[c])
+			s.Cursor.Color[c] = color.Increase(s.Cursor.Color[c])
 		}
 	}
 }

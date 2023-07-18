@@ -25,9 +25,9 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 
 	} else if msg.X <= xMin {
 		s.X = xMin + 1
-		s.Cursor = " "
+		s.Cursor.Symbol = " "
 	} else {
-		s.Cursor = s.CursorStore
+		s.Cursor.Symbol = s.Cursor.Store
 	}
 
 	if msg.X > xMin && msg.X < s.Columns {
@@ -41,16 +41,21 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 func onFile(msg tea.MouseMsg, s *Screen) {
 	if file, ok := s.FileList[msg.Y]; ok {
 		s.X = 0
-		s.Cursor = utils.FgRgb(config.Cfg.PointerColor["r"], config.Cfg.PointerColor["g"], config.Cfg.PointerColor["b"], config.Cfg.Pointer)
+		s.Cursor.Symbol = utils.FgRgb(
+			config.Cfg.PointerColor["r"],
+			config.Cfg.PointerColor["g"],
+			config.Cfg.PointerColor["b"],
+			config.Cfg.Pointer,
+		)
 		s.File = file
 	} else {
-		s.Cursor = " "
+		s.Cursor.Symbol = " "
 		s.File = ""
 	}
 }
 
 func onMenu(msg tea.MouseMsg, s *Screen) {
-	s.Cursor = " "
+	s.Cursor.Symbol = " "
 	_, okSymbol := config.Cfg.Symbols[msg.Y][msg.X]
 	c, okColor := Colors[msg.Y]
 	//if okSymbol {
@@ -61,16 +66,21 @@ func onMenu(msg tea.MouseMsg, s *Screen) {
 		s.InputLock = true
 		s.InputColor = c
 		s.X = 0
-		s.Cursor = utils.FgRgb(config.Cfg.PointerColor["r"], config.Cfg.PointerColor["g"], config.Cfg.PointerColor["b"], config.Cfg.Pointer)
+		s.Cursor.Symbol = utils.FgRgb(
+			config.Cfg.PointerColor["r"],
+			config.Cfg.PointerColor["g"],
+			config.Cfg.PointerColor["b"],
+			config.Cfg.Pointer,
+		)
 	} else {
 		s.InputLock = false
 		if len(s.Input) > 0 {
-			s.Color[s.InputColor] = color.SetColor(s.Input)
+			s.Cursor.Color[s.InputColor] = color.SetColor(s.Input)
 		}
 		s.Input = ""
 	}
 	if !okSymbol && !okColor {
 		s.X = MenuWidth + 1
-		s.Cursor = " "
+		s.Cursor.Symbol = " "
 	}
 }

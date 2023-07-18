@@ -10,17 +10,14 @@ import (
 
 func main() {
 	config.InitConfig()
-	c := screen.Cursor{
-		Symbol: config.Cfg.DefaultCursor,
-		Color:  config.Cfg.DefaultColor,
-		Brush:  screen.Dot,
-	}
 	s := &screen.Screen{
-		Cursor:      config.Cfg.DefaultCursor,
-		NewCursor:   c,
-		CursorStore: config.Cfg.DefaultCursor,
-		Color:       config.Cfg.DefaultColor,
-		Dir:         config.Cfg.ImageSaveDirectory,
+		Cursor: screen.Cursor{
+			Symbol: config.Cfg.DefaultCursor,
+			Color:  config.Cfg.DefaultColor,
+			Brush:  screen.Dot,
+			Store:  config.Cfg.DefaultCursor,
+		},
+		Dir: config.Cfg.ImageSaveDirectory,
 	}
 	p := tea.NewProgram(
 		s,

@@ -12,10 +12,8 @@ type Screen struct {
 	Y             int
 	Columns       int
 	Rows          int
-	Cursor        string
-	NewCursor     Cursor
+	Cursor        Cursor
 	Pixels        []Pixel
-	Color         map[string]int
 	ShowMenu      bool
 	ShowHelp      bool
 	ShowFile      bool
@@ -25,7 +23,6 @@ type Screen struct {
 	InputLock     bool
 	Input         string
 	InputColor    string
-	CursorStore   string
 	File          string
 	Messages      []Message
 	MessageWidth  int
