@@ -1,25 +1,26 @@
-package src
+package screen
 
 import (
+	"github.com/14Artemiy88/termPaint/src/utils"
 	"strings"
 )
 
 const liveTime = 200
 
-type message struct {
+type Message struct {
 	liveTime int
 	text     string
 }
 
 func (s *Screen) SetMessage(text string) {
-	s.Messages = append(s.Messages, message{text: text, liveTime: liveTime})
+	s.Messages = append(s.Messages, Message{text: text, liveTime: liveTime})
 	textLen := len(text)
 	if textLen > s.MessageWidth {
 		s.MessageWidth = textLen
 	}
 }
 
-func DrawMsg(messages []message, width int, screen [][]string) [][]string {
+func DrawMsg(messages []Message, width int, screen [][]string) [][]string {
 	ClearMessage(screen, width+5, len(messages)+2)
 	for k, m := range messages {
 		DrawString(1, 1+k, m.text, screen)
@@ -30,9 +31,9 @@ func DrawMsg(messages []message, width int, screen [][]string) [][]string {
 func ClearMessage(screen [][]string, width int, height int) [][]string {
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
-			SetByKeys(x, y, " ", screen)
+			utils.SetByKeys(x, y, " ", screen)
 		}
-		SetByKeys(width, y, "│", screen)
+		utils.SetByKeys(width, y, "│", screen)
 	}
 	DrawString(0, height, strings.Repeat("─", width)+"┘", screen)
 

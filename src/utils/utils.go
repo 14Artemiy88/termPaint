@@ -1,14 +1,14 @@
-package src
+package utils
 
 import "strconv"
 
-const reset = "\u001B[0m"
+const Reset = "\u001B[0m"
 
 func FgRgb(r int, g int, b int, symbol string) string {
 	if r == 255 && g == 255 && b == 255 {
 		return symbol
 	}
-	return "\033[38;2;" + strconv.Itoa(r) + ";" + strconv.Itoa(g) + ";" + strconv.Itoa(b) + "m" + symbol + reset
+	return "\033[38;2;" + strconv.Itoa(r) + ";" + strconv.Itoa(g) + ";" + strconv.Itoa(b) + "m" + symbol + Reset
 }
 
 func isset(arr [][]string, first int, second int) bool {

@@ -1,6 +1,7 @@
-package src
+package screen
 
 import (
+	"github.com/14Artemiy88/termPaint/src/utils"
 	tea "github.com/charmbracelet/bubbletea"
 	"strings"
 	"time"
@@ -13,7 +14,7 @@ type Screen struct {
 	Rows          int
 	Cursor        string
 	NewCursor     Cursor
-	Pixels        []pixel
+	Pixels        []Pixel
 	Color         map[string]int
 	ShowMenu      bool
 	ShowHelp      bool
@@ -26,15 +27,15 @@ type Screen struct {
 	InputColor    string
 	CursorStore   string
 	File          string
-	Messages      []message
+	Messages      []Message
 	MessageWidth  int
 	Dir           string
 }
 
-type pixel struct {
+type Pixel struct {
 	X      int
 	Y      int
-	symbol string
+	Symbol string
 }
 
 func (s *Screen) Init() tea.Cmd {
@@ -57,10 +58,10 @@ func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return s, tick
 
 	case tea.KeyMsg:
-		return keyBind(msg, s)
+		return KeyBind(msg, s)
 
 	case tea.MouseMsg:
-		mouseBind(msg, s)
+		MouseBind(msg, s)
 
 	case tea.WindowSizeMsg:
 		s.X = msg.Width / 2
@@ -85,16 +86,16 @@ func (s *Screen) View() string {
 	}
 
 	for _, p := range s.Pixels {
-		SetByKeys(p.X, p.Y, p.symbol, screen)
+		utils.SetByKeys(p.X, p.Y, p.Symbol, screen)
 	}
 	if s.ShowMenu {
-		drawMenu(s, screen)
+		DrawMenu(s, screen)
 	}
 	if s.ShowHelp {
-		drawHelpMenu(s, screen)
+		DrawHelpMenu(s, screen)
 	}
 	if s.ShowFile {
-		fileList(s, screen, s.Dir)
+		FileList(s, screen, s.Dir)
 	}
 	if len(s.Messages) > 0 {
 		DrawMsg(s.Messages, s.MessageWidth, screen)
@@ -114,7 +115,7 @@ func (s *Screen) View() string {
 
 	if s.Save {
 		s.Save = false
-		saveImage(screenString, s)
+		SaveImage(screenString, s)
 	}
 
 	return screenString

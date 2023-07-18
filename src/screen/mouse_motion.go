@@ -1,16 +1,19 @@
-package src
+package screen
 
 import (
+	"github.com/14Artemiy88/termPaint/src/color"
+	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/utils"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 func mouseMotion(msg tea.MouseMsg, s *Screen) {
 	xMin := 0
 	if s.ShowMenu {
-		xMin = menuWidth
+		xMin = MenuWidth
 	}
 	if s.ShowHelp {
-		xMin = helpWidth
+		xMin = HelpWidth
 	}
 	if s.ShowFile {
 		xMin = s.FileListWidth
@@ -38,7 +41,7 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 func onFile(msg tea.MouseMsg, s *Screen) {
 	if file, ok := s.FileList[msg.Y]; ok {
 		s.X = 0
-		s.Cursor = FgRgb(Cfg.PointerColor["r"], Cfg.PointerColor["g"], Cfg.PointerColor["b"], Cfg.Pointer)
+		s.Cursor = utils.FgRgb(config.Cfg.PointerColor["r"], config.Cfg.PointerColor["g"], config.Cfg.PointerColor["b"], config.Cfg.Pointer)
 		s.File = file
 	} else {
 		s.Cursor = " "
@@ -48,26 +51,26 @@ func onFile(msg tea.MouseMsg, s *Screen) {
 
 func onMenu(msg tea.MouseMsg, s *Screen) {
 	s.Cursor = " "
-	_, okSymbol := Cfg.Symbols[msg.Y][msg.X]
-	color, okColor := colors[msg.Y]
+	_, okSymbol := config.Cfg.Symbols[msg.Y][msg.X]
+	c, okColor := Colors[msg.Y]
 	//if okSymbol {
 	//	s.X = msg.X - 1
 	//	s.Cursor = FgRgb(Cfg.PointerColor["r"], Cfg.PointerColor["g"], Cfg.PointerColor["b"], Cfg.Pointer)
 	//}
-	if okColor && msg.X < menuWidth {
+	if okColor && msg.X < MenuWidth {
 		s.InputLock = true
-		s.InputColor = color
+		s.InputColor = c
 		s.X = 0
-		s.Cursor = FgRgb(Cfg.PointerColor["r"], Cfg.PointerColor["g"], Cfg.PointerColor["b"], Cfg.Pointer)
+		s.Cursor = utils.FgRgb(config.Cfg.PointerColor["r"], config.Cfg.PointerColor["g"], config.Cfg.PointerColor["b"], config.Cfg.Pointer)
 	} else {
 		s.InputLock = false
 		if len(s.Input) > 0 {
-			s.Color[s.InputColor] = setColor(s.Input)
+			s.Color[s.InputColor] = color.SetColor(s.Input)
 		}
 		s.Input = ""
 	}
 	if !okSymbol && !okColor {
-		s.X = menuWidth + 1
+		s.X = MenuWidth + 1
 		s.Cursor = " "
 	}
 }

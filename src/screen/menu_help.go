@@ -1,4 +1,4 @@
-package src
+package screen
 
 import (
 	"strings"
@@ -22,7 +22,7 @@ var menu = []menuItem{
 			"Ctrl+S   - Save in txt file",
 			"Ctrl+O   - Load Image",
 			"Enter    - Show this help menu",
-			"Any char - Set this symbol",
+			"Any char - Set this Symbol",
 		},
 	},
 	{
@@ -40,7 +40,7 @@ var menu = []menuItem{
 		title: "Symbol",
 		end:   "┤",
 		item: []string{
-			"Click to select symbol",
+			"Click to select Symbol",
 		},
 	},
 	{
@@ -64,20 +64,20 @@ var menu = []menuItem{
 	},
 }
 
-const helpWidth = 37
+const HelpWidth = 37
 
-func drawHelpMenu(s *Screen, screen [][]string) [][]string {
-	ClearMenu(s, screen, helpWidth)
+func DrawHelpMenu(s *Screen, screen [][]string) [][]string {
+	ClearMenu(s, screen, HelpWidth)
 	for _, mi := range menu {
-		mi.drawMenuItem(screen)
+		mi.DrawMenuItem(screen)
 	}
 
 	return screen
 }
 
-func (m menuItem) drawMenuItem(screen [][]string) [][]string {
+func (m menuItem) DrawMenuItem(screen [][]string) [][]string {
 	var str string
-	str = m.title + " " + strings.Repeat("─", helpWidth-1-len(m.title)) + m.end
+	str = m.title + " " + strings.Repeat("─", HelpWidth-1-len(m.title)) + m.end
 	DrawString(0, m.Y, str, screen)
 	for k, i := range m.item {
 		str = i

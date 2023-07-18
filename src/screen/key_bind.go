@@ -1,4 +1,4 @@
-package src
+package screen
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func keyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
+func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 	switch msg.Type {
 	case tea.KeyCtrlC, tea.KeyEsc:
 		return s, tea.Quit
@@ -35,7 +35,7 @@ func keyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 		s.ShowMenu = false
 		s.ShowHelp = false
 		s.ShowFile = false
-		s.Messages = []message{}
+		s.Messages = []Message{}
 
 	// del file
 	case tea.KeyDelete:

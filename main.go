@@ -1,25 +1,26 @@
 package main
 
 import (
-	"github.com/14Artemiy88/termPaint/src"
+	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/screen"
 	tea "github.com/charmbracelet/bubbletea"
 	"log"
 	"os"
 )
 
 func main() {
-	src.InitConfig()
-	c := src.Cursor{
-		Symbol: src.Cfg.DefaultCursor,
-		Color:  src.Cfg.DefaultColor,
-		Brush:  src.Dot,
+	config.InitConfig()
+	c := screen.Cursor{
+		Symbol: config.Cfg.DefaultCursor,
+		Color:  config.Cfg.DefaultColor,
+		Brush:  screen.Dot,
 	}
-	s := &src.Screen{
-		Cursor:      src.Cfg.DefaultCursor,
+	s := &screen.Screen{
+		Cursor:      config.Cfg.DefaultCursor,
 		NewCursor:   c,
-		CursorStore: src.Cfg.DefaultCursor,
-		Color:       src.Cfg.DefaultColor,
-		Dir:         src.Cfg.ImageSaveDirectory,
+		CursorStore: config.Cfg.DefaultCursor,
+		Color:       config.Cfg.DefaultColor,
+		Dir:         config.Cfg.ImageSaveDirectory,
 	}
 	p := tea.NewProgram(
 		s,
@@ -27,12 +28,12 @@ func main() {
 		tea.WithMouseAllMotion(),
 	)
 
-	if _, err := os.Stat(src.Cfg.ImageSaveDirectory); os.IsNotExist(err) {
-		errDir := os.MkdirAll(src.Cfg.ImageSaveDirectory, 0755)
+	if _, err := os.Stat(config.Cfg.ImageSaveDirectory); os.IsNotExist(err) {
+		errDir := os.MkdirAll(config.Cfg.ImageSaveDirectory, 0755)
 		if errDir != nil {
 			s.SetMessage(err.Error())
 		}
-		s.SetMessage("Directory " + src.Cfg.ImageSaveDirectory + " successfully created.")
+		s.SetMessage("Directory " + config.Cfg.ImageSaveDirectory + " successfully created.")
 	}
 
 	if _, err := p.Run(); err != nil {

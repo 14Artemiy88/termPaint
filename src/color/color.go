@@ -1,8 +1,8 @@
-package src
+package color
 
 import "strconv"
 
-func setColor(color string) int {
+func SetColor(color string) int {
 	c, _ := strconv.Atoi(color)
 	if c < 255 {
 		return c
@@ -27,7 +27,7 @@ func Increase(color int) int {
 	return color
 }
 
-func minMsxColor(color int) int {
+func MinMaxColor(color int) int {
 	if color > 0 {
 		return 0
 	}
