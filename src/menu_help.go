@@ -1,6 +1,8 @@
-package main
+package src
 
-import "strings"
+import (
+	"strings"
+)
 
 type menuItem struct {
 	Y     int
@@ -30,7 +32,7 @@ var menu = []menuItem{
 		item: []string{
 			"Left   - Draw",
 			"Right  - Erase",
-			"Middle - Clear screen",
+			"Middle - Clear Screen",
 		},
 	},
 	{
@@ -64,8 +66,8 @@ var menu = []menuItem{
 
 const helpWidth = 37
 
-func drawHelpMenu(s *screen, screen [][]string) [][]string {
-	clearMenu(s, screen, helpWidth)
+func drawHelpMenu(s *Screen, screen [][]string) [][]string {
+	ClearMenu(s, screen, helpWidth)
 	for _, mi := range menu {
 		mi.drawMenuItem(screen)
 	}
@@ -76,10 +78,10 @@ func drawHelpMenu(s *screen, screen [][]string) [][]string {
 func (m menuItem) drawMenuItem(screen [][]string) [][]string {
 	var str string
 	str = m.title + " " + strings.Repeat("─", helpWidth-1-len(m.title)) + m.end
-	drawString(0, m.Y, str, screen)
+	DrawString(0, m.Y, str, screen)
 	for k, i := range m.item {
 		str = i
-		drawString(2, m.Y+1+k, str, screen)
+		DrawString(2, m.Y+1+k, str, screen)
 	}
 
 	return screen

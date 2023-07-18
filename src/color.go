@@ -1,4 +1,4 @@
-package main
+package src
 
 import "strconv"
 
@@ -11,7 +11,7 @@ func setColor(color string) int {
 	return 255
 }
 
-func decrease(color int) int {
+func Decrease(color int) int {
 	if color > 0 {
 		color--
 	}
@@ -19,7 +19,7 @@ func decrease(color int) int {
 	return color
 }
 
-func increase(color int) int {
+func Increase(color int) int {
 	if color < 255 {
 		color++
 	}

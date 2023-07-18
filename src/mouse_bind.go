@@ -1,10 +1,10 @@
-package main
+package src
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func mouseBind(msg tea.MouseMsg, s *screen) {
+func mouseBind(msg tea.MouseMsg, s *Screen) {
 	switch msg.Type {
 	case tea.MouseMotion:
 		mouseMotion(msg, s)
@@ -13,19 +13,19 @@ func mouseBind(msg tea.MouseMsg, s *screen) {
 		mouseLeft(msg, s)
 
 	case tea.MouseRight:
-		s.pixels = append(s.pixels, pixel{X: msg.X, Y: msg.Y, symbol: " "})
+		s.Pixels = append(s.Pixels, pixel{X: msg.X, Y: msg.Y, symbol: " "})
 
 	case tea.MouseMiddle:
-		s.pixels = []pixel{}
+		s.Pixels = []pixel{}
 
 	case tea.MouseWheelDown:
 		if color, ok := colors[msg.Y]; ok {
-			s.color[color] = decrease(s.color[color])
+			s.Color[color] = Decrease(s.Color[color])
 		}
 
 	case tea.MouseWheelUp:
 		if color, ok := colors[msg.Y]; ok {
-			s.color[color] = increase(s.color[color])
+			s.Color[color] = Increase(s.Color[color])
 		}
 	}
 }

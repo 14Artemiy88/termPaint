@@ -1,4 +1,4 @@
-package main
+package src
 
 import (
 	"github.com/spf13/viper"
@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-var cfg Config
+var Cfg Config
 
 type Config struct {
 	DefaultCursor       string                 `mapstructure:"default_cursor"`
@@ -20,16 +20,16 @@ type Config struct {
 	ImageSaveNameFormat string                 `mapstructure:"image_save_name_format"`
 }
 
-func initConfig() {
+func InitConfig() {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		log.Println("Cannot determine the user's home dir:", err)
 	}
 	viper.SetConfigFile(homeDir + "/.config/termPaint/config.yaml")
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Error reading cfg file, %s", err)
+		log.Fatalf("Error reading Cfg file, %s", err)
 	}
-	err = viper.Unmarshal(&cfg)
+	err = viper.Unmarshal(&Cfg)
 	if err != nil {
 		log.Fatalf("unable to decode into struct, %v", err)
 	}
