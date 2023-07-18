@@ -12,7 +12,7 @@ func FgRgb(r int, g int, b int, symbol string) string {
 }
 
 func isset(arr [][]string, first int, second int) bool {
-	return first < len(arr) && second < len(arr[first])
+	return first > 0 && second > 0 && first < len(arr) && second < len(arr[first])
 }
 
 func SetByKeys(X int, Y int, val string, screen [][]string) [][]string {

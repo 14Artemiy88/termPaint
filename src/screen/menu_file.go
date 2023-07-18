@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const fileX = 2
+const fileX = 3
 
 func FileList(s *Screen, screen [][]string, path string) [][]string {
 	files, err := os.ReadDir(path)
@@ -36,14 +36,14 @@ func FileList(s *Screen, screen [][]string, path string) [][]string {
 	}
 	s.FileListWidth = width + 6
 	ClearMenu(s, screen, s.FileListWidth)
-	str := "File " + strings.Repeat("─", s.FileListWidth-len("File ")) + "┐"
-	DrawString(0, 0, str, screen)
+	str := "File " + strings.Repeat("─", s.FileListWidth-len("File")-2) + "┐"
+	DrawString(1, 1, str, screen)
 
-	Y := 2
+	Y := 3
 	if config.Cfg.ShowFolder {
 		s.FileList = make(map[int]string, len(FileList)+len(dirList)+1)
 		s.FileList[1] = "../"
-		DrawString(fileX, 1, "..", screen)
+		DrawString(fileX, 2, "..", screen)
 		for _, dirName := range dirList {
 			DrawString(fileX, Y, fmt.Sprintf("🗀 %v", dirName), screen)
 			s.FileList[Y] = dirName + "/"

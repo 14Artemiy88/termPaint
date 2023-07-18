@@ -10,30 +10,30 @@ import (
 const MenuWidth = 15
 
 var Colors = map[int]string{
-	15: "r",
-	17: "g",
-	19: "b",
+	16: "r",
+	18: "g",
+	20: "b",
 }
 
-const colorX = 2
+const colorX = 3
 
 func DrawMenu(s *Screen, screen [][]string) [][]string {
 	ClearMenu(s, screen, MenuWidth)
 	drawSymbolMenu(screen)
 	drawColorMenu(s, screen)
-	str := "Help " + strings.Repeat("─", MenuWidth-len("Help ")) + "┤"
-	DrawString(0, s.Rows-2, str, screen)
-	DrawString(1, s.Rows-1, "Press Enter", screen)
+	str := "Help " + strings.Repeat("─", MenuWidth-len("Help")-2) + "┤"
+	DrawString(1, s.Rows-2, str, screen)
+	DrawString(2, s.Rows-1, "Press Enter", screen)
 
 	return screen
 }
 
 func drawSymbolMenu(screen [][]string) [][]string {
-	str := "Symbol " + strings.Repeat("─", MenuWidth-len("Symbol ")) + "┐"
-	DrawString(0, 0, str, screen)
+	str := "Symbol " + strings.Repeat("─", MenuWidth-len("Symbol")-2) + "┐"
+	DrawString(1, 1, str, screen)
 	for y, line := range config.Cfg.Symbols {
 		for x, symbol := range line {
-			utils.SetByKeys(x, y, symbol, screen)
+			utils.SetByKeys(x, y+1, symbol, screen)
 		}
 	}
 
@@ -41,10 +41,10 @@ func drawSymbolMenu(screen [][]string) [][]string {
 }
 
 func drawColorMenu(s *Screen, screen [][]string) [][]string {
-	str := "Color " + strings.Repeat("─", MenuWidth-len("Color ")) + "┤"
-	DrawString(0, 13, str, screen)
+	str := "Color " + strings.Repeat("─", MenuWidth-len("Color")-2) + "┤"
+	DrawString(1, 14, str, screen)
 	for y, line := range Colors {
-		DrawString(4, y, strconv.Itoa(s.Cursor.Color[line]), screen)
+		DrawString(colorX+2, y, strconv.Itoa(s.Cursor.Color[line]), screen)
 		switch line {
 		case "r":
 			utils.SetByKeys(colorX, y, utils.FgRgb(s.Cursor.Color[line], 0, 0, "█"), screen)
@@ -54,12 +54,12 @@ func drawColorMenu(s *Screen, screen [][]string) [][]string {
 			utils.SetByKeys(colorX, y, utils.FgRgb(0, 0, s.Cursor.Color[line], "█"), screen)
 		}
 	}
-	utils.SetByKeys(3, 21, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
-	utils.SetByKeys(4, 21, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
-	utils.SetByKeys(5, 21, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
 	utils.SetByKeys(3, 22, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
 	utils.SetByKeys(4, 22, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
 	utils.SetByKeys(5, 22, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
+	utils.SetByKeys(3, 23, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
+	utils.SetByKeys(4, 23, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
+	utils.SetByKeys(5, 23, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
 
 	return screen
 }

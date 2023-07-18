@@ -13,7 +13,7 @@ type menuItem struct {
 
 var menu = []menuItem{
 	{
-		Y:     0,
+		Y:     1,
 		title: "Keys",
 		end:   "┐",
 		item: []string{
@@ -26,7 +26,7 @@ var menu = []menuItem{
 		},
 	},
 	{
-		Y:     8,
+		Y:     9,
 		title: "Mouse",
 		end:   "┤",
 		item: []string{
@@ -36,7 +36,7 @@ var menu = []menuItem{
 		},
 	},
 	{
-		Y:     13,
+		Y:     14,
 		title: "Symbol",
 		end:   "┤",
 		item: []string{
@@ -44,7 +44,7 @@ var menu = []menuItem{
 		},
 	},
 	{
-		Y:     16,
+		Y:     17,
 		title: "Color",
 		end:   "┤",
 		item: []string{
@@ -54,7 +54,7 @@ var menu = []menuItem{
 		},
 	},
 	{
-		Y:     21,
+		Y:     22,
 		title: "File",
 		end:   "┤",
 		item: []string{
@@ -77,11 +77,11 @@ func DrawHelpMenu(s *Screen, screen [][]string) [][]string {
 
 func (m menuItem) DrawMenuItem(screen [][]string) [][]string {
 	var str string
-	str = m.title + " " + strings.Repeat("─", HelpWidth-1-len(m.title)) + m.end
-	DrawString(0, m.Y, str, screen)
+	str = m.title + " " + strings.Repeat("─", HelpWidth-2-len(m.title)) + m.end
+	DrawString(1, m.Y, str, screen)
 	for k, i := range m.item {
 		str = i
-		DrawString(2, m.Y+1+k, str, screen)
+		DrawString(3, m.Y+1+k, str, screen)
 	}
 
 	return screen

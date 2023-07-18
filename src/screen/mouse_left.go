@@ -11,7 +11,7 @@ import (
 func mouseLeft(msg tea.MouseMsg, s *Screen) {
 	if s.ShowMenu && msg.X < MenuWidth {
 		if symbol, ok := config.Cfg.Symbols[msg.Y][msg.X]; ok {
-			s.Cursor.Store = symbol
+			s.Cursor.Store.Symbol = symbol
 			s.Cursor.Symbol = symbol
 		}
 		if c, ok := Colors[msg.Y]; ok {
@@ -28,18 +28,36 @@ func mouseLeft(msg tea.MouseMsg, s *Screen) {
 			s.LoadImage(string(content))
 		}
 	} else {
-		s.Pixels = append(
-			s.Pixels,
-			Pixel{
-				X: msg.X,
-				Y: msg.Y,
-				Symbol: utils.FgRgb(
-					s.Cursor.Color["r"],
-					s.Cursor.Color["g"],
-					s.Cursor.Color["b"],
-					s.Cursor.Symbol,
-				),
-			},
-		)
+		if len(s.Cursor.Pixels) > 1 {
+			for _, pixel := range s.Cursor.Pixels {
+				s.Pixels = append(
+					s.Pixels,
+					Pixel{
+						X: pixel.X,
+						Y: pixel.Y,
+						Symbol: utils.FgRgb(
+							s.Cursor.Color["r"],
+							s.Cursor.Color["g"],
+							s.Cursor.Color["b"],
+							s.Cursor.Symbol,
+						),
+					},
+				)
+			}
+		} else {
+			s.Pixels = append(
+				s.Pixels,
+				Pixel{
+					X: msg.X,
+					Y: msg.Y,
+					Symbol: utils.FgRgb(
+						s.Cursor.Color["r"],
+						s.Cursor.Color["g"],
+						s.Cursor.Color["b"],
+						s.Cursor.Symbol,
+					),
+				},
+			)
+		}
 	}
 }

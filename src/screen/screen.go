@@ -77,7 +77,7 @@ func (s *Screen) View() string {
 
 	screen := make([][]string, s.Rows)
 
-	// draw empty Screen
+	// draw Empty Screen
 	for i := 0; i < s.Rows; i++ {
 		screen[i] = strings.Split(strings.Repeat(" ", s.Columns), "")
 	}

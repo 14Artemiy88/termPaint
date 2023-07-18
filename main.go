@@ -15,7 +15,11 @@ func main() {
 			Symbol: config.Cfg.DefaultCursor,
 			Color:  config.Cfg.DefaultColor,
 			Brush:  screen.Dot,
-			Store:  config.Cfg.DefaultCursor,
+			Width:  5,
+			Store: screen.Store{
+				Symbol: config.Cfg.DefaultCursor,
+				Brush:  screen.Dot,
+			},
 		},
 		Dir: config.Cfg.ImageSaveDirectory,
 	}

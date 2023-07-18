@@ -24,7 +24,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 		s.ShowMenu = !s.ShowMenu
 
 	// help
-	case tea.KeyEnter:
+	case tea.KeyEnter, tea.KeyCtrlH:
 		s.ShowMenu = false
 		s.ShowFile = false
 		s.ShowHelp = !s.ShowHelp
@@ -43,6 +43,12 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 			_ = os.Remove(s.File)
 		}
 
+	case tea.KeyCtrlZ:
+		s.Cursor.Brush++
+		if s.Cursor.Brush > 8 {
+			s.Cursor.Brush = 0
+		}
+
 	// set cursor or color
 	case tea.KeyRunes:
 		if s.ShowMenu && s.InputLock {
@@ -52,7 +58,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 				s.SetMessage(err.Error())
 			}
 		} else {
-			s.Cursor.Store = string(msg.Runes)
+			s.Cursor.Store.Symbol = string(msg.Runes)
 			s.Cursor.Symbol = string(msg.Runes)
 		}
 	}
