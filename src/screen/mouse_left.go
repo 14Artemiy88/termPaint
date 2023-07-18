@@ -13,7 +13,9 @@ func mouseLeft(msg tea.MouseMsg, s *Screen) {
 		if symbol, ok := config.Cfg.Symbols[msg.Y][msg.X]; ok {
 			s.Cursor.Store.Symbol = symbol
 			s.Cursor.Symbol = symbol
-			s.SetMessage("Set " + symbol)
+			if config.Cfg.Notifications.SetSymbol {
+				s.SetMessage("Set " + symbol)
+			}
 		}
 		if c, ok := Colors[msg.Y]; ok {
 			s.Cursor.Color[c] = color.MinMaxColor(s.Cursor.Color[c])

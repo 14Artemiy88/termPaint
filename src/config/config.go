@@ -18,6 +18,13 @@ type Config struct {
 	ShowHiddenFolder    bool                   `mapstructure:"show_hidden_folder"`
 	ImageSaveDirectory  string                 `mapstructure:"image_save_directory"`
 	ImageSaveNameFormat string                 `mapstructure:"image_save_name_format"`
+	Notifications       struct {
+		SetSymbol           bool `mapstructure:"set_symbol"`
+		Error               bool `mapstructure:"error"`
+		SaveImage           bool `mapstructure:"save_image"`
+		LoadImageSizeErrors bool `mapstructure:"load_image_size_errors"`
+	} `mapstructure:"notifications"`
+	//Notifications map[string]bool `mapstructure:"notifications"`
 }
 
 func InitConfig() {
@@ -25,7 +32,11 @@ func InitConfig() {
 	if err != nil {
 		log.Println("Cannot determine the user's home dir:", err)
 	}
-	viper.SetConfigFile(homeDir + "/.config/termPaint/config.yaml")
+	if os.Getenv("ENV") == "dev" {
+		viper.SetConfigFile("config.yaml")
+	} else {
+		viper.SetConfigFile(homeDir + "/.config/termPaint/config.yaml")
+	}
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading Cfg file, %s", err)
 	}

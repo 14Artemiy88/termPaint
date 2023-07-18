@@ -52,3 +52,8 @@ show_folder: true
 show_hidden_folder: false
 image_save_directory: './'
 image_save_name_format: "termPaint_01-02-2006_15:04:05.txt"
+notifications:
+    set_symbol: true
+    error: true
+    save_image: true
+    load_image_size_errors: true
