@@ -21,19 +21,35 @@ func MouseBind(msg tea.MouseMsg, s *Screen) {
 		s.Pixels = []Pixel{}
 
 	case tea.MouseWheelDown:
-		if c, ok := Colors[msg.Y]; ok {
+		if c, ok := Colors[msg.Y]; ok && s.Cursor.Brush == Pointer {
 			s.Cursor.Color[c] = color.Decrease(s.Cursor.Color[c])
 		}
-		if s.Cursor.Symbol != emptyCursor && s.Cursor.Symbol != config.Cfg.Pointer && s.Cursor.Width > 1 {
-			s.Cursor.Width--
+		if s.Cursor.Brush > Dot && s.Cursor.Symbol != config.Cfg.Pointer {
+			if msg.Ctrl {
+				if s.Cursor.Store.Brush == ESquare || s.Cursor.Store.Brush == FSquare {
+					if s.Cursor.Height > 1 {
+						s.Cursor.Height--
+					}
+				}
+			} else {
+				if s.Cursor.Width > 1 {
+					s.Cursor.Width--
+				}
+			}
 		}
 
 	case tea.MouseWheelUp:
-		if c, ok := Colors[msg.Y]; ok {
+		if c, ok := Colors[msg.Y]; ok && s.Cursor.Brush == Pointer {
 			s.Cursor.Color[c] = color.Increase(s.Cursor.Color[c])
 		}
-		if s.Cursor.Symbol != emptyCursor && s.Cursor.Symbol != config.Cfg.Pointer {
-			s.Cursor.Width++
+		if s.Cursor.Brush > Dot && s.Cursor.Symbol != config.Cfg.Pointer {
+			if msg.Ctrl {
+				if s.Cursor.Store.Brush == ESquare || s.Cursor.Store.Brush == FSquare {
+					s.Cursor.Height++
+				}
+			} else {
+				s.Cursor.Width++
+			}
 		}
 	}
 }

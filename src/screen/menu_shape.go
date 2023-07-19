@@ -8,12 +8,13 @@ import (
 const MenuShapeWidth = 12
 
 var shapeList = map[int]Shape{
-	3:  {shapeType: GLine, shapeSymbol: "━"},
-	5:  {shapeType: VLine, shapeSymbol: "┃"},
-	7:  {shapeType: ESquare, shapeSymbol: "🞎"},
-	9:  {shapeType: FSquare, shapeSymbol: "■"},
-	11: {shapeType: ECircle, shapeSymbol: "○"},
-	13: {shapeType: FCircle, shapeSymbol: "●"},
+	3:  {shapeType: Dot, shapeSymbol: "•"},
+	5:  {shapeType: GLine, shapeSymbol: "━"},
+	7:  {shapeType: VLine, shapeSymbol: "┃"},
+	9:  {shapeType: ESquare, shapeSymbol: "🞎"},
+	11: {shapeType: FSquare, shapeSymbol: "■"},
+	13: {shapeType: ECircle, shapeSymbol: "○"},
+	15: {shapeType: FCircle, shapeSymbol: "●"},
 }
 
 type Shape struct {
@@ -29,7 +30,15 @@ func drawShapeMenu(s *Screen, screen [][]string) [][]string {
 	for y, sh := range shapeList {
 		DrawString(3, y, sh.shapeSymbol, screen)
 	}
-	DrawString(1, 16, "Width: "+strconv.Itoa(s.Cursor.Width), screen)
+	switch s.Cursor.Store.Brush {
+	case GLine, VLine:
+		DrawString(1, 17, "Length: "+strconv.Itoa(s.Cursor.Width), screen)
+	case ESquare, FSquare:
+		DrawString(1, 17, "Width: "+strconv.Itoa(s.Cursor.Width), screen)
+		DrawString(1, 18, "Height: "+strconv.Itoa(s.Cursor.Height), screen)
+	case ECircle, FCircle:
+		DrawString(1, 17, "Radius: "+strconv.Itoa(s.Cursor.Width), screen)
+	}
 
 	return screen
 }

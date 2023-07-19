@@ -84,9 +84,9 @@ func draw(msg tea.MouseMsg, s *Screen) {
 		}
 
 	case ESquare:
-		for i := 0; i < s.Cursor.Width; i++ {
+		for i := 0; i < s.Cursor.Height; i++ {
 			for j := 0; j < s.Cursor.Width; j++ {
-				if j > 0 && j < s.Cursor.Width-1 && i > 0 && i < s.Cursor.Width-1 {
+				if j > 0 && j < s.Cursor.Width-1 && i > 0 && i < s.Cursor.Height-1 {
 					continue
 				}
 				s.Pixels = append(
@@ -97,7 +97,7 @@ func draw(msg tea.MouseMsg, s *Screen) {
 		}
 
 	case FSquare:
-		for i := 0; i < s.Cursor.Width; i++ {
+		for i := 0; i < s.Cursor.Height; i++ {
 			for j := 0; j < s.Cursor.Width; j++ {
 				s.Pixels = append(
 					s.Pixels,
@@ -110,11 +110,7 @@ func draw(msg tea.MouseMsg, s *Screen) {
 		R := s.Cursor.Width / 2
 		k := 5
 		for y := -R * k; y <= R*k; y++ {
-			x := int(
-				math.Sqrt(
-					math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2),
-				) / .4583333333333333,
-			)
+			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / .4583333333333333)
 			ky := int(math.Round(float64(y) / float64(k)))
 			s.Pixels = append(
 				s.Pixels,
@@ -127,11 +123,7 @@ func draw(msg tea.MouseMsg, s *Screen) {
 		R := s.Cursor.Width / 2
 		k := 5
 		for y := -R * k; y <= R*k; y++ {
-			x := int(
-				math.Sqrt(
-					math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2),
-				) / .4583333333333333,
-			)
+			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / .4583333333333333)
 			ky := int(math.Round(float64(y) / float64(k)))
 			for i := -x; i <= x; i++ {
 				s.Pixels = append(

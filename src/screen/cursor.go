@@ -9,6 +9,7 @@ import (
 type Cursor struct {
 	Brush  cursorType
 	Width  int
+	Height int
 	Symbol string
 	Color  map[string]int
 	Store  Store
@@ -19,14 +20,12 @@ type Store struct {
 	Brush  cursorType
 }
 
-const emptyCursor = " "
-
 type cursorType int
 
 const (
-	Dot cursorType = iota
-	Empty
+	Empty cursorType = iota
 	Pointer
+	Dot
 	GLine
 	VLine
 	ESquare
@@ -68,19 +67,19 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 		}
 
 	case ESquare:
-		for i := 0; i < s.Cursor.Width; i++ {
-			for j := 0; j < s.Cursor.Width; j++ {
-				if j > 0 && j < s.Cursor.Width-1 && i > 0 && i < s.Cursor.Width-1 {
+		for y := 0; y < s.Cursor.Height; y++ {
+			for x := 0; x < s.Cursor.Width; x++ {
+				if x > 0 && x < s.Cursor.Width-1 && y > 0 && y < s.Cursor.Height-1 {
 					continue
 				}
-				utils.SetByKeys(s.X+j, s.Y+i, symbol, screen)
+				utils.SetByKeys(s.X+x, s.Y+y, symbol, screen)
 			}
 		}
 
 	case FSquare:
-		for i := 0; i < s.Cursor.Width; i++ {
-			for j := 0; j < s.Cursor.Width; j++ {
-				utils.SetByKeys(s.X+j, s.Y+i, symbol, screen)
+		for y := 0; y < s.Cursor.Height; y++ {
+			for x := 0; x < s.Cursor.Width; x++ {
+				utils.SetByKeys(s.X+x, s.Y+y, symbol, screen)
 			}
 		}
 

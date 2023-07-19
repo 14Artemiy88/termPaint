@@ -16,6 +16,7 @@ func main() {
 			Color:  config.Cfg.DefaultColor,
 			Brush:  screen.Dot,
 			Width:  4,
+			Height: 4,
 			Store: screen.Store{
 				Symbol: config.Cfg.DefaultCursor,
 				Brush:  screen.Dot,
