@@ -24,7 +24,6 @@ func mouseLeft(msg tea.MouseMsg, s *Screen) {
 func selectShape(msg tea.MouseMsg, s *Screen) {
 	if sh, ok := shapeList[msg.Y]; ok {
 		s.Cursor.Store.Brush = sh.shapeType
-		s.Cursor.Brush = sh.shapeType
 	}
 }
 
