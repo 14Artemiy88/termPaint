@@ -19,7 +19,7 @@ func FileList(s *Screen, screen [][]string, path string) [][]string {
 	}
 
 	var width int
-	var FileList []string
+	var fileList []string
 	var dirList []string
 	for _, file := range files {
 		fileName := file.Name()
@@ -31,7 +31,7 @@ func FileList(s *Screen, screen [][]string, path string) [][]string {
 			continue
 		}
 		if filepath.Ext(fileName) == ".txt" {
-			FileList = append(FileList, fileName)
+			fileList = append(fileList, fileName)
 		}
 	}
 	s.FileListWidth = width + 6
@@ -41,7 +41,7 @@ func FileList(s *Screen, screen [][]string, path string) [][]string {
 
 	Y := 3
 	if config.Cfg.ShowFolder {
-		s.FileList = make(map[int]string, len(FileList)+len(dirList)+1)
+		s.FileList = make(map[int]string, len(fileList)+len(dirList)+1)
 		s.FileList[2] = "../"
 		DrawString(fileX, 2, "..", screen)
 		for _, dirName := range dirList {
@@ -50,9 +50,9 @@ func FileList(s *Screen, screen [][]string, path string) [][]string {
 			Y++
 		}
 	} else {
-		s.FileList = make(map[int]string, len(FileList)+1)
+		s.FileList = make(map[int]string, len(fileList)+1)
 	}
-	for y, fileName := range FileList {
+	for y, fileName := range fileList {
 		DrawString(fileX, Y+y, fmt.Sprintf("🖹 %v", fileName), screen)
 		s.FileList[Y+y] = fileName
 	}

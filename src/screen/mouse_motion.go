@@ -7,22 +7,31 @@ import (
 )
 
 func mouseMotion(msg tea.MouseMsg, s *Screen) {
-	xMin := 0
-	if s.ShowMenu {
-		xMin = MenuWidth
-	}
-	if s.ShowHelp {
-		xMin = HelpWidth
-	}
-	if s.ShowFile {
+	var xMin int
+	switch s.MenuType {
+	case symbolColor:
+		xMin = MenuSymbolColorWidth
+	case file:
 		xMin = s.FileListWidth
+	case help:
+		xMin = HelpWidth
+	case shape:
+		xMin = MenuShapeWidth
+	default:
+		xMin = 0
 	}
-	if s.ShowMenu && msg.X <= xMin {
-		onMenu(msg, s)
-	} else if s.ShowFile && msg.X <= xMin {
-		onFile(msg, s)
-	} else if msg.X <= xMin {
-		s.X = xMin + 1
+
+	if msg.X <= xMin {
+		switch s.MenuType {
+		case symbolColor:
+			onMenu(msg, s)
+		case file:
+			onFile(msg, s)
+		case shape:
+			onShape(msg, s)
+		default:
+			s.Cursor.Brush = Empty
+		}
 	} else {
 		s.Cursor.Symbol = s.Cursor.Store.Symbol
 		s.Cursor.Brush = s.Cursor.Store.Brush
@@ -36,9 +45,15 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 	}
 }
 
+func onShape(msg tea.MouseMsg, s *Screen) {
+	s.Cursor.Brush = Empty
+	if _, ok := shapeList[msg.Y]; ok {
+		s.Cursor.Brush = Pointer
+	}
+}
+
 func onFile(msg tea.MouseMsg, s *Screen) {
-	s.Cursor.Symbol = emptyCursor
-	s.Cursor.Brush = Dot
+	s.Cursor.Brush = Empty
 	if file, ok := s.FileList[msg.Y]; ok {
 		s.Cursor.Brush = Pointer
 		s.File = file
@@ -48,11 +63,10 @@ func onFile(msg tea.MouseMsg, s *Screen) {
 }
 
 func onMenu(msg tea.MouseMsg, s *Screen) {
-	s.Cursor.Symbol = emptyCursor
-	s.Cursor.Brush = Dot
+	s.Cursor.Brush = Empty
 	_, okSymbol := config.Cfg.Symbols[msg.Y][msg.X]
 	c, okColor := Colors[msg.Y]
-	if okColor && msg.X < MenuWidth {
+	if okColor && msg.X < MenuSymbolColorWidth {
 		s.InputLock = true
 		s.InputColor = c
 		s.Cursor.Brush = Pointer
@@ -64,6 +78,6 @@ func onMenu(msg tea.MouseMsg, s *Screen) {
 		s.Input = ""
 	}
 	if !okSymbol && !okColor {
-		s.X = MenuWidth + 1
+		s.X = MenuSymbolColorWidth + 1
 	}
 }

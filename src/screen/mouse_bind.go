@@ -4,7 +4,6 @@ import (
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
 	tea "github.com/charmbracelet/bubbletea"
-	"strconv"
 )
 
 func MouseBind(msg tea.MouseMsg, s *Screen) {
@@ -27,7 +26,6 @@ func MouseBind(msg tea.MouseMsg, s *Screen) {
 		}
 		if s.Cursor.Symbol != emptyCursor && s.Cursor.Symbol != config.Cfg.Pointer && s.Cursor.Width > 1 {
 			s.Cursor.Width--
-			s.SetMessage(strconv.Itoa(s.Cursor.Width))
 		}
 
 	case tea.MouseWheelUp:
@@ -36,7 +34,6 @@ func MouseBind(msg tea.MouseMsg, s *Screen) {
 		}
 		if s.Cursor.Symbol != emptyCursor && s.Cursor.Symbol != config.Cfg.Pointer {
 			s.Cursor.Width++
-			s.SetMessage(strconv.Itoa(s.Cursor.Width))
 		}
 	}
 }

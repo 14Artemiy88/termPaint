@@ -12,29 +12,41 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 		return s, tea.Quit
 
 	// file
-	case tea.KeyCtrlO:
-		s.ShowHelp = false
-		s.ShowMenu = false
-		s.ShowFile = !s.ShowFile
+	case tea.KeyCtrlO, tea.KeyF3:
+		if s.MenuType == file {
+			s.MenuType = None
+		} else {
+			s.MenuType = file
+		}
 
 	// menu
-	case tea.KeyTab:
-		s.ShowHelp = false
-		s.ShowFile = false
-		s.ShowMenu = !s.ShowMenu
+	case tea.KeyTab, tea.KeyF2:
+		if s.MenuType == symbolColor {
+			s.MenuType = None
+		} else {
+			s.MenuType = symbolColor
+		}
 
 	// help
-	case tea.KeyEnter, tea.KeyCtrlH:
-		s.ShowMenu = false
-		s.ShowFile = false
-		s.ShowHelp = !s.ShowHelp
+	case tea.KeyEnter, tea.KeyCtrlH, tea.KeyF1:
+		if s.MenuType == help {
+			s.MenuType = None
+		} else {
+			s.MenuType = help
+		}
+
+	// shape
+	case tea.KeyF4:
+		if s.MenuType == shape {
+			s.MenuType = None
+		} else {
+			s.MenuType = shape
+		}
 
 	// save
 	case tea.KeyCtrlS:
 		s.Save = true
-		s.ShowMenu = false
-		s.ShowHelp = false
-		s.ShowFile = false
+		s.MenuType = None
 		s.Messages = []Message{}
 
 	// del file
@@ -43,16 +55,9 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 			_ = os.Remove(s.File)
 		}
 
-	case tea.KeyCtrlZ:
-		s.Cursor.Brush++
-		if s.Cursor.Brush > 8 {
-			s.Cursor.Brush = 0
-		}
-		s.Cursor.Store.Brush = s.Cursor.Brush
-
 	// set cursor or color
 	case tea.KeyRunes:
-		if s.ShowMenu && s.InputLock {
+		if s.MenuType == symbolColor && s.InputLock {
 			if _, err := strconv.Atoi(string(msg.Runes)); err == nil {
 				s.Input += string(msg.Runes)
 			} else {
