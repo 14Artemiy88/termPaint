@@ -42,7 +42,7 @@ func FileList(s *Screen, screen [][]string, path string) [][]string {
 	Y := 3
 	if config.Cfg.ShowFolder {
 		s.FileList = make(map[int]string, len(FileList)+len(dirList)+1)
-		s.FileList[1] = "../"
+		s.FileList[2] = "../"
 		DrawString(fileX, 2, "..", screen)
 		for _, dirName := range dirList {
 			DrawString(fileX, Y, fmt.Sprintf("🗀 %v", dirName), screen)

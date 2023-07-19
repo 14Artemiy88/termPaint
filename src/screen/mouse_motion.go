@@ -3,7 +3,6 @@ package screen
 import (
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
-	"github.com/14Artemiy88/termPaint/src/utils"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -41,13 +40,7 @@ func onFile(msg tea.MouseMsg, s *Screen) {
 	s.Cursor.Symbol = emptyCursor
 	s.Cursor.Brush = Dot
 	if file, ok := s.FileList[msg.Y]; ok {
-		s.X = 0
-		s.Cursor.Symbol = utils.FgRgb(
-			config.Cfg.PointerColor["r"],
-			config.Cfg.PointerColor["g"],
-			config.Cfg.PointerColor["b"],
-			config.Cfg.Pointer,
-		)
+		s.Cursor.Brush = Pointer
 		s.File = file
 	} else {
 		s.File = ""
@@ -62,13 +55,7 @@ func onMenu(msg tea.MouseMsg, s *Screen) {
 	if okColor && msg.X < MenuWidth {
 		s.InputLock = true
 		s.InputColor = c
-		s.X = 1
-		s.Cursor.Symbol = utils.FgRgb(
-			config.Cfg.PointerColor["r"],
-			config.Cfg.PointerColor["g"],
-			config.Cfg.PointerColor["b"],
-			config.Cfg.Pointer,
-		)
+		s.Cursor.Brush = Pointer
 	} else {
 		s.InputLock = false
 		if len(s.Input) > 0 {
