@@ -5,6 +5,7 @@ import (
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	tea "github.com/charmbracelet/bubbletea"
+	"math"
 	"os"
 )
 
@@ -56,24 +57,88 @@ func selectFile(msg tea.MouseMsg, s *Screen) {
 }
 
 func draw(msg tea.MouseMsg, s *Screen) {
-	if s.Cursor.Brush != Dot && len(s.Cursor.Pixels) > 1 {
-		s.Pixels = append(
-			s.Pixels,
-			s.Cursor.Pixels...,
-		)
-	} else {
-		s.Pixels = append(
-			s.Pixels,
-			Pixel{
-				X: msg.X,
-				Y: msg.Y,
-				Symbol: utils.FgRgb(
-					s.Cursor.Color["r"],
-					s.Cursor.Color["g"],
-					s.Cursor.Color["b"],
-					s.Cursor.Symbol,
-				),
-			},
-		)
+	symbol := utils.FgRgb(
+		s.Cursor.Color["r"],
+		s.Cursor.Color["g"],
+		s.Cursor.Color["b"],
+		s.Cursor.Symbol,
+	)
+
+	switch s.Cursor.Brush {
+	case Dot:
+		s.Pixels = append(s.Pixels, Pixel{X: msg.X, Y: msg.Y, Symbol: symbol})
+	case GLine:
+		for i := 0; i < s.Cursor.Width; i++ {
+			s.Pixels = append(
+				s.Pixels,
+				Pixel{X: msg.X + i, Y: msg.Y, Symbol: symbol},
+			)
+		}
+
+	case VLine:
+		for i := 0; i < s.Cursor.Width; i++ {
+			s.Pixels = append(
+				s.Pixels,
+				Pixel{X: msg.X, Y: msg.Y + i, Symbol: symbol},
+			)
+		}
+
+	case ESquare:
+		for i := 0; i < s.Cursor.Width; i++ {
+			for j := 0; j < s.Cursor.Width; j++ {
+				if j > 0 && j < s.Cursor.Width-1 && i > 0 && i < s.Cursor.Width-1 {
+					continue
+				}
+				s.Pixels = append(
+					s.Pixels,
+					Pixel{X: msg.X + j, Y: msg.Y + i, Symbol: symbol},
+				)
+			}
+		}
+
+	case FSquare:
+		for i := 0; i < s.Cursor.Width; i++ {
+			for j := 0; j < s.Cursor.Width; j++ {
+				s.Pixels = append(
+					s.Pixels,
+					Pixel{X: msg.X + j, Y: msg.Y + i, Symbol: symbol},
+				)
+			}
+		}
+
+	case ECircle:
+		R := s.Cursor.Width / 2
+		k := 5
+		for y := -R * k; y <= R*k; y++ {
+			x := int(
+				math.Sqrt(
+					math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2),
+				) / .4583333333333333,
+			)
+			ky := int(math.Round(float64(y) / float64(k)))
+			s.Pixels = append(
+				s.Pixels,
+				Pixel{X: msg.X + x, Y: msg.Y + ky, Symbol: symbol},
+				Pixel{X: msg.X - x, Y: msg.Y + ky, Symbol: symbol},
+			)
+		}
+
+	case FCircle:
+		R := s.Cursor.Width / 2
+		k := 5
+		for y := -R * k; y <= R*k; y++ {
+			x := int(
+				math.Sqrt(
+					math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2),
+				) / .4583333333333333,
+			)
+			ky := int(math.Round(float64(y) / float64(k)))
+			for i := -x; i <= x; i++ {
+				s.Pixels = append(
+					s.Pixels,
+					Pixel{X: msg.X + i, Y: msg.Y + ky, Symbol: symbol},
+				)
+			}
+		}
 	}
 }
