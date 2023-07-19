@@ -5,8 +5,10 @@ conf_dir="$HOME/.config/termPaint"
 if [[ ! -d "$conf_dir" ]]; then
     mkdir "$conf_dir"
 fi
-file="$conf_dir/config.yaml"
-if [[ -f "$file" ]]; then
-    echo mv "$file" "$file.old"
+
+FILE="$conf_dir/config.yaml"
+if [ -f "$FILE" ]; then
+    mv "$FILE" "$FILE.old"
 fi
-curl -o "$file"  https://raw.githubusercontent.com/14Artemiy88/termPaint/main/config.yaml
+
+curl -o "$FILE"  https://raw.githubusercontent.com/14Artemiy88/termPaint/main/config.yaml
