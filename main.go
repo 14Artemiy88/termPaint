@@ -14,8 +14,8 @@ func main() {
 		Cursor: screen.Cursor{
 			Symbol: config.Cfg.DefaultCursor,
 			Color:  config.Cfg.DefaultColor,
-			Brush:  screen.ECircle,
-			Width:  8,
+			Brush:  screen.Dot,
+			Width:  4,
 			Store: screen.Store{
 				Symbol: config.Cfg.DefaultCursor,
 				Brush:  screen.Dot,
