@@ -32,12 +32,10 @@ func mouseLeft(msg tea.MouseMsg, s *Screen) {
 		}
 	} else {
 		if s.Cursor.Brush != Dot && len(s.Cursor.Pixels) > 1 {
-
 			s.Pixels = append(
 				s.Pixels,
 				s.Cursor.Pixels...,
 			)
-
 		} else {
 			s.Pixels = append(
 				s.Pixels,
