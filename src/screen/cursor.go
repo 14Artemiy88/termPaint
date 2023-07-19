@@ -8,7 +8,7 @@ import (
 type Cursor struct {
 	X      int
 	Y      int
-	Pixels []pos
+	Pixels []Pixel
 	Brush  cursorType
 	Width  int
 	Symbol string
@@ -19,10 +19,6 @@ type Cursor struct {
 type Store struct {
 	Symbol string
 	Brush  cursorType
-}
-type pos struct {
-	X int
-	Y int
 }
 
 const emptyCursor = " "
@@ -46,7 +42,7 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 	case Empty:
 	case Pointer:
 	case Dot:
-		s.Cursor.Pixels = []pos{}
+		s.Cursor.Pixels = []Pixel{}
 		utils.SetByKeys(
 			s.X,
 			s.Y,
@@ -60,13 +56,19 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 		)
 
 	case GLine:
-		s.Cursor.Pixels = []pos{}
+		s.Cursor.Pixels = []Pixel{}
 		for i := 0; i < s.Cursor.Width; i++ {
 			s.Cursor.Pixels = append(
 				s.Cursor.Pixels,
-				pos{
+				Pixel{
 					X: s.X + i,
 					Y: s.Y,
+					Symbol: utils.FgRgb(
+						s.Cursor.Color["r"],
+						s.Cursor.Color["g"],
+						s.Cursor.Color["b"],
+						s.Cursor.Symbol,
+					),
 				},
 			)
 			utils.SetByKeys(
@@ -82,13 +84,19 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 			)
 		}
 	case VLine:
-		s.Cursor.Pixels = []pos{}
+		s.Cursor.Pixels = []Pixel{}
 		for i := 0; i < s.Cursor.Width; i++ {
 			s.Cursor.Pixels = append(
 				s.Cursor.Pixels,
-				pos{
+				Pixel{
 					X: s.X,
 					Y: s.Y + i,
+					Symbol: utils.FgRgb(
+						s.Cursor.Color["r"],
+						s.Cursor.Color["g"],
+						s.Cursor.Color["b"],
+						s.Cursor.Symbol,
+					),
 				},
 			)
 			utils.SetByKeys(
@@ -104,7 +112,7 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 			)
 		}
 	case ESquare:
-		s.Cursor.Pixels = []pos{}
+		s.Cursor.Pixels = []Pixel{}
 		for i := 0; i < s.Cursor.Width; i++ {
 			for j := 0; j < s.Cursor.Width; j++ {
 				if j > 0 && j < s.Cursor.Width-1 && i > 0 && i < s.Cursor.Width-1 {
@@ -112,9 +120,15 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 				}
 				s.Cursor.Pixels = append(
 					s.Cursor.Pixels,
-					pos{
+					Pixel{
 						X: s.X + j,
 						Y: s.Y + i,
+						Symbol: utils.FgRgb(
+							s.Cursor.Color["r"],
+							s.Cursor.Color["g"],
+							s.Cursor.Color["b"],
+							s.Cursor.Symbol,
+						),
 					},
 				)
 				utils.SetByKeys(
@@ -131,14 +145,20 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 			}
 		}
 	case FSquare:
-		s.Cursor.Pixels = []pos{}
+		s.Cursor.Pixels = []Pixel{}
 		for i := 0; i < s.Cursor.Width; i++ {
 			for j := 0; j < s.Cursor.Width; j++ {
 				s.Cursor.Pixels = append(
 					s.Cursor.Pixels,
-					pos{
+					Pixel{
 						X: s.X + j,
 						Y: s.Y + i,
+						Symbol: utils.FgRgb(
+							s.Cursor.Color["r"],
+							s.Cursor.Color["g"],
+							s.Cursor.Color["b"],
+							s.Cursor.Symbol,
+						),
 					},
 				)
 				utils.SetByKeys(
@@ -155,7 +175,7 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 			}
 		}
 	case ECircle:
-		s.Cursor.Pixels = []pos{}
+		s.Cursor.Pixels = []Pixel{}
 		for y := -s.Cursor.Width * 10; y <= s.Cursor.Width*10; y++ {
 			x := int(
 				math.Sqrt(
@@ -165,17 +185,29 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 
 			s.Cursor.Pixels = append(
 				s.Cursor.Pixels,
-				pos{
+				Pixel{
 					X: s.X + x,
 					Y: s.Y + y/10,
+					Symbol: utils.FgRgb(
+						s.Cursor.Color["r"],
+						s.Cursor.Color["g"],
+						s.Cursor.Color["b"],
+						s.Cursor.Symbol,
+					),
 				},
 			)
 
 			s.Cursor.Pixels = append(
 				s.Cursor.Pixels,
-				pos{
+				Pixel{
 					X: s.X - x,
 					Y: s.Y + y/10,
+					Symbol: utils.FgRgb(
+						s.Cursor.Color["r"],
+						s.Cursor.Color["g"],
+						s.Cursor.Color["b"],
+						s.Cursor.Symbol,
+					),
 				},
 			)
 			utils.SetByKeys(
@@ -203,7 +235,7 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 			)
 		}
 	case FCircle:
-		s.Cursor.Pixels = []pos{}
+		s.Cursor.Pixels = []Pixel{}
 		R := s.Cursor.Width / 2
 		for y := -R; y <= R; y++ {
 			x := int(
@@ -214,9 +246,15 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 			for i := -x; i < x; i++ {
 				s.Cursor.Pixels = append(
 					s.Cursor.Pixels,
-					pos{
+					Pixel{
 						X: s.X + i,
 						Y: s.Y + y,
+						Symbol: utils.FgRgb(
+							s.Cursor.Color["r"],
+							s.Cursor.Color["g"],
+							s.Cursor.Color["b"],
+							s.Cursor.Symbol,
+						),
 					},
 				)
 				utils.SetByKeys(

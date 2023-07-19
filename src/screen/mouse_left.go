@@ -31,22 +31,13 @@ func mouseLeft(msg tea.MouseMsg, s *Screen) {
 			s.LoadImage(string(content))
 		}
 	} else {
-		if len(s.Cursor.Pixels) > 1 {
-			for _, pixel := range s.Cursor.Pixels {
-				s.Pixels = append(
-					s.Pixels,
-					Pixel{
-						X: pixel.X,
-						Y: pixel.Y,
-						Symbol: utils.FgRgb(
-							s.Cursor.Color["r"],
-							s.Cursor.Color["g"],
-							s.Cursor.Color["b"],
-							s.Cursor.Symbol,
-						),
-					},
-				)
-			}
+		if s.Cursor.Brush != Dot && len(s.Cursor.Pixels) > 1 {
+
+			s.Pixels = append(
+				s.Pixels,
+				s.Cursor.Pixels...,
+			)
+
 		} else {
 			s.Pixels = append(
 				s.Pixels,

@@ -41,7 +41,7 @@ func onFile(msg tea.MouseMsg, s *Screen) {
 	s.Cursor.Symbol = emptyCursor
 	s.Cursor.Brush = Dot
 	if file, ok := s.FileList[msg.Y]; ok {
-		s.Cursor.X = 0
+		s.X = 0
 		s.Cursor.Symbol = utils.FgRgb(
 			config.Cfg.PointerColor["r"],
 			config.Cfg.PointerColor["g"],
