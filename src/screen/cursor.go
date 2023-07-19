@@ -110,40 +110,42 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 
 	case ECircle:
 		s.Cursor.Pixels = []Pixel{}
-		for y := -s.Cursor.Width * 10; y <= s.Cursor.Width*10; y++ {
+		R := s.Cursor.Width / 2
+		k := 5
+		for y := -R * k; y <= R*k; y++ {
 			x := int(
 				math.Sqrt(
-					math.Pow(float64(s.Cursor.Width), 2)-math.Pow(float64(y)/10.0, 2),
+					math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2),
 				) / .4583333333333333,
 			)
+			ky := int(math.Round(float64(y) / float64(k)))
 			s.Cursor.Pixels = append(
 				s.Cursor.Pixels,
-				Pixel{X: s.X + x, Y: s.Y + y/10, Symbol: symbol},
+				Pixel{X: s.X + x, Y: s.Y + ky, Symbol: symbol},
+				Pixel{X: s.X - x, Y: s.Y + ky, Symbol: symbol},
 			)
 
-			s.Cursor.Pixels = append(
-				s.Cursor.Pixels,
-				Pixel{X: s.X - x, Y: s.Y + y/10, Symbol: symbol},
-			)
-			utils.SetByKeys(s.X+x, s.Y+y/10, symbol, screen)
-			utils.SetByKeys(s.X-x, s.Y+y/10, symbol, screen)
+			utils.SetByKeys(s.X+x, s.Y+ky, symbol, screen)
+			utils.SetByKeys(s.X-x, s.Y+ky, symbol, screen)
 		}
 
 	case FCircle:
 		s.Cursor.Pixels = []Pixel{}
 		R := s.Cursor.Width / 2
-		for y := -R; y <= R; y++ {
+		k := 5
+		for y := -R * k; y <= R*k; y++ {
 			x := int(
 				math.Sqrt(
-					math.Pow(float64(R), 2)-math.Pow(float64(y), 2),
+					math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2),
 				) / .4583333333333333,
 			)
-			for i := -x; i < x; i++ {
+			ky := int(math.Round(float64(y) / float64(k)))
+			for i := -x; i <= x; i++ {
 				s.Cursor.Pixels = append(
 					s.Cursor.Pixels,
-					Pixel{X: s.X + i, Y: s.Y + y, Symbol: symbol},
+					Pixel{X: s.X + i, Y: s.Y + ky, Symbol: symbol},
 				)
-				utils.SetByKeys(s.X+i, s.Y+y, symbol, screen)
+				utils.SetByKeys(s.X+i, s.Y+ky, symbol, screen)
 			}
 		}
 	}
