@@ -17,6 +17,8 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 		xMin = HelpWidth
 	case shape:
 		xMin = MenuShapeWidth
+	case line:
+		xMin = MenuLineWidth
 	default:
 		xMin = 0
 	}
@@ -29,6 +31,8 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 			onFile(msg, s)
 		case shape:
 			onShape(msg, s)
+		case line:
+			onLine(msg, s)
 		default:
 			s.Cursor.Brush = Empty
 		}
@@ -42,6 +46,13 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 	}
 	if msg.Y > 0 && msg.Y < s.Rows {
 		s.Y = msg.Y
+	}
+}
+
+func onLine(msg tea.MouseMsg, s *Screen) {
+	s.Cursor.Brush = Empty
+	if _, ok := lineList[msg.Y]; ok {
+		s.Cursor.Brush = Pointer
 	}
 }
 

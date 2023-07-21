@@ -11,12 +11,12 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 	case tea.KeyCtrlC, tea.KeyEsc:
 		return s, tea.Quit
 
-	// file
-	case tea.KeyCtrlO, tea.KeyF3:
-		if s.MenuType == file {
+	// help
+	case tea.KeyEnter, tea.KeyCtrlH, tea.KeyF1:
+		if s.MenuType == help {
 			s.MenuType = None
 		} else {
-			s.MenuType = file
+			s.MenuType = help
 		}
 
 	// menu
@@ -27,12 +27,12 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 			s.MenuType = symbolColor
 		}
 
-	// help
-	case tea.KeyEnter, tea.KeyCtrlH, tea.KeyF1:
-		if s.MenuType == help {
+	// file
+	case tea.KeyCtrlO, tea.KeyF3:
+		if s.MenuType == file {
 			s.MenuType = None
 		} else {
-			s.MenuType = help
+			s.MenuType = file
 		}
 
 	// shape
@@ -41,6 +41,14 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 			s.MenuType = None
 		} else {
 			s.MenuType = shape
+		}
+
+	// shape
+	case tea.KeyF5:
+		if s.MenuType == line {
+			s.MenuType = None
+		} else {
+			s.MenuType = line
 		}
 
 	// save
@@ -64,8 +72,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 				s.SetMessage(err.Error())
 			}
 		} else {
-			s.Cursor.Store.Symbol = string(msg.Runes)
-			s.Cursor.Symbol = string(msg.Runes)
+			s.Cursor.setCursor(string(msg.Runes))
 		}
 	}
 

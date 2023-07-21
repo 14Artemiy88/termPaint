@@ -17,8 +17,17 @@ func mouseLeft(msg tea.MouseMsg, s *Screen) {
 		selectFile(msg, s)
 	} else if s.MenuType == shape && msg.X < MenuShapeWidth {
 		selectShape(msg, s)
+	} else if s.MenuType == line && msg.X < MenuLineWidth {
+		selectLine(msg, s)
 	} else {
 		draw(msg, s)
+	}
+}
+
+func selectLine(msg tea.MouseMsg, s *Screen) {
+	if line, ok := lineList[msg.Y]; ok {
+		s.Cursor.Store.Brush = line.LineType
+		s.Cursor.Store.Symbol = line.Cursor
 	}
 }
 
@@ -30,8 +39,7 @@ func selectShape(msg tea.MouseMsg, s *Screen) {
 
 func selectColor(msg tea.MouseMsg, s *Screen) {
 	if symbol, ok := config.Cfg.Symbols[msg.Y][msg.X]; ok {
-		s.Cursor.Store.Symbol = symbol
-		s.Cursor.Symbol = symbol
+		s.Cursor.setCursor(symbol)
 		if config.Cfg.Notifications.SetSymbol {
 			s.SetMessage("Set " + symbol)
 		}
@@ -132,5 +140,71 @@ func draw(msg tea.MouseMsg, s *Screen) {
 				)
 			}
 		}
+
+	case ContinuousLine:
+		var px int
+		var py int
+		var pr route
+		if s.StorePixel[0].Symbol != "" {
+			px = msg.X - s.StorePixel[0].X
+			py = msg.Y - s.StorePixel[0].Y
+			if px > 1 || px < -1 {
+				px = 0
+			}
+			if py > 1 || py < -1 {
+				py = 0
+			}
+		}
+		pr = getRoute[py][px]
+
+		var x int
+		var y int
+		var r route
+		line := "─"
+		prevLine := " "
+		if s.StorePixel[1].Symbol != "" {
+			x = msg.X - s.StorePixel[1].X // -1 0 1
+			y = msg.Y - s.StorePixel[1].Y // -1 0 1
+			if x < -1 || x > 1 || y < -1 || y > 1 {
+				s.StorePixel = [2]Pixel{}
+				x = 0
+				y = 0
+			}
+			if x == 0 {
+				line = "│"
+				s.Cursor.setCursor("│")
+			}
+			if y == 0 {
+				line = "─"
+				s.Cursor.setCursor("─")
+			}
+		}
+		r = getRoute[y][x]
+		prevLine = drawLineList[pr][r]
+		symbol = utils.FgRgb(
+			s.Cursor.Color["r"],
+			s.Cursor.Color["g"],
+			s.Cursor.Color["b"],
+			line,
+		)
+		pixel := Pixel{X: msg.X, Y: msg.Y, Symbol: symbol}
+		prevPixel := Pixel{X: msg.X - x, Y: msg.Y - y, Symbol: prevLine}
+
+		//s.Pixels = append(s.Pixels, pixel)
+		s.Pixels = append(s.Pixels, prevPixel)
+		//s.Pixels = append(s.Pixels, pixel, prevPixel)
+		s.StorePixel[0] = prevPixel
+		s.StorePixel[1] = pixel
 	}
+}
+
+func limit(value int, min int, max int) int {
+	if value <= min {
+		return min
+	}
+	if value >= max {
+		return max
+	}
+
+	return 0
 }

@@ -13,7 +13,23 @@ const (
 	file
 	help
 	shape
+	line
 )
+
+func drawMenu(s *Screen, screen [][]string) {
+	switch s.MenuType {
+	case symbolColor:
+		DrawSymbolColorMenu(s, screen)
+	case file:
+		FileList(s, screen, s.Dir)
+	case help:
+		DrawHelpMenu(s, screen)
+	case shape:
+		drawShapeMenu(s, screen)
+	case line:
+		drawLineMenu(s, screen)
+	}
+}
 
 func DrawString(X int, Y int, val string, screen [][]string) [][]string {
 	str := strings.Split(val, "")

@@ -14,6 +14,7 @@ type Screen struct {
 	Rows          int
 	Cursor        Cursor
 	Pixels        []Pixel
+	StorePixel    [2]Pixel
 	MenuType      menuType
 	FileList      map[int]string
 	FileListWidth int
@@ -83,16 +84,9 @@ func (s *Screen) View() string {
 	for _, p := range s.Pixels {
 		utils.SetByKeys(p.X, p.Y, p.Symbol, screen)
 	}
-	switch s.MenuType {
-	case symbolColor:
-		DrawSymbolColorMenu(s, screen)
-	case file:
-		FileList(s, screen, s.Dir)
-	case help:
-		DrawHelpMenu(s, screen)
-	case shape:
-		drawShapeMenu(s, screen)
-	}
+
+	drawMenu(s, screen)
+
 	if len(s.Messages) > 0 {
 		DrawMsg(s.Messages, s.MessageWidth, screen)
 	}

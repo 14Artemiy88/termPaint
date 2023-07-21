@@ -32,7 +32,16 @@ const (
 	FSquare
 	ECircle
 	FCircle
+	ContinuousLine
+	SmoothContinuousLine
+	FatContinuousLine
+	DoubleContinuousLine
 )
+
+func (c *Cursor) setCursor(cursor string) {
+	c.Symbol = cursor
+	c.Store.Symbol = cursor
+}
 
 func DrawCursor(s *Screen, screen [][]string) [][]string {
 	symbol := utils.FgRgb(
@@ -53,7 +62,11 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 		)
 		utils.SetByKeys(1, s.Y, symbol, screen)
 
-	case Dot:
+	case Dot,
+		ContinuousLine,
+		SmoothContinuousLine,
+		FatContinuousLine,
+		DoubleContinuousLine:
 		utils.SetByKeys(s.X, s.Y, symbol, screen)
 
 	case GLine:
