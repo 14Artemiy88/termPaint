@@ -180,14 +180,3 @@ func draw(msg tea.MouseMsg, s *Screen) {
 		s.StorePixel.restore(pixel, prevPixel)
 	}
 }
-
-func limit(value int, min int, max int) int {
-	if value <= min {
-		return min
-	}
-	if value >= max {
-		return max
-	}
-
-	return 0
-}
