@@ -74,21 +74,15 @@ func draw(msg tea.MouseMsg, s *Screen) {
 
 	switch s.Cursor.Brush {
 	case Dot:
-		s.Pixels = append(s.Pixels, Pixel{X: msg.X, Y: msg.Y, Symbol: symbol})
+		s.Pixels.add(Pixel{X: msg.X, Y: msg.Y, Symbol: symbol})
 	case GLine:
 		for i := 0; i < s.Cursor.Width; i++ {
-			s.Pixels = append(
-				s.Pixels,
-				Pixel{X: msg.X + i, Y: msg.Y, Symbol: symbol},
-			)
+			s.Pixels.add(Pixel{X: msg.X + i, Y: msg.Y, Symbol: symbol})
 		}
 
 	case VLine:
 		for i := 0; i < s.Cursor.Width; i++ {
-			s.Pixels = append(
-				s.Pixels,
-				Pixel{X: msg.X, Y: msg.Y + i, Symbol: symbol},
-			)
+			s.Pixels.add(Pixel{X: msg.X, Y: msg.Y + i, Symbol: symbol})
 		}
 
 	case ESquare:
@@ -97,20 +91,14 @@ func draw(msg tea.MouseMsg, s *Screen) {
 				if j > 0 && j < s.Cursor.Width-1 && i > 0 && i < s.Cursor.Height-1 {
 					continue
 				}
-				s.Pixels = append(
-					s.Pixels,
-					Pixel{X: msg.X + j, Y: msg.Y + i, Symbol: symbol},
-				)
+				s.Pixels.add(Pixel{X: msg.X + j, Y: msg.Y + i, Symbol: symbol})
 			}
 		}
 
 	case FSquare:
 		for i := 0; i < s.Cursor.Height; i++ {
 			for j := 0; j < s.Cursor.Width; j++ {
-				s.Pixels = append(
-					s.Pixels,
-					Pixel{X: msg.X + j, Y: msg.Y + i, Symbol: symbol},
-				)
+				s.Pixels.add(Pixel{X: msg.X + j, Y: msg.Y + i, Symbol: symbol})
 			}
 		}
 
@@ -120,8 +108,7 @@ func draw(msg tea.MouseMsg, s *Screen) {
 		for y := -R * k; y <= R*k; y++ {
 			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / .4583333333333333)
 			ky := int(math.Round(float64(y) / float64(k)))
-			s.Pixels = append(
-				s.Pixels,
+			s.Pixels.add(
 				Pixel{X: msg.X + x, Y: msg.Y + ky, Symbol: symbol},
 				Pixel{X: msg.X - x, Y: msg.Y + ky, Symbol: symbol},
 			)
@@ -134,10 +121,7 @@ func draw(msg tea.MouseMsg, s *Screen) {
 			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / .4583333333333333)
 			ky := int(math.Round(float64(y) / float64(k)))
 			for i := -x; i <= x; i++ {
-				s.Pixels = append(
-					s.Pixels,
-					Pixel{X: msg.X + i, Y: msg.Y + ky, Symbol: symbol},
-				)
+				s.Pixels.add(Pixel{X: msg.X + i, Y: msg.Y + ky, Symbol: symbol})
 			}
 		}
 
@@ -190,11 +174,10 @@ func draw(msg tea.MouseMsg, s *Screen) {
 		pixel := Pixel{X: msg.X, Y: msg.Y, Symbol: symbol}
 		prevPixel := Pixel{X: msg.X - x, Y: msg.Y - y, Symbol: prevLine}
 
-		//s.Pixels = append(s.Pixels, pixel)
-		s.Pixels = append(s.Pixels, prevPixel)
-		//s.Pixels = append(s.Pixels, pixel, prevPixel)
-		s.StorePixel[0] = prevPixel
-		s.StorePixel[1] = pixel
+		//s.Pixels.add(pixel)
+		s.Pixels.add(prevPixel)
+		//s.Pixels.add(pixel, prevPixel)
+		s.StorePixel.restore(pixel, prevPixel)
 	}
 }
 

@@ -13,8 +13,8 @@ type Screen struct {
 	Columns       int
 	Rows          int
 	Cursor        Cursor
-	Pixels        []Pixel
-	StorePixel    [2]Pixel
+	Pixels        pixels
+	StorePixel    storePixels
 	MenuType      menuType
 	FileList      map[int]string
 	FileListWidth int
@@ -26,12 +26,6 @@ type Screen struct {
 	Messages      []Message
 	MessageWidth  int
 	Dir           string
-}
-
-type Pixel struct {
-	X      int
-	Y      int
-	Symbol string
 }
 
 func (s *Screen) Init() tea.Cmd {

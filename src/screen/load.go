@@ -38,7 +38,7 @@ func loadWhite(lines []string, rows int, s *Screen, errors map[string]string) ma
 				}
 				maxX++
 			}
-			s.Pixels = append(s.Pixels, Pixel{X: x, Y: y, Symbol: symbol})
+			s.Pixels.add(Pixel{X: x, Y: y, Symbol: symbol})
 		}
 	}
 
@@ -71,7 +71,7 @@ func loadColored(lines []string, rows int, s *Screen, errors map[string]string) 
 			if symbol == "\u001B" {
 				if len(str) > 0 {
 					pixel := Pixel{X: x, Y: y, Symbol: str + utils.Reset}
-					s.Pixels = append(s.Pixels, pixel)
+					s.Pixels.add(pixel)
 					skip = len(utils.Reset) - 1
 					str = ""
 					continue
@@ -83,13 +83,13 @@ func loadColored(lines []string, rows int, s *Screen, errors map[string]string) 
 			if len(str) == 0 {
 				x++
 				pixel := Pixel{X: x, Y: y, Symbol: symbol}
-				s.Pixels = append(s.Pixels, pixel)
+				s.Pixels.add(pixel)
 				continue
 			}
 			str += symbol
 		}
 		x++
-		s.Pixels = append(s.Pixels, Pixel{X: x, Y: y, Symbol: str})
+		s.Pixels.add(Pixel{X: x, Y: y, Symbol: str})
 	}
 
 	return errors
