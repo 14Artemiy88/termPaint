@@ -3,8 +3,59 @@ package screen
 import (
 	"fmt"
 	"github.com/14Artemiy88/termPaint/src/utils"
+	"image"
+	_ "image/jpeg"
+	_ "image/png"
+	"math"
+	"os"
+	"strconv"
 	"strings"
 )
+
+func (s *Screen) loadFromImafe(path string) {
+	file, err := os.Open(path)
+	if err != nil {
+		s.SetMessage(err.Error())
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
+
+	img, _, err := image.Decode(file)
+	if err != nil {
+		s.SetMessage(err.Error())
+	}
+
+	bounds := img.Bounds()
+	ratio := 1
+	if s.Rows > s.Columns {
+		if bounds.Max.X > s.Columns {
+			ratio = int(math.Ceil(float64(bounds.Max.X) / float64(s.Columns)))
+		}
+	} else {
+		if bounds.Max.Y > s.Rows {
+			ratio = int(math.Ceil(float64(bounds.Max.Y)/float64(s.Rows)) / 2)
+		}
+	}
+	s.SetMessage(strconv.Itoa(ratio))
+	s.Pixels = []Pixel{}
+	var y int
+	for i := bounds.Min.Y; i < bounds.Max.Y; i += int(float64(ratio) / pixelRatio) {
+		var x int
+		for j := bounds.Min.X; j < bounds.Max.X; j += ratio {
+			color := img.At(j, i)
+			r, g, b, _ := color.RGBA()
+			symbol := utils.FgRgb(int(r/257), int(g/257), int(b/257), s.Cursor.Symbol)
+			s.Pixels.add(Pixel{X: x, Y: y, Symbol: symbol})
+			x++
+		}
+		fmt.Print("\n")
+		y++
+	}
+}
 
 func (s *Screen) LoadImage(screenStrong string) {
 	s.Pixels = []Pixel{}

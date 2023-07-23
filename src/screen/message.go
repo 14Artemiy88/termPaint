@@ -1,11 +1,10 @@
 package screen
 
 import (
+	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"strings"
 )
-
-const liveTime = 200
 
 type Message struct {
 	liveTime int
@@ -13,7 +12,7 @@ type Message struct {
 }
 
 func (s *Screen) SetMessage(text string) {
-	s.Messages = append(s.Messages, Message{text: text, liveTime: liveTime})
+	s.Messages = append(s.Messages, Message{text: text, liveTime: config.Cfg.NotificationTime})
 	textLen := len(text)
 	if textLen > s.MessageWidth {
 		s.MessageWidth = textLen

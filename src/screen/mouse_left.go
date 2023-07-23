@@ -7,7 +7,11 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"math"
 	"os"
+	"path/filepath"
+	"strconv"
 )
+
+const pixelRatio = .4583333333333333
 
 func mouseLeft(msg tea.MouseMsg, s *Screen) {
 	if s.MenuType == symbolColor && msg.X < MenuSymbolColorWidth {
@@ -53,14 +57,28 @@ func selectSymbol(msg tea.MouseMsg, s *Screen) {
 }
 
 func selectFile(msg tea.MouseMsg, s *Screen) {
-	if file, ok := s.FileList[msg.Y]; ok {
-		content, err := os.ReadFile(s.Dir + file)
+
+	if filePath, ok := s.FileList[msg.Y]; ok {
+		info, err := os.Stat(s.Dir + filePath)
 		if err != nil {
-			s.Dir += file
+			s.SetMessage(err.Error())
+		}
+		if info.IsDir() {
+			s.Dir += filePath
 		} else {
 			s.MenuType = None
+			ext := filepath.Ext(s.Dir + filePath)
+			if ext == ".txt" {
+				content, err := os.ReadFile(s.Dir + filePath)
+				if err != nil {
+					s.SetMessage(err.Error())
+				}
+				s.LoadImage(string(content))
+			}
+			if ext == ".jpg" || ext == ".png" {
+				s.loadFromImafe(s.Dir + filePath)
+			}
 		}
-		s.LoadImage(string(content))
 	}
 }
 
@@ -106,7 +124,7 @@ func draw(msg tea.MouseMsg, s *Screen) {
 		R := s.Cursor.Width / 2
 		k := 5
 		for y := -R * k; y <= R*k; y++ {
-			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / .4583333333333333)
+			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixelRatio)
 			ky := int(math.Round(float64(y) / float64(k)))
 			s.Pixels.add(
 				Pixel{X: msg.X + x, Y: msg.Y + ky, Symbol: symbol},
@@ -118,7 +136,7 @@ func draw(msg tea.MouseMsg, s *Screen) {
 		R := s.Cursor.Width / 2
 		k := 5
 		for y := -R * k; y <= R*k; y++ {
-			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / .4583333333333333)
+			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixelRatio)
 			ky := int(math.Round(float64(y) / float64(k)))
 			for i := -x; i <= x; i++ {
 				s.Pixels.add(Pixel{X: msg.X + i, Y: msg.Y + ky, Symbol: symbol})
@@ -143,9 +161,7 @@ func draw(msg tea.MouseMsg, s *Screen) {
 
 		var x int
 		var y int
-		var r route
 		line := "─"
-		prevLine := " "
 		if s.StorePixel[1].Symbol != "" {
 			x = msg.X - s.StorePixel[1].X // -1 0 1
 			y = msg.Y - s.StorePixel[1].Y // -1 0 1
@@ -163,8 +179,6 @@ func draw(msg tea.MouseMsg, s *Screen) {
 				s.Cursor.setCursor("─")
 			}
 		}
-		r = getRoute[y][x]
-		prevLine = drawLineList[pr][r]
 		symbol = utils.FgRgb(
 			s.Cursor.Color["r"],
 			s.Cursor.Color["g"],
@@ -172,11 +186,17 @@ func draw(msg tea.MouseMsg, s *Screen) {
 			line,
 		)
 		pixel := Pixel{X: msg.X, Y: msg.Y, Symbol: symbol}
-		prevPixel := Pixel{X: msg.X - x, Y: msg.Y - y, Symbol: prevLine}
+		s.Pixels.add(pixel)
+		prevPixel := Pixel{}
+		s.SetMessage(strconv.Itoa(px) + " " + strconv.Itoa(py))
+		if x != 0 || y != 0 {
+			r := getRoute[y][x]
+			prevLine := drawLineList[pr][r]
+			prevPixel = Pixel{X: s.StorePixel[1].X, Y: s.StorePixel[1].Y, Symbol: prevLine}
+			s.Pixels.add(prevPixel)
+		}
 
-		//s.Pixels.add(pixel)
-		s.Pixels.add(prevPixel)
 		//s.Pixels.add(pixel, prevPixel)
-		s.StorePixel.restore(pixel, prevPixel)
+		s.StorePixel.restore(prevPixel, pixel)
 	}
 }

@@ -57,3 +57,4 @@ notifications:
     error: true
     save_image: true
     load_image_size_errors: true
+notification_time: 200

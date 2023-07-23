@@ -47,11 +47,11 @@ var drawLineList = map[route]map[route]string{
 		right: "└",
 	},
 	stay: {
-		stay:  "─",
-		right: "─",
-		left:  "─",
-		up:    "│",
-		down:  "│",
+		stay:  "O", //"─",
+		right: "─", //"─",
+		left:  "─", //"─",
+		up:    "│", //"│",
+		down:  "│", //"│",
 	},
 }
 

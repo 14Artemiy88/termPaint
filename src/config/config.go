@@ -18,6 +18,7 @@ type Config struct {
 	ShowHiddenFolder    bool                   `mapstructure:"show_hidden_folder"`
 	ImageSaveDirectory  string                 `mapstructure:"image_save_directory"`
 	ImageSaveNameFormat string                 `mapstructure:"image_save_name_format"`
+	NotificationTime    int                    `mapstructure:"notification_time"`
 	Notifications       struct {
 		SetSymbol           bool `mapstructure:"set_symbol"`
 		Error               bool `mapstructure:"error"`

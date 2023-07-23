@@ -1,3 +1,5 @@
 .*
 vendor/
 *.txt
+*.jpg
+*.png

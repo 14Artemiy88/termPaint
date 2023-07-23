@@ -30,7 +30,8 @@ func FileList(s *Screen, screen [][]string, path string) [][]string {
 			dirList = append(dirList, fileName)
 			continue
 		}
-		if filepath.Ext(fileName) == ".txt" {
+		ext := filepath.Ext(fileName)
+		if ext == ".txt" || ext == ".jpg" || ext == ".png" {
 			fileList = append(fileList, fileName)
 		}
 	}
