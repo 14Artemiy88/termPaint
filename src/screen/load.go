@@ -67,9 +67,9 @@ func (s *Screen) LoadImage(screenString string) {
 		errors["rows"] = fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, Size.Rows)
 	}
 	if strings.Contains(screenString, "\u001B") {
-		loadColored(lines, rows, s, errors)
+		loadColored(lines, rows, errors)
 	} else {
-		loadWhite(lines, rows, s, errors)
+		loadWhite(lines, rows, errors)
 	}
 	if len(errors) > 0 {
 		for _, i := range errors {
@@ -78,7 +78,7 @@ func (s *Screen) LoadImage(screenString string) {
 	}
 }
 
-func loadWhite(lines []string, rows int, s *Screen, errors map[string]string) map[string]string {
+func loadWhite(lines []string, rows int, errors map[string]string) map[string]string {
 	for y := 0; y < rows; y++ {
 		line := strings.Split(lines[y], "")
 		var maxX int
@@ -97,7 +97,7 @@ func loadWhite(lines []string, rows int, s *Screen, errors map[string]string) ma
 	return errors
 }
 
-func loadColored(lines []string, rows int, s *Screen, errors map[string]string) map[string]string {
+func loadColored(lines []string, rows int, errors map[string]string) map[string]string {
 	for y := 0; y < rows; y++ {
 		line := strings.Split(lines[y], "")
 		var str string

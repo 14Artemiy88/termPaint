@@ -25,7 +25,7 @@ func drawMenu(s *Screen, screen [][]string) {
 	case file:
 		FileMenu(screen, Dir)
 	case help:
-		DrawHelpMenu(s, screen)
+		DrawHelpMenu(screen)
 	case shape:
 		drawShapeMenu(screen)
 	case line:
