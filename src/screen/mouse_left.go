@@ -10,8 +10,6 @@ import (
 	"path/filepath"
 )
 
-const pixelRatio = .4583333333333333
-
 func mouseLeft(msg tea.MouseMsg, s *Screen) {
 	if s.MenuType == symbolColor && msg.X < MenuSymbolColorWidth {
 		selectSymbol(msg, s)
@@ -28,12 +26,12 @@ func mouseLeft(msg tea.MouseMsg, s *Screen) {
 }
 
 func selectLine(msg tea.MouseMsg, s *Screen) {
-	if line, ok := lineList[msg.Y]; ok {
+	if line, ok := menuLineList[msg.Y]; ok {
 		s.Cursor.Store.Brush = line.LineType
 		if line.LineType == Dot {
-			s.Cursor.Store.Symbol = config.Cfg.DefaultCursor
+			s.Cursor.setCursor(config.Cfg.DefaultCursor)
 		} else {
-			s.Cursor.Store.Symbol = line.Cursor
+			s.Cursor.setCursor(line.Cursor)
 		}
 	}
 }
@@ -108,7 +106,7 @@ func draw(msg tea.MouseMsg, s *Screen) {
 		drawECircle(s, msg.X, msg.Y, symbol)
 	case FCircle:
 		drawFCircle(s, msg.X, msg.Y, symbol)
-	case ContinuousLine:
+	case ContinuousLine, SmoothContinuousLine, FatContinuousLine, DoubleContinuousLine:
 		drawContinuousLine(s, msg.X, msg.Y)
 	}
 }
@@ -177,7 +175,7 @@ func drawContinuousLine(s *Screen, X int, Y int) {
 	x := X - s.StorePixel[1].X // -1 0 1
 	y := Y - s.StorePixel[1].Y // -1 0 1
 	if x != 0 || y != 0 {
-		line := "─"
+		line := s.Cursor.Store.Symbol
 		if s.StorePixel[1].Symbol != "" {
 			if x < -1 || x > 1 || y < -1 || y > 1 {
 				s.StorePixel = [2]Pixel{}
@@ -185,14 +183,27 @@ func drawContinuousLine(s *Screen, X int, Y int) {
 				y = 0
 			}
 			if x == 0 {
-				line = "│"
-				s.Cursor.setCursor("│")
+				line = gvLine[line]["v"]
+				s.Cursor.setCursor(line)
 			}
 			if y == 0 {
-				line = "─"
-				s.Cursor.setCursor("─")
+				line = gvLine[line]["g"]
+				s.Cursor.setCursor(line)
 			}
 		}
+
+		pixel := Pixel{
+			X: X,
+			Y: Y,
+			Symbol: utils.FgRgb(
+				s.Cursor.Color["r"],
+				s.Cursor.Color["g"],
+				s.Cursor.Color["b"],
+				line,
+			),
+		}
+		s.Pixels.add(pixel)
+
 		var px int
 		var py int
 		var pr route
@@ -206,18 +217,19 @@ func drawContinuousLine(s *Screen, X int, Y int) {
 				py = 0
 			}
 		}
+		r := getRoute[y][x]
 		pr = getRoute[py][px]
 
-		symbol := utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], line)
-		pixel := Pixel{X: X, Y: Y, Symbol: symbol}
-		s.Pixels.add(pixel)
-
-		r := getRoute[y][x]
 		s.Pixels.add(
 			Pixel{
-				X:      s.StorePixel[1].X,
-				Y:      s.StorePixel[1].Y,
-				Symbol: drawLineList[pr][r],
+				X: s.StorePixel[1].X,
+				Y: s.StorePixel[1].Y,
+				Symbol: utils.FgRgb(
+					s.Cursor.Color["r"],
+					s.Cursor.Color["g"],
+					s.Cursor.Color["b"],
+					drawLine[s.Cursor.Store.Brush][pr][r],
+				),
 			},
 		)
 

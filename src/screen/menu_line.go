@@ -6,16 +6,15 @@ import (
 
 const MenuLineWidth = 10
 
-var lineList = map[int]Line{
+var menuLineList = map[int]Line{
 	3: {
 		LineType: Dot,
 		LineMenu: "•",
-		Cursor:   "•",
 	},
 	5: {
 		LineType: SmoothContinuousLine,
 		LineMenu: "╭─╯",
-		Cursor:   "⁓",
+		Cursor:   "─",
 	},
 	7: {
 		LineType: ContinuousLine,
@@ -34,30 +33,48 @@ var lineList = map[int]Line{
 	},
 }
 
-var drawLineList = map[route]map[route]string{
-	upLeft: {
-		up:   "└",
-		left: "┐",
-	},
-	upRight: {
-		up:    "┘",
-		right: "┌",
-	},
-	downLeft: {
-		down: "┌",
-		left: "┘",
-	},
-	downRight: {
-		down:  "┐",
-		right: "└",
-	},
-	stay: {
-		stay:  "O", //"─",
-		right: "─", //"─",
-		left:  "─", //"─",
-		up:    "│", //"│",
-		down:  "│", //"│",
-	},
+var lineList = map[route]map[route]string{
+	upLeft:    {up: "└", left: "┐"},
+	upRight:   {up: "┘", right: "┌"},
+	downLeft:  {down: "┌", left: "┘"},
+	downRight: {down: "┐", right: "└"},
+	stay:      {stay: "O", right: "─", left: "─", up: "│", down: "│"},
+}
+var smoothLineList = map[route]map[route]string{
+	upLeft:    {up: "╰", left: "╮"},
+	upRight:   {up: "╯", right: "╭"},
+	downLeft:  {down: "╭", left: "╯"},
+	downRight: {down: "╮", right: "╰"},
+	stay:      {stay: "O", right: "─", left: "─", up: "│", down: "│"},
+}
+
+var fatLineList = map[route]map[route]string{
+	upLeft:    {up: "┗", left: "┓"},
+	upRight:   {up: "┛", right: "┏"},
+	downLeft:  {down: "┏", left: "┛"},
+	downRight: {down: "┓", right: "┗"},
+	stay:      {stay: "O", right: "━", left: "━", up: "┃", down: "┃"},
+}
+
+var doubleLineList = map[route]map[route]string{
+	upLeft:    {up: "╚", left: "╗"},
+	upRight:   {up: "╝", right: "╔"},
+	downLeft:  {down: "╔", left: "╝"},
+	downRight: {down: "╗", right: "╚"},
+	stay:      {stay: "O", right: "═", left: "═", up: "║", down: "║"},
+}
+
+var drawLine = map[cursorType]map[route]map[route]string{
+	ContinuousLine:       lineList,
+	SmoothContinuousLine: smoothLineList,
+	FatContinuousLine:    fatLineList,
+	DoubleContinuousLine: doubleLineList,
+}
+
+var gvLine = map[string]map[string]string{
+	"─": {"v": "│", "g": "─"},
+	"━": {"v": "┃", "g": "━"},
+	"═": {"v": "║", "g": "═"},
 }
 
 type route int
@@ -104,7 +121,7 @@ func drawLineMenu(s *Screen, screen [][]string) [][]string {
 	str := "Line " + strings.Repeat("─", MenuLineWidth-len("Line")) + "┐"
 	DrawString(1, 1, str, screen)
 
-	for y, line := range lineList {
+	for y, line := range menuLineList {
 		DrawString(3, y, line.LineMenu, screen)
 	}
 

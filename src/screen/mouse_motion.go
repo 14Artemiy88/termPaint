@@ -51,7 +51,7 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 
 func onLine(msg tea.MouseMsg, s *Screen) {
 	s.Cursor.Brush = Empty
-	if _, ok := lineList[msg.Y]; ok {
+	if _, ok := menuLineList[msg.Y]; ok {
 		s.Cursor.Brush = Pointer
 	}
 }

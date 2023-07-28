@@ -1,5 +1,7 @@
 package screen
 
+const pixelRatio = .4583333333333333
+
 type Pixel struct {
 	X      int
 	Y      int
