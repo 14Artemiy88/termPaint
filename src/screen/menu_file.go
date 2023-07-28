@@ -63,7 +63,7 @@ func FileList(s *Screen, screen [][]string, path string) [][]string {
 	return screen
 }
 
-func SaveImage(image string, s *Screen) {
+func SaveImage(image string) {
 	f, err := os.Create(config.Cfg.ImageSaveDirectory + time.Now().Format(config.Cfg.ImageSaveNameFormat))
 	if err != nil {
 		SetMessage(err.Error())

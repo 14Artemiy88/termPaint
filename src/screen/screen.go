@@ -92,7 +92,7 @@ func (s *Screen) View() string {
 
 	if s.Save {
 		s.Save = false
-		SaveImage(screenString, s)
+		SaveImage(screenString)
 	}
 
 	return screenString

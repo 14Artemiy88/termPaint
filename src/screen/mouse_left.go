@@ -13,7 +13,7 @@ import (
 func mouseLeft(msg tea.MouseMsg, s *Screen) {
 	if s.MenuType == symbolColor && msg.X < MenuSymbolColorWidth {
 		selectSymbol(msg)
-		selectColor(msg, s)
+		selectColor(msg)
 	} else if s.MenuType == file && msg.X < s.FileListWidth {
 		selectFile(msg, s)
 	} else if s.MenuType == shape && msg.X < MenuShapeWidth {
@@ -42,7 +42,7 @@ func selectShape(msg tea.MouseMsg) {
 	}
 }
 
-func selectColor(msg tea.MouseMsg, s *Screen) {
+func selectColor(msg tea.MouseMsg) {
 	if symbol, ok := config.Cfg.Symbols[msg.Y][msg.X]; ok {
 		CC.setCursor(symbol)
 		if config.Cfg.Notifications.SetSymbol {
