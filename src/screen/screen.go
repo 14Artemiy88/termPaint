@@ -11,7 +11,6 @@ type Screen struct {
 	Columns       int
 	Rows          int
 	Pixels        pixels
-	StorePixel    storePixels
 	MenuType      menuType
 	FileList      map[int]string
 	FileListWidth int

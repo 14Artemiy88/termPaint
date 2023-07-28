@@ -171,13 +171,13 @@ func drawFCircle(s *Screen, X int, Y int, symbol string) {
 }
 
 func drawContinuousLine(s *Screen, X int, Y int) {
-	x := X - s.StorePixel[1].X // -1 0 1
-	y := Y - s.StorePixel[1].Y // -1 0 1
+	x := X - StorePixel[1].X // -1 0 1
+	y := Y - StorePixel[1].Y // -1 0 1
 	if x != 0 || y != 0 {
 		line := CC.Store.Symbol
-		if s.StorePixel[1].Symbol != "" {
+		if StorePixel[1].Symbol != "" {
 			if x < -1 || x > 1 || y < -1 || y > 1 {
-				s.StorePixel = [2]Pixel{}
+				StorePixel = [2]Pixel{}
 				x = 0
 				y = 0
 			}
@@ -206,9 +206,9 @@ func drawContinuousLine(s *Screen, X int, Y int) {
 		var px int
 		var py int
 		var pr route
-		if s.StorePixel[0].Symbol != "" {
-			px = X - s.StorePixel[0].X
-			py = Y - s.StorePixel[0].Y
+		if StorePixel[0].Symbol != "" {
+			px = X - StorePixel[0].X
+			py = Y - StorePixel[0].Y
 			if px > 1 || px < -1 {
 				px = 0
 			}
@@ -221,8 +221,8 @@ func drawContinuousLine(s *Screen, X int, Y int) {
 
 		s.Pixels.add(
 			Pixel{
-				X: s.StorePixel[1].X,
-				Y: s.StorePixel[1].Y,
+				X: StorePixel[1].X,
+				Y: StorePixel[1].Y,
 				Symbol: utils.FgRgb(
 					CC.Color["r"],
 					CC.Color["g"],
@@ -232,6 +232,6 @@ func drawContinuousLine(s *Screen, X int, Y int) {
 			},
 		)
 
-		s.StorePixel = [2]Pixel{s.StorePixel[1], pixel}
+		StorePixel = [2]Pixel{StorePixel[1], pixel}
 	}
 }
