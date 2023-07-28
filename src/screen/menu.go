@@ -18,7 +18,7 @@ const (
 
 var MenuType menuType
 
-func drawMenu(s *Screen, screen [][]string) {
+func drawMenu(screen [][]string) {
 	switch MenuType {
 	case symbolColor:
 		DrawSymbolColorMenu(screen)

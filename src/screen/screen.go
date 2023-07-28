@@ -71,7 +71,7 @@ func (s *Screen) View() string {
 		utils.SetByKeys(p.X, p.Y, p.Symbol, screen)
 	}
 
-	drawMenu(s, screen)
+	drawMenu(screen)
 
 	if len(Msg) > 0 {
 		DrawMsg(Msg, MsgWidth, screen)
