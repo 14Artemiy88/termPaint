@@ -70,7 +70,7 @@ const (
 )
 
 var getRoute = map[int]map[int]route{
-	// Y   X
+	// Y: X
 	-1: {
 		-1: upLeft,
 		1:  upRight,

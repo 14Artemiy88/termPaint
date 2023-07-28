@@ -8,7 +8,6 @@ import (
 	"math"
 	"os"
 	"path/filepath"
-	"strconv"
 )
 
 const pixelRatio = .4583333333333333
@@ -144,59 +143,54 @@ func draw(msg tea.MouseMsg, s *Screen) {
 		}
 
 	case ContinuousLine:
-		var px int
-		var py int
-		var pr route
-		if s.StorePixel[0].Symbol != "" {
-			px = msg.X - s.StorePixel[0].X
-			py = msg.Y - s.StorePixel[0].Y
-			if px > 1 || px < -1 {
-				px = 0
-			}
-			if py > 1 || py < -1 {
-				py = 0
-			}
-		}
-		pr = getRoute[py][px]
-
-		var x int
-		var y int
-		line := "─"
-		if s.StorePixel[1].Symbol != "" {
-			x = msg.X - s.StorePixel[1].X // -1 0 1
-			y = msg.Y - s.StorePixel[1].Y // -1 0 1
-			if x < -1 || x > 1 || y < -1 || y > 1 {
-				s.StorePixel = [2]Pixel{}
-				x = 0
-				y = 0
-			}
-			if x == 0 {
-				line = "│"
-				s.Cursor.setCursor("│")
-			}
-			if y == 0 {
-				line = "─"
-				s.Cursor.setCursor("─")
-			}
-		}
-		symbol = utils.FgRgb(
-			s.Cursor.Color["r"],
-			s.Cursor.Color["g"],
-			s.Cursor.Color["b"],
-			line,
-		)
-		pixel := Pixel{X: msg.X, Y: msg.Y, Symbol: symbol}
-		s.Pixels.add(pixel)
-		prevPixel := Pixel{}
-		s.SetMessage(strconv.Itoa(px) + " " + strconv.Itoa(py))
+		x := msg.X - s.StorePixel[1].X // -1 0 1
+		y := msg.Y - s.StorePixel[1].Y // -1 0 1
 		if x != 0 || y != 0 {
-			r := getRoute[y][x]
-			prevLine := drawLineList[pr][r]
-			prevPixel = Pixel{X: s.StorePixel[1].X, Y: s.StorePixel[1].Y, Symbol: prevLine}
-			s.Pixels.add(prevPixel)
-		}
+			line := "─"
+			if s.StorePixel[1].Symbol != "" {
+				if x < -1 || x > 1 || y < -1 || y > 1 {
+					s.StorePixel = [2]Pixel{}
+					x = 0
+					y = 0
+				}
+				if x == 0 {
+					line = "│"
+					s.Cursor.setCursor("│")
+				}
+				if y == 0 {
+					line = "─"
+					s.Cursor.setCursor("─")
+				}
+			}
+			var px int
+			var py int
+			var pr route
+			if s.StorePixel[0].Symbol != "" {
+				px = msg.X - s.StorePixel[0].X
+				py = msg.Y - s.StorePixel[0].Y
+				if px > 1 || px < -1 {
+					px = 0
+				}
+				if py > 1 || py < -1 {
+					py = 0
+				}
+			}
+			pr = getRoute[py][px]
 
-		//s.Pixels.add(pixel, prevPixel)
-		s.StorePixel.restore(prevPixel, pixel)
+			symbol = utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], line)
+			pixel := Pixel{X: msg.X, Y: msg.Y, Symbol: symbol}
+			s.Pixels.add(pixel)
+
+			r := getRoute[y][x]
+			s.Pixels.add(
+				Pixel{
+					X:      s.StorePixel[1].X,
+					Y:      s.StorePixel[1].Y,
+					Symbol: drawLineList[pr][r],
+				},
+			)
+
+			s.StorePixel = [2]Pixel{s.StorePixel[1], pixel}
+		}
 	}
 }
