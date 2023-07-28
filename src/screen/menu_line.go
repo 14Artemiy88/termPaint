@@ -7,26 +7,31 @@ import (
 const MenuLineWidth = 10
 
 var lineList = map[int]Line{
-	//3: {
-	//	LineType: SmoothContinuousLine,
-	//	LineMenu: "╭─╯",
-	//	Cursor:   "⁓",
-	//},
+	3: {
+		LineType: Dot,
+		LineMenu: "•",
+		Cursor:   "•",
+	},
 	5: {
+		LineType: SmoothContinuousLine,
+		LineMenu: "╭─╯",
+		Cursor:   "⁓",
+	},
+	7: {
 		LineType: ContinuousLine,
 		LineMenu: "┌─┘",
 		Cursor:   "─",
 	},
-	//7: {
-	//	LineType: FatContinuousLine,
-	//	LineMenu: "┏━┛",
-	//	Cursor:   "━",
-	//},
-	//9: {
-	//	LineType: DoubleContinuousLine,
-	//	LineMenu: "╔═╝",
-	//	Cursor:   "═",
-	//},
+	9: {
+		LineType: FatContinuousLine,
+		LineMenu: "┏━┛",
+		Cursor:   "━",
+	},
+	11: {
+		LineType: DoubleContinuousLine,
+		LineMenu: "╔═╝",
+		Cursor:   "═",
+	},
 }
 
 var drawLineList = map[route]map[route]string{

@@ -30,7 +30,11 @@ func mouseLeft(msg tea.MouseMsg, s *Screen) {
 func selectLine(msg tea.MouseMsg, s *Screen) {
 	if line, ok := lineList[msg.Y]; ok {
 		s.Cursor.Store.Brush = line.LineType
-		s.Cursor.Store.Symbol = line.Cursor
+		if line.LineType == Dot {
+			s.Cursor.Store.Symbol = config.Cfg.DefaultCursor
+		} else {
+			s.Cursor.Store.Symbol = line.Cursor
+		}
 	}
 }
 
@@ -91,106 +95,132 @@ func draw(msg tea.MouseMsg, s *Screen) {
 
 	switch s.Cursor.Brush {
 	case Dot:
-		s.Pixels.add(Pixel{X: msg.X, Y: msg.Y, Symbol: symbol})
+		drawDot(s, Pixel{X: msg.X, Y: msg.Y, Symbol: symbol})
 	case GLine:
-		for i := 0; i < s.Cursor.Width; i++ {
-			s.Pixels.add(Pixel{X: msg.X + i, Y: msg.Y, Symbol: symbol})
-		}
-
+		drawGLine(s, msg.X, msg.Y, symbol)
 	case VLine:
-		for i := 0; i < s.Cursor.Width; i++ {
-			s.Pixels.add(Pixel{X: msg.X, Y: msg.Y + i, Symbol: symbol})
-		}
-
+		drawVLine(s, msg.X, msg.Y, symbol)
 	case ESquare:
-		for i := 0; i < s.Cursor.Height; i++ {
-			for j := 0; j < s.Cursor.Width; j++ {
-				if j > 0 && j < s.Cursor.Width-1 && i > 0 && i < s.Cursor.Height-1 {
-					continue
-				}
-				s.Pixels.add(Pixel{X: msg.X + j, Y: msg.Y + i, Symbol: symbol})
-			}
-		}
-
+		drawESquare(s, msg.X, msg.Y, symbol)
 	case FSquare:
-		for i := 0; i < s.Cursor.Height; i++ {
-			for j := 0; j < s.Cursor.Width; j++ {
-				s.Pixels.add(Pixel{X: msg.X + j, Y: msg.Y + i, Symbol: symbol})
-			}
-		}
-
+		drawFSquare(s, msg.X, msg.Y, symbol)
 	case ECircle:
-		R := s.Cursor.Width / 2
-		k := 5
-		for y := -R * k; y <= R*k; y++ {
-			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixelRatio)
-			ky := int(math.Round(float64(y) / float64(k)))
-			s.Pixels.add(
-				Pixel{X: msg.X + x, Y: msg.Y + ky, Symbol: symbol},
-				Pixel{X: msg.X - x, Y: msg.Y + ky, Symbol: symbol},
-			)
-		}
-
+		drawECircle(s, msg.X, msg.Y, symbol)
 	case FCircle:
-		R := s.Cursor.Width / 2
-		k := 5
-		for y := -R * k; y <= R*k; y++ {
-			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixelRatio)
-			ky := int(math.Round(float64(y) / float64(k)))
-			for i := -x; i <= x; i++ {
-				s.Pixels.add(Pixel{X: msg.X + i, Y: msg.Y + ky, Symbol: symbol})
-			}
-		}
-
+		drawFCircle(s, msg.X, msg.Y, symbol)
 	case ContinuousLine:
-		x := msg.X - s.StorePixel[1].X // -1 0 1
-		y := msg.Y - s.StorePixel[1].Y // -1 0 1
-		if x != 0 || y != 0 {
-			line := "─"
-			if s.StorePixel[1].Symbol != "" {
-				if x < -1 || x > 1 || y < -1 || y > 1 {
-					s.StorePixel = [2]Pixel{}
-					x = 0
-					y = 0
-				}
-				if x == 0 {
-					line = "│"
-					s.Cursor.setCursor("│")
-				}
-				if y == 0 {
-					line = "─"
-					s.Cursor.setCursor("─")
-				}
+		drawContinuousLine(s, msg.X, msg.Y)
+	}
+}
+
+func drawDot(s *Screen, pixel Pixel) {
+	s.Pixels.add(pixel)
+}
+
+func drawGLine(s *Screen, x int, y int, symbol string) {
+	for i := 0; i < s.Cursor.Width; i++ {
+		s.Pixels.add(Pixel{X: x + i, Y: y, Symbol: symbol})
+	}
+}
+
+func drawVLine(s *Screen, x int, y int, symbol string) {
+	for i := 0; i < s.Cursor.Width; i++ {
+		s.Pixels.add(Pixel{X: x, Y: y + i, Symbol: symbol})
+	}
+}
+
+func drawESquare(s *Screen, x int, y int, symbol string) {
+	for i := 0; i < s.Cursor.Height; i++ {
+		for j := 0; j < s.Cursor.Width; j++ {
+			if j > 0 && j < s.Cursor.Width-1 && i > 0 && i < s.Cursor.Height-1 {
+				continue
 			}
-			var px int
-			var py int
-			var pr route
-			if s.StorePixel[0].Symbol != "" {
-				px = msg.X - s.StorePixel[0].X
-				py = msg.Y - s.StorePixel[0].Y
-				if px > 1 || px < -1 {
-					px = 0
-				}
-				if py > 1 || py < -1 {
-					py = 0
-				}
-			}
-			pr = getRoute[py][px]
-
-			symbol = utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], line)
-			pixel := Pixel{X: msg.X, Y: msg.Y, Symbol: symbol}
-			s.Pixels.add(pixel)
-
-			r := getRoute[y][x]
-			s.Pixels.add(
-				Pixel{
-					X:      s.StorePixel[1].X,
-					Y:      s.StorePixel[1].Y,
-					Symbol: drawLineList[pr][r],
-				},
-			)
-
-			s.StorePixel = [2]Pixel{s.StorePixel[1], pixel}
+			s.Pixels.add(Pixel{X: x + j, Y: y + i, Symbol: symbol})
 		}
+	}
+}
+
+func drawFSquare(s *Screen, x int, y int, symbol string) {
+	for i := 0; i < s.Cursor.Height; i++ {
+		for j := 0; j < s.Cursor.Width; j++ {
+			s.Pixels.add(Pixel{X: x + j, Y: y + i, Symbol: symbol})
+		}
+	}
+}
+
+func drawECircle(s *Screen, X int, Y int, symbol string) {
+	R := s.Cursor.Width / 2
+	k := 5
+	for y := -R * k; y <= R*k; y++ {
+		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixelRatio)
+		ky := int(math.Round(float64(y) / float64(k)))
+		s.Pixels.add(
+			Pixel{X: X + x, Y: Y + ky, Symbol: symbol},
+			Pixel{X: X - x, Y: Y + ky, Symbol: symbol},
+		)
+	}
+}
+
+func drawFCircle(s *Screen, X int, Y int, symbol string) {
+	R := s.Cursor.Width / 2
+	k := 5
+	for y := -R * k; y <= R*k; y++ {
+		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixelRatio)
+		ky := int(math.Round(float64(y) / float64(k)))
+		for i := -x; i <= x; i++ {
+			s.Pixels.add(Pixel{X: X + i, Y: Y + ky, Symbol: symbol})
+		}
+	}
+}
+
+func drawContinuousLine(s *Screen, X int, Y int) {
+	x := X - s.StorePixel[1].X // -1 0 1
+	y := Y - s.StorePixel[1].Y // -1 0 1
+	if x != 0 || y != 0 {
+		line := "─"
+		if s.StorePixel[1].Symbol != "" {
+			if x < -1 || x > 1 || y < -1 || y > 1 {
+				s.StorePixel = [2]Pixel{}
+				x = 0
+				y = 0
+			}
+			if x == 0 {
+				line = "│"
+				s.Cursor.setCursor("│")
+			}
+			if y == 0 {
+				line = "─"
+				s.Cursor.setCursor("─")
+			}
+		}
+		var px int
+		var py int
+		var pr route
+		if s.StorePixel[0].Symbol != "" {
+			px = X - s.StorePixel[0].X
+			py = Y - s.StorePixel[0].Y
+			if px > 1 || px < -1 {
+				px = 0
+			}
+			if py > 1 || py < -1 {
+				py = 0
+			}
+		}
+		pr = getRoute[py][px]
+
+		symbol := utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], line)
+		pixel := Pixel{X: X, Y: Y, Symbol: symbol}
+		s.Pixels.add(pixel)
+
+		r := getRoute[y][x]
+		s.Pixels.add(
+			Pixel{
+				X:      s.StorePixel[1].X,
+				Y:      s.StorePixel[1].Y,
+				Symbol: drawLineList[pr][r],
+			},
+		)
+
+		s.StorePixel = [2]Pixel{s.StorePixel[1], pixel}
 	}
 }
