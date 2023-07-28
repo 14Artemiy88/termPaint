@@ -32,13 +32,13 @@ func (s *Screen) loadFromImafe(path string) {
 
 	bounds := img.Bounds()
 	ratio := 1
-	if s.Rows > s.Columns {
-		if bounds.Max.X > s.Columns {
-			ratio = int(math.Ceil(float64(bounds.Max.X) / float64(s.Columns)))
+	if Size.Rows > Size.Columns {
+		if bounds.Max.X > Size.Columns {
+			ratio = int(math.Ceil(float64(bounds.Max.X) / float64(Size.Columns)))
 		}
 	} else {
-		if bounds.Max.Y > s.Rows {
-			ratio = int(math.Ceil(float64(bounds.Max.Y)/float64(s.Rows)) / 2)
+		if bounds.Max.Y > Size.Rows {
+			ratio = int(math.Ceil(float64(bounds.Max.Y)/float64(Size.Rows)) / 2)
 		}
 	}
 
@@ -63,8 +63,8 @@ func (s *Screen) LoadImage(screenString string) {
 	lines := strings.Split(screenString, "\n")
 	rows := len(lines)
 	errors := make(map[string]string, 2)
-	if rows > s.Rows {
-		errors["rows"] = fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, s.Rows)
+	if rows > Size.Rows {
+		errors["rows"] = fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, Size.Rows)
 	}
 	if strings.Contains(screenString, "\u001B") {
 		loadColored(lines, rows, s, errors)
@@ -83,10 +83,10 @@ func loadWhite(lines []string, rows int, s *Screen, errors map[string]string) ma
 		line := strings.Split(lines[y], "")
 		var maxX int
 		for x, symbol := range line {
-			if x >= s.Columns-1 {
+			if x >= Size.Columns-1 {
 				if maxX == 0 {
 					maxX = x
-					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, s.Columns)
+					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, Size.Columns)
 				}
 				maxX++
 			}
@@ -105,10 +105,10 @@ func loadColored(lines []string, rows int, s *Screen, errors map[string]string) 
 		var skip int
 		var maxX int
 		for _, symbol := range line {
-			if x >= s.Columns-1 {
+			if x >= Size.Columns-1 {
 				if maxX == 0 {
 					maxX = x
-					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, s.Columns)
+					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, Size.Columns)
 				}
 				maxX++
 			}

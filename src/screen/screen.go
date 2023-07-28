@@ -10,9 +10,7 @@ import (
 )
 
 type Screen struct {
-	Columns int
-	Rows    int
-	Save    bool
+	Save bool
 }
 
 type size struct {
@@ -50,23 +48,23 @@ func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		cursor.CC.X = msg.Width / 2
 		cursor.CC.Y = msg.Height / 2
-		s.Columns = msg.Width
-		s.Rows = msg.Height
+		Size.Columns = msg.Width
+		Size.Rows = msg.Height
 	}
 
 	return s, nil
 }
 
 func (s *Screen) View() string {
-	if s.Rows == 0 {
+	if Size.Rows == 0 {
 		return ""
 	}
 
-	screen := make([][]string, s.Rows)
+	screen := make([][]string, Size.Rows)
 
 	// draw Empty Screen
-	for i := 0; i < s.Rows; i++ {
-		screen[i] = strings.Split(strings.Repeat(" ", s.Columns), "")
+	for i := 0; i < Size.Rows; i++ {
+		screen[i] = strings.Split(strings.Repeat(" ", Size.Columns), "")
 	}
 
 	for _, p := range pixel.Pixels {

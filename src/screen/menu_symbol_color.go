@@ -31,8 +31,8 @@ func DrawSymbolColorMenu(s *Screen, screen [][]string) [][]string {
 	drawSymbolMenu(screen)
 	drawColorMenu(screen)
 	str := "Help " + strings.Repeat("─", MenuSymbolColorWidth-len("Help")-2) + "┤"
-	DrawString(1, s.Rows-2, str, screen)
-	DrawString(2, s.Rows-1, "Press Enter", screen)
+	DrawString(1, Size.Rows-2, str, screen)
+	DrawString(2, Size.Rows-1, "Press Enter", screen)
 
 	return screen
 }

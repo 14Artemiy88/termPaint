@@ -42,10 +42,10 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 		cursor.CC.Brush = cursor.CC.Store.Brush
 	}
 
-	if msg.X > xMin && msg.X < s.Columns {
+	if msg.X > xMin && msg.X < Size.Columns {
 		cursor.CC.X = msg.X
 	}
-	if msg.Y > 0 && msg.Y < s.Rows {
+	if msg.Y > 0 && msg.Y < Size.Rows {
 		cursor.CC.Y = msg.Y
 	}
 }
