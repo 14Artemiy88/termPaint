@@ -13,6 +13,7 @@ const fileX = 3
 
 var Dir string
 var File string
+var FileListWidth int
 
 func FileList(s *Screen, screen [][]string, path string) [][]string {
 	files, err := os.ReadDir(path)
@@ -38,9 +39,9 @@ func FileList(s *Screen, screen [][]string, path string) [][]string {
 			fileList = append(fileList, fileName)
 		}
 	}
-	s.FileListWidth = width + 6
-	ClearMenu(s, screen, s.FileListWidth)
-	str := "File " + strings.Repeat("─", s.FileListWidth-len("File")-2) + "┐"
+	FileListWidth = width + 6
+	ClearMenu(s, screen, FileListWidth)
+	str := "File " + strings.Repeat("─", FileListWidth-len("File")-2) + "┐"
 	DrawString(1, 1, str, screen)
 
 	Y := 3

@@ -13,7 +13,7 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 	case symbolColor:
 		xMin = MenuSymbolColorWidth
 	case file:
-		xMin = s.FileListWidth
+		xMin = FileListWidth
 	case help:
 		xMin = HelpWidth
 	case shape:

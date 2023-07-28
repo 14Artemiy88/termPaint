@@ -16,7 +16,7 @@ func mouseLeft(msg tea.MouseMsg, s *Screen) {
 	if s.MenuType == symbolColor && msg.X < MenuSymbolColorWidth {
 		selectSymbol(msg)
 		selectColor(msg)
-	} else if s.MenuType == file && msg.X < s.FileListWidth {
+	} else if s.MenuType == file && msg.X < FileListWidth {
 		selectFile(msg, s)
 	} else if s.MenuType == shape && msg.X < MenuShapeWidth {
 		selectShape(msg)

@@ -10,12 +10,11 @@ import (
 )
 
 type Screen struct {
-	Columns       int
-	Rows          int
-	MenuType      menuType
-	FileList      map[int]string
-	FileListWidth int
-	Save          bool
+	Columns  int
+	Rows     int
+	MenuType menuType
+	FileList map[int]string
+	Save     bool
 }
 
 func (s *Screen) Init() tea.Cmd {
