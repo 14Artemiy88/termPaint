@@ -26,7 +26,7 @@ var Colors = map[int]string{
 
 const colorX = 3
 
-func DrawSymbolColorMenu(s *Screen, screen [][]string) [][]string {
+func DrawSymbolColorMenu(screen [][]string) [][]string {
 	ClearMenu(screen, MenuSymbolColorWidth)
 	drawSymbolMenu(screen)
 	drawColorMenu(screen)

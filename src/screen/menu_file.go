@@ -18,7 +18,7 @@ var (
 	FileListWidth int
 )
 
-func FileMenu(s *Screen, screen [][]string, path string) [][]string {
+func FileMenu(screen [][]string, path string) [][]string {
 	files, err := os.ReadDir(path)
 	if err != nil {
 		SetMessage(err.Error())

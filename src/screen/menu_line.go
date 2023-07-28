@@ -117,7 +117,7 @@ type Line struct {
 	Cursor   string
 }
 
-func drawLineMenu(s *Screen, screen [][]string) [][]string {
+func drawLineMenu(screen [][]string) [][]string {
 	ClearMenu(screen, MenuShapeWidth)
 	str := "Line " + strings.Repeat("─", MenuLineWidth-len("Line")) + "┐"
 	DrawString(1, 1, str, screen)

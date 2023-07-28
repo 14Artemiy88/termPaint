@@ -23,7 +23,7 @@ type Shape struct {
 	shapeSymbol string
 }
 
-func drawShapeMenu(s *Screen, screen [][]string) [][]string {
+func drawShapeMenu(screen [][]string) [][]string {
 	ClearMenu(screen, MenuShapeWidth)
 	str := "Shape " + strings.Repeat("─", MenuShapeWidth-len("Shape")-2) + "┐"
 	DrawString(1, 1, str, screen)

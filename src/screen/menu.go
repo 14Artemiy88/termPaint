@@ -21,15 +21,15 @@ var MenuType menuType
 func drawMenu(s *Screen, screen [][]string) {
 	switch MenuType {
 	case symbolColor:
-		DrawSymbolColorMenu(s, screen)
+		DrawSymbolColorMenu(screen)
 	case file:
-		FileMenu(s, screen, Dir)
+		FileMenu(screen, Dir)
 	case help:
 		DrawHelpMenu(s, screen)
 	case shape:
-		drawShapeMenu(s, screen)
+		drawShapeMenu(screen)
 	case line:
-		drawLineMenu(s, screen)
+		drawLineMenu(screen)
 	}
 }
 
