@@ -3,6 +3,7 @@ package screen
 import (
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	tea "github.com/charmbracelet/bubbletea"
 	"math"
@@ -92,7 +93,7 @@ func draw(msg tea.MouseMsg) {
 
 	switch CC.Brush {
 	case Dot:
-		drawDot(Pixel{X: msg.X, Y: msg.Y, Symbol: symbol})
+		drawDot(pixel.Pixel{X: msg.X, Y: msg.Y, Symbol: symbol})
 	case GLine:
 		drawGLine(msg.X, msg.Y, symbol)
 	case VLine:
@@ -110,19 +111,19 @@ func draw(msg tea.MouseMsg) {
 	}
 }
 
-func drawDot(pixel Pixel) {
-	Pixels.add(pixel)
+func drawDot(p pixel.Pixel) {
+	pixel.Pixels.Add(p)
 }
 
 func drawGLine(x int, y int, symbol string) {
 	for i := 0; i < CC.Width; i++ {
-		Pixels.add(Pixel{X: x + i, Y: y, Symbol: symbol})
+		pixel.Pixels.Add(pixel.Pixel{X: x + i, Y: y, Symbol: symbol})
 	}
 }
 
 func drawVLine(x int, y int, symbol string) {
 	for i := 0; i < CC.Width; i++ {
-		Pixels.add(Pixel{X: x, Y: y + i, Symbol: symbol})
+		pixel.Pixels.Add(pixel.Pixel{X: x, Y: y + i, Symbol: symbol})
 	}
 }
 
@@ -132,7 +133,7 @@ func drawESquare(x int, y int, symbol string) {
 			if j > 0 && j < CC.Width-1 && i > 0 && i < CC.Height-1 {
 				continue
 			}
-			Pixels.add(Pixel{X: x + j, Y: y + i, Symbol: symbol})
+			pixel.Pixels.Add(pixel.Pixel{X: x + j, Y: y + i, Symbol: symbol})
 		}
 	}
 }
@@ -140,7 +141,7 @@ func drawESquare(x int, y int, symbol string) {
 func drawFSquare(x int, y int, symbol string) {
 	for i := 0; i < CC.Height; i++ {
 		for j := 0; j < CC.Width; j++ {
-			Pixels.add(Pixel{X: x + j, Y: y + i, Symbol: symbol})
+			pixel.Pixels.Add(pixel.Pixel{X: x + j, Y: y + i, Symbol: symbol})
 		}
 	}
 }
@@ -149,11 +150,11 @@ func drawECircle(X int, Y int, symbol string) {
 	R := CC.Width / 2
 	k := 5
 	for y := -R * k; y <= R*k; y++ {
-		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixelRatio)
+		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.PixelRatio)
 		ky := int(math.Round(float64(y) / float64(k)))
-		Pixels.add(
-			Pixel{X: X + x, Y: Y + ky, Symbol: symbol},
-			Pixel{X: X - x, Y: Y + ky, Symbol: symbol},
+		pixel.Pixels.Add(
+			pixel.Pixel{X: X + x, Y: Y + ky, Symbol: symbol},
+			pixel.Pixel{X: X - x, Y: Y + ky, Symbol: symbol},
 		)
 	}
 }
@@ -162,22 +163,22 @@ func drawFCircle(X int, Y int, symbol string) {
 	R := CC.Width / 2
 	k := 5
 	for y := -R * k; y <= R*k; y++ {
-		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixelRatio)
+		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.PixelRatio)
 		ky := int(math.Round(float64(y) / float64(k)))
 		for i := -x; i <= x; i++ {
-			Pixels.add(Pixel{X: X + i, Y: Y + ky, Symbol: symbol})
+			pixel.Pixels.Add(pixel.Pixel{X: X + i, Y: Y + ky, Symbol: symbol})
 		}
 	}
 }
 
 func drawContinuousLine(X int, Y int) {
-	x := X - StorePixel[1].X // -1 0 1
-	y := Y - StorePixel[1].Y // -1 0 1
+	x := X - pixel.StorePixel[1].X // -1 0 1
+	y := Y - pixel.StorePixel[1].Y // -1 0 1
 	if x != 0 || y != 0 {
 		line := CC.Store.Symbol
-		if StorePixel[1].Symbol != "" {
+		if pixel.StorePixel[1].Symbol != "" {
 			if x < -1 || x > 1 || y < -1 || y > 1 {
-				StorePixel = [2]Pixel{}
+				pixel.StorePixel = [2]pixel.Pixel{}
 				x = 0
 				y = 0
 			}
@@ -191,7 +192,7 @@ func drawContinuousLine(X int, Y int) {
 			}
 		}
 
-		pixel := Pixel{
+		p := pixel.Pixel{
 			X: X,
 			Y: Y,
 			Symbol: utils.FgRgb(
@@ -201,14 +202,14 @@ func drawContinuousLine(X int, Y int) {
 				line,
 			),
 		}
-		Pixels.add(pixel)
+		pixel.Pixels.Add(p)
 
 		var px int
 		var py int
 		var pr route
-		if StorePixel[0].Symbol != "" {
-			px = X - StorePixel[0].X
-			py = Y - StorePixel[0].Y
+		if pixel.StorePixel[0].Symbol != "" {
+			px = X - pixel.StorePixel[0].X
+			py = Y - pixel.StorePixel[0].Y
 			if px > 1 || px < -1 {
 				px = 0
 			}
@@ -219,10 +220,10 @@ func drawContinuousLine(X int, Y int) {
 		r := getRoute[y][x]
 		pr = getRoute[py][px]
 
-		Pixels.add(
-			Pixel{
-				X: StorePixel[1].X,
-				Y: StorePixel[1].Y,
+		pixel.Pixels.Add(
+			pixel.Pixel{
+				X: pixel.StorePixel[1].X,
+				Y: pixel.StorePixel[1].Y,
 				Symbol: utils.FgRgb(
 					CC.Color["r"],
 					CC.Color["g"],
@@ -232,6 +233,6 @@ func drawContinuousLine(X int, Y int) {
 			},
 		)
 
-		StorePixel = [2]Pixel{StorePixel[1], pixel}
+		pixel.StorePixel = [2]pixel.Pixel{pixel.StorePixel[1], p}
 	}
 }

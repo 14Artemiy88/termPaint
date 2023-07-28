@@ -1,6 +1,7 @@
 package screen
 
 import (
+	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	tea "github.com/charmbracelet/bubbletea"
 	"strings"
@@ -64,7 +65,7 @@ func (s *Screen) View() string {
 		screen[i] = strings.Split(strings.Repeat(" ", s.Columns), "")
 	}
 
-	for _, p := range Pixels {
+	for _, p := range pixel.Pixels {
 		utils.SetByKeys(p.X, p.Y, p.Symbol, screen)
 	}
 

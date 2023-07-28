@@ -3,6 +3,7 @@ package screen
 import (
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/pixel"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -15,10 +16,10 @@ func MouseBind(msg tea.MouseMsg, s *Screen) {
 		mouseLeft(msg, s)
 
 	case tea.MouseRight:
-		Pixels.add(Pixel{X: msg.X, Y: msg.Y, Symbol: " "})
+		pixel.Pixels.Add(pixel.Pixel{X: msg.X, Y: msg.Y, Symbol: " "})
 
 	case tea.MouseMiddle:
-		Pixels = []Pixel{}
+		pixel.Pixels = []pixel.Pixel{}
 
 	case tea.MouseWheelDown:
 		if c, ok := Colors[msg.Y]; ok && CC.Brush == Pointer {
