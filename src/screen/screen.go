@@ -10,7 +10,6 @@ import (
 type Screen struct {
 	Columns       int
 	Rows          int
-	Pixels        pixels
 	MenuType      menuType
 	FileList      map[int]string
 	FileListWidth int
@@ -65,7 +64,7 @@ func (s *Screen) View() string {
 		screen[i] = strings.Split(strings.Repeat(" ", s.Columns), "")
 	}
 
-	for _, p := range s.Pixels {
+	for _, p := range Pixels {
 		utils.SetByKeys(p.X, p.Y, p.Symbol, screen)
 	}
 

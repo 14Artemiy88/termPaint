@@ -40,7 +40,7 @@ func (s *Screen) loadFromImafe(path string) {
 		}
 	}
 
-	s.Pixels = []Pixel{}
+	Pixels = []Pixel{}
 	var y int
 	for i := bounds.Min.Y; i < bounds.Max.Y; i += int(float64(ratio) / pixelRatio) {
 		var x int
@@ -48,7 +48,7 @@ func (s *Screen) loadFromImafe(path string) {
 			color := img.At(j, i)
 			r, g, b, _ := color.RGBA()
 			symbol := utils.FgRgb(int(r/257), int(g/257), int(b/257), CC.Symbol)
-			s.Pixels.add(Pixel{X: x, Y: y, Symbol: symbol})
+			Pixels.add(Pixel{X: x, Y: y, Symbol: symbol})
 			x++
 		}
 		fmt.Print("\n")
@@ -57,7 +57,7 @@ func (s *Screen) loadFromImafe(path string) {
 }
 
 func (s *Screen) LoadImage(screenStrong string) {
-	s.Pixels = []Pixel{}
+	Pixels = []Pixel{}
 	lines := strings.Split(screenStrong, "\n")
 	rows := len(lines)
 	errors := make(map[string]string, 2)
@@ -88,7 +88,7 @@ func loadWhite(lines []string, rows int, s *Screen, errors map[string]string) ma
 				}
 				maxX++
 			}
-			s.Pixels.add(Pixel{X: x, Y: y, Symbol: symbol})
+			Pixels.add(Pixel{X: x, Y: y, Symbol: symbol})
 		}
 	}
 
@@ -121,7 +121,7 @@ func loadColored(lines []string, rows int, s *Screen, errors map[string]string) 
 			if symbol == "\u001B" {
 				if len(str) > 0 {
 					pixel := Pixel{X: x, Y: y, Symbol: str + utils.Reset}
-					s.Pixels.add(pixel)
+					Pixels.add(pixel)
 					skip = len(utils.Reset) - 1
 					str = ""
 					continue
@@ -133,13 +133,13 @@ func loadColored(lines []string, rows int, s *Screen, errors map[string]string) 
 			if len(str) == 0 {
 				x++
 				pixel := Pixel{X: x, Y: y, Symbol: symbol}
-				s.Pixels.add(pixel)
+				Pixels.add(pixel)
 				continue
 			}
 			str += symbol
 		}
 		x++
-		s.Pixels.add(Pixel{X: x, Y: y, Symbol: str})
+		Pixels.add(Pixel{X: x, Y: y, Symbol: str})
 	}
 
 	return errors

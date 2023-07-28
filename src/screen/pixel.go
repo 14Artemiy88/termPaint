@@ -9,6 +9,8 @@ type Pixel struct {
 }
 type pixels []Pixel
 
+var Pixels pixels
+
 var StorePixel [2]Pixel
 
 func (p *pixels) add(pixel ...Pixel) {

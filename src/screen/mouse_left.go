@@ -111,18 +111,18 @@ func draw(msg tea.MouseMsg, s *Screen) {
 }
 
 func drawDot(s *Screen, pixel Pixel) {
-	s.Pixels.add(pixel)
+	Pixels.add(pixel)
 }
 
 func drawGLine(s *Screen, x int, y int, symbol string) {
 	for i := 0; i < CC.Width; i++ {
-		s.Pixels.add(Pixel{X: x + i, Y: y, Symbol: symbol})
+		Pixels.add(Pixel{X: x + i, Y: y, Symbol: symbol})
 	}
 }
 
 func drawVLine(s *Screen, x int, y int, symbol string) {
 	for i := 0; i < CC.Width; i++ {
-		s.Pixels.add(Pixel{X: x, Y: y + i, Symbol: symbol})
+		Pixels.add(Pixel{X: x, Y: y + i, Symbol: symbol})
 	}
 }
 
@@ -132,7 +132,7 @@ func drawESquare(s *Screen, x int, y int, symbol string) {
 			if j > 0 && j < CC.Width-1 && i > 0 && i < CC.Height-1 {
 				continue
 			}
-			s.Pixels.add(Pixel{X: x + j, Y: y + i, Symbol: symbol})
+			Pixels.add(Pixel{X: x + j, Y: y + i, Symbol: symbol})
 		}
 	}
 }
@@ -140,7 +140,7 @@ func drawESquare(s *Screen, x int, y int, symbol string) {
 func drawFSquare(s *Screen, x int, y int, symbol string) {
 	for i := 0; i < CC.Height; i++ {
 		for j := 0; j < CC.Width; j++ {
-			s.Pixels.add(Pixel{X: x + j, Y: y + i, Symbol: symbol})
+			Pixels.add(Pixel{X: x + j, Y: y + i, Symbol: symbol})
 		}
 	}
 }
@@ -151,7 +151,7 @@ func drawECircle(s *Screen, X int, Y int, symbol string) {
 	for y := -R * k; y <= R*k; y++ {
 		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixelRatio)
 		ky := int(math.Round(float64(y) / float64(k)))
-		s.Pixels.add(
+		Pixels.add(
 			Pixel{X: X + x, Y: Y + ky, Symbol: symbol},
 			Pixel{X: X - x, Y: Y + ky, Symbol: symbol},
 		)
@@ -165,7 +165,7 @@ func drawFCircle(s *Screen, X int, Y int, symbol string) {
 		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixelRatio)
 		ky := int(math.Round(float64(y) / float64(k)))
 		for i := -x; i <= x; i++ {
-			s.Pixels.add(Pixel{X: X + i, Y: Y + ky, Symbol: symbol})
+			Pixels.add(Pixel{X: X + i, Y: Y + ky, Symbol: symbol})
 		}
 	}
 }
@@ -201,7 +201,7 @@ func drawContinuousLine(s *Screen, X int, Y int) {
 				line,
 			),
 		}
-		s.Pixels.add(pixel)
+		Pixels.add(pixel)
 
 		var px int
 		var py int
@@ -219,7 +219,7 @@ func drawContinuousLine(s *Screen, X int, Y int) {
 		r := getRoute[y][x]
 		pr = getRoute[py][px]
 
-		s.Pixels.add(
+		Pixels.add(
 			Pixel{
 				X: StorePixel[1].X,
 				Y: StorePixel[1].Y,
