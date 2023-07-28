@@ -58,15 +58,15 @@ func (s *Screen) loadFromImafe(path string) {
 	}
 }
 
-func (s *Screen) LoadImage(screenStrong string) {
+func (s *Screen) LoadImage(screenString string) {
 	pixel.Pixels = []pixel.Pixel{}
-	lines := strings.Split(screenStrong, "\n")
+	lines := strings.Split(screenString, "\n")
 	rows := len(lines)
 	errors := make(map[string]string, 2)
 	if rows > s.Rows {
 		errors["rows"] = fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, s.Rows)
 	}
-	if strings.Contains(screenStrong, "\u001B") {
+	if strings.Contains(screenString, "\u001B") {
 		loadColored(lines, rows, s, errors)
 	} else {
 		loadWhite(lines, rows, s, errors)

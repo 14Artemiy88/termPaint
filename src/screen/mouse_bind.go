@@ -14,7 +14,7 @@ func MouseBind(msg tea.MouseMsg, s *Screen) {
 		mouseMotion(msg, s)
 
 	case tea.MouseLeft:
-		mouseLeft(msg, s)
+		mouseLeft(msg.X, msg.Y, s)
 
 	case tea.MouseRight:
 		pixel.Pixels.Add(pixel.Pixel{X: msg.X, Y: msg.Y, Symbol: " "})

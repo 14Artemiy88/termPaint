@@ -14,48 +14,48 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 
 	// help
 	case tea.KeyEnter, tea.KeyCtrlH, tea.KeyF1:
-		if s.MenuType == help {
-			s.MenuType = None
+		if MenuType == help {
+			MenuType = None
 		} else {
-			s.MenuType = help
+			MenuType = help
 		}
 
 	// menu
 	case tea.KeyTab, tea.KeyF2:
-		if s.MenuType == symbolColor {
-			s.MenuType = None
+		if MenuType == symbolColor {
+			MenuType = None
 		} else {
-			s.MenuType = symbolColor
+			MenuType = symbolColor
 		}
 
 	// file
 	case tea.KeyCtrlO, tea.KeyF3:
-		if s.MenuType == file {
-			s.MenuType = None
+		if MenuType == file {
+			MenuType = None
 		} else {
-			s.MenuType = file
+			MenuType = file
 		}
 
 	// shape
 	case tea.KeyF4:
-		if s.MenuType == shape {
-			s.MenuType = None
+		if MenuType == shape {
+			MenuType = None
 		} else {
-			s.MenuType = shape
+			MenuType = shape
 		}
 
 	// line
-	//case tea.KeyF5:
-	//	if s.MenuType == line {
-	//		s.MenuType = None
-	//	} else {
-	//		s.MenuType = line
-	//	}
+	case tea.KeyF5:
+		if MenuType == line {
+			MenuType = None
+		} else {
+			MenuType = line
+		}
 
 	// save
 	case tea.KeyCtrlS:
 		s.Save = true
-		s.MenuType = None
+		MenuType = None
 		Msg = []Message{}
 
 	// del file
@@ -66,7 +66,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 
 	// set cursor or color
 	case tea.KeyRunes:
-		if s.MenuType == symbolColor && input.lock {
+		if MenuType == symbolColor && input.lock {
 			if _, err := strconv.Atoi(string(msg.Runes)); err == nil {
 				input.value += string(msg.Runes)
 			} else {

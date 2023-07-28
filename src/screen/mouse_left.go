@@ -6,29 +6,28 @@ import (
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
-	tea "github.com/charmbracelet/bubbletea"
 	"math"
 	"os"
 	"path/filepath"
 )
 
-func mouseLeft(msg tea.MouseMsg, s *Screen) {
-	if s.MenuType == symbolColor && msg.X < MenuSymbolColorWidth {
-		selectSymbol(msg)
-		selectColor(msg)
-	} else if s.MenuType == file && msg.X < FileListWidth {
-		selectFile(msg, s)
-	} else if s.MenuType == shape && msg.X < MenuShapeWidth {
-		selectShape(msg)
-	} else if s.MenuType == line && msg.X < MenuLineWidth {
-		selectLine(msg)
+func mouseLeft(X int, Y int, s *Screen) {
+	if MenuType == symbolColor && X < MenuSymbolColorWidth {
+		selectSymbol(Y)
+		selectColor(X, Y)
+	} else if MenuType == file && X < FileListWidth {
+		selectFile(Y, s)
+	} else if MenuType == shape && X < MenuShapeWidth {
+		selectShape(Y)
+	} else if MenuType == line && X < MenuLineWidth {
+		selectLine(Y)
 	} else {
-		draw(msg)
+		draw(X, Y)
 	}
 }
 
-func selectLine(msg tea.MouseMsg) {
-	if line, ok := menuLineList[msg.Y]; ok {
+func selectLine(Y int) {
+	if line, ok := menuLineList[Y]; ok {
 		cursor.CC.Store.Brush = line.LineType
 		if line.LineType == cursor.Dot {
 			cursor.CC.SetCursor(config.Cfg.DefaultCursor)
@@ -38,14 +37,14 @@ func selectLine(msg tea.MouseMsg) {
 	}
 }
 
-func selectShape(msg tea.MouseMsg) {
-	if sh, ok := shapeList[msg.Y]; ok {
+func selectShape(Y int) {
+	if sh, ok := shapeList[Y]; ok {
 		cursor.CC.Store.Brush = sh.shapeType
 	}
 }
 
-func selectColor(msg tea.MouseMsg) {
-	if symbol, ok := config.Cfg.Symbols[msg.Y][msg.X]; ok {
+func selectColor(X int, Y int) {
+	if symbol, ok := config.Cfg.Symbols[Y][X]; ok {
 		cursor.CC.SetCursor(symbol)
 		if config.Cfg.Notifications.SetSymbol {
 			SetMessage("Set " + symbol)
@@ -53,14 +52,14 @@ func selectColor(msg tea.MouseMsg) {
 	}
 }
 
-func selectSymbol(msg tea.MouseMsg) {
-	if c, ok := Colors[msg.Y]; ok {
+func selectSymbol(Y int) {
+	if c, ok := Colors[Y]; ok {
 		cursor.CC.Color[c] = color.MinMaxColor(cursor.CC.Color[c])
 	}
 }
 
-func selectFile(msg tea.MouseMsg, s *Screen) {
-	if filePath, ok := FileList[msg.Y]; ok {
+func selectFile(Y int, s *Screen) {
+	if filePath, ok := FileList[Y]; ok {
 		info, err := os.Stat(Dir + filePath)
 		if err != nil {
 			SetMessage(err.Error())
@@ -68,7 +67,7 @@ func selectFile(msg tea.MouseMsg, s *Screen) {
 		if info.IsDir() {
 			Dir += filePath
 		} else {
-			s.MenuType = None
+			MenuType = None
 			ext := filepath.Ext(Dir + filePath)
 			if ext == ".txt" {
 				content, err := os.ReadFile(Dir + filePath)
@@ -84,7 +83,7 @@ func selectFile(msg tea.MouseMsg, s *Screen) {
 	}
 }
 
-func draw(msg tea.MouseMsg) {
+func draw(X int, Y int) {
 	symbol := utils.FgRgb(
 		cursor.CC.Color["r"],
 		cursor.CC.Color["g"],
@@ -94,21 +93,21 @@ func draw(msg tea.MouseMsg) {
 
 	switch cursor.CC.Brush {
 	case cursor.Dot:
-		drawDot(pixel.Pixel{X: msg.X, Y: msg.Y, Symbol: symbol})
+		drawDot(pixel.Pixel{X: X, Y: Y, Symbol: symbol})
 	case cursor.GLine:
-		drawGLine(msg.X, msg.Y, symbol)
+		drawGLine(X, Y, symbol)
 	case cursor.VLine:
-		drawVLine(msg.X, msg.Y, symbol)
+		drawVLine(X, Y, symbol)
 	case cursor.ESquare:
-		drawESquare(msg.X, msg.Y, symbol)
+		drawESquare(X, Y, symbol)
 	case cursor.FSquare:
-		drawFSquare(msg.X, msg.Y, symbol)
+		drawFSquare(X, Y, symbol)
 	case cursor.ECircle:
-		drawECircle(msg.X, msg.Y, symbol)
+		drawECircle(X, Y, symbol)
 	case cursor.FCircle:
-		drawFCircle(msg.X, msg.Y, symbol)
+		drawFCircle(X, Y, symbol)
 	case cursor.ContinuousLine, cursor.SmoothContinuousLine, cursor.FatContinuousLine, cursor.DoubleContinuousLine:
-		drawContinuousLine(msg.X, msg.Y)
+		drawContinuousLine(X, Y)
 	}
 }
 

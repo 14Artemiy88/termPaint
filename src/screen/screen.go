@@ -10,11 +10,17 @@ import (
 )
 
 type Screen struct {
-	Columns  int
-	Rows     int
-	MenuType menuType
-	Save     bool
+	Columns int
+	Rows    int
+	Save    bool
 }
+
+type size struct {
+	Columns int
+	Rows    int
+}
+
+var Size size
 
 func (s *Screen) Init() tea.Cmd {
 	return tick

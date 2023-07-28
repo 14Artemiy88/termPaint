@@ -9,7 +9,7 @@ import (
 
 func mouseMotion(msg tea.MouseMsg, s *Screen) {
 	var xMin int
-	switch s.MenuType {
+	switch MenuType {
 	case symbolColor:
 		xMin = MenuSymbolColorWidth
 	case file:
@@ -25,7 +25,7 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 	}
 
 	if msg.X <= xMin {
-		switch s.MenuType {
+		switch MenuType {
 		case symbolColor:
 			onMenu(msg)
 		case file:
