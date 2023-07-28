@@ -15,6 +15,8 @@ type Cursor struct {
 	Store  Store
 }
 
+var CC Cursor
+
 type Store struct {
 	Symbol string
 	Brush  cursorType
@@ -45,12 +47,12 @@ func (c *Cursor) setCursor(cursor string) {
 
 func DrawCursor(s *Screen, screen [][]string) [][]string {
 	symbol := utils.FgRgb(
-		s.Cursor.Color["r"],
-		s.Cursor.Color["g"],
-		s.Cursor.Color["b"],
-		s.Cursor.Symbol,
+		CC.Color["r"],
+		CC.Color["g"],
+		CC.Color["b"],
+		CC.Symbol,
 	)
-	switch s.Cursor.Brush {
+	switch CC.Brush {
 	case Empty:
 	case Pointer:
 		s.X = 1
@@ -70,19 +72,19 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 		utils.SetByKeys(s.X, s.Y, symbol, screen)
 
 	case GLine:
-		for i := 0; i < s.Cursor.Width; i++ {
+		for i := 0; i < CC.Width; i++ {
 			utils.SetByKeys(s.X+i, s.Y, symbol, screen)
 		}
 
 	case VLine:
-		for i := 0; i < s.Cursor.Width; i++ {
+		for i := 0; i < CC.Width; i++ {
 			utils.SetByKeys(s.X, s.Y+i, symbol, screen)
 		}
 
 	case ESquare:
-		for y := 0; y < s.Cursor.Height; y++ {
-			for x := 0; x < s.Cursor.Width; x++ {
-				if x > 0 && x < s.Cursor.Width-1 && y > 0 && y < s.Cursor.Height-1 {
+		for y := 0; y < CC.Height; y++ {
+			for x := 0; x < CC.Width; x++ {
+				if x > 0 && x < CC.Width-1 && y > 0 && y < CC.Height-1 {
 					continue
 				}
 				utils.SetByKeys(s.X+x, s.Y+y, symbol, screen)
@@ -90,14 +92,14 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 		}
 
 	case FSquare:
-		for y := 0; y < s.Cursor.Height; y++ {
-			for x := 0; x < s.Cursor.Width; x++ {
+		for y := 0; y < CC.Height; y++ {
+			for x := 0; x < CC.Width; x++ {
 				utils.SetByKeys(s.X+x, s.Y+y, symbol, screen)
 			}
 		}
 
 	case ECircle:
-		R := s.Cursor.Width / 2
+		R := CC.Width / 2
 		k := 5
 		for y := -R * k; y <= R*k; y++ {
 			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixelRatio)
@@ -107,7 +109,7 @@ func DrawCursor(s *Screen, screen [][]string) [][]string {
 		}
 
 	case FCircle:
-		R := s.Cursor.Width / 2
+		R := CC.Width / 2
 		k := 5
 		for y := -R * k; y <= R*k; y++ {
 			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixelRatio)

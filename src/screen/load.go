@@ -47,7 +47,7 @@ func (s *Screen) loadFromImafe(path string) {
 		for j := bounds.Min.X; j < bounds.Max.X; j += ratio {
 			color := img.At(j, i)
 			r, g, b, _ := color.RGBA()
-			symbol := utils.FgRgb(int(r/257), int(g/257), int(b/257), s.Cursor.Symbol)
+			symbol := utils.FgRgb(int(r/257), int(g/257), int(b/257), CC.Symbol)
 			s.Pixels.add(Pixel{X: x, Y: y, Symbol: symbol})
 			x++
 		}

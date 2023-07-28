@@ -30,14 +30,14 @@ func drawShapeMenu(s *Screen, screen [][]string) [][]string {
 	for y, sh := range shapeList {
 		DrawString(3, y, sh.shapeSymbol, screen)
 	}
-	switch s.Cursor.Store.Brush {
+	switch CC.Store.Brush {
 	case GLine, VLine:
-		DrawString(1, 17, "Length: "+strconv.Itoa(s.Cursor.Width), screen)
+		DrawString(1, 17, "Length: "+strconv.Itoa(CC.Width), screen)
 	case ESquare, FSquare:
-		DrawString(1, 17, "Width: "+strconv.Itoa(s.Cursor.Width), screen)
-		DrawString(1, 18, "Height: "+strconv.Itoa(s.Cursor.Height), screen)
+		DrawString(1, 17, "Width: "+strconv.Itoa(CC.Width), screen)
+		DrawString(1, 18, "Height: "+strconv.Itoa(CC.Height), screen)
 	case ECircle, FCircle:
-		DrawString(1, 17, "Radius: "+strconv.Itoa(s.Cursor.Width), screen)
+		DrawString(1, 17, "Radius: "+strconv.Itoa(CC.Width), screen)
 	}
 
 	return screen

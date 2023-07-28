@@ -72,7 +72,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 				s.SetMessage(err.Error())
 			}
 		} else {
-			s.Cursor.setCursor(string(msg.Runes))
+			CC.setCursor(string(msg.Runes))
 		}
 	}
 

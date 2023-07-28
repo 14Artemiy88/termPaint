@@ -12,7 +12,6 @@ type Screen struct {
 	Y             int
 	Columns       int
 	Rows          int
-	Cursor        Cursor
 	Pixels        pixels
 	StorePixel    storePixels
 	MenuType      menuType

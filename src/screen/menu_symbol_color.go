@@ -44,22 +44,22 @@ func drawColorMenu(s *Screen, screen [][]string) [][]string {
 	str := "Color " + strings.Repeat("─", MenuSymbolColorWidth-len("Color")-2) + "┤"
 	DrawString(1, 15, str, screen)
 	for y, line := range Colors {
-		DrawString(colorX+2, y, strconv.Itoa(s.Cursor.Color[line]), screen)
+		DrawString(colorX+2, y, strconv.Itoa(CC.Color[line]), screen)
 		switch line {
 		case "r":
-			utils.SetByKeys(colorX, y, utils.FgRgb(s.Cursor.Color[line], 0, 0, "█"), screen)
+			utils.SetByKeys(colorX, y, utils.FgRgb(CC.Color[line], 0, 0, "█"), screen)
 		case "g":
-			utils.SetByKeys(colorX, y, utils.FgRgb(0, s.Cursor.Color[line], 0, "█"), screen)
+			utils.SetByKeys(colorX, y, utils.FgRgb(0, CC.Color[line], 0, "█"), screen)
 		case "b":
-			utils.SetByKeys(colorX, y, utils.FgRgb(0, 0, s.Cursor.Color[line], "█"), screen)
+			utils.SetByKeys(colorX, y, utils.FgRgb(0, 0, CC.Color[line], "█"), screen)
 		}
 	}
-	utils.SetByKeys(3, 23, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
-	utils.SetByKeys(4, 23, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
-	utils.SetByKeys(5, 23, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
-	utils.SetByKeys(3, 24, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
-	utils.SetByKeys(4, 24, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
-	utils.SetByKeys(5, 24, utils.FgRgb(s.Cursor.Color["r"], s.Cursor.Color["g"], s.Cursor.Color["b"], "█"), screen)
+	utils.SetByKeys(3, 23, utils.FgRgb(CC.Color["r"], CC.Color["g"], CC.Color["b"], "█"), screen)
+	utils.SetByKeys(4, 23, utils.FgRgb(CC.Color["r"], CC.Color["g"], CC.Color["b"], "█"), screen)
+	utils.SetByKeys(5, 23, utils.FgRgb(CC.Color["r"], CC.Color["g"], CC.Color["b"], "█"), screen)
+	utils.SetByKeys(3, 24, utils.FgRgb(CC.Color["r"], CC.Color["g"], CC.Color["b"], "█"), screen)
+	utils.SetByKeys(4, 24, utils.FgRgb(CC.Color["r"], CC.Color["g"], CC.Color["b"], "█"), screen)
+	utils.SetByKeys(5, 24, utils.FgRgb(CC.Color["r"], CC.Color["g"], CC.Color["b"], "█"), screen)
 
 	return screen
 }

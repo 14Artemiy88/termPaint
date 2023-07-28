@@ -10,17 +10,16 @@ import (
 
 func main() {
 	config.InitConfig()
-	s := &screen.Screen{
-		Cursor: screen.Cursor{
+	s := &screen.Screen{}
+	screen.CC = screen.Cursor{
+		Symbol: config.Cfg.DefaultCursor,
+		Color:  config.Cfg.DefaultColor,
+		Brush:  screen.Dot,
+		Width:  4,
+		Height: 4,
+		Store: screen.Store{
 			Symbol: config.Cfg.DefaultCursor,
-			Color:  config.Cfg.DefaultColor,
 			Brush:  screen.Dot,
-			Width:  4,
-			Height: 4,
-			Store: screen.Store{
-				Symbol: config.Cfg.DefaultCursor,
-				Brush:  screen.Dot,
-			},
 		},
 	}
 	screen.Dir = config.Cfg.ImageSaveDirectory
