@@ -22,8 +22,8 @@ func main() {
 				Brush:  screen.Dot,
 			},
 		},
-		Dir: config.Cfg.ImageSaveDirectory,
 	}
+	screen.Dir = config.Cfg.ImageSaveDirectory
 	p := tea.NewProgram(
 		s,
 		tea.WithAltScreen(),

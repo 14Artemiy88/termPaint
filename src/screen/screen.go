@@ -25,8 +25,9 @@ type Screen struct {
 	File          string
 	Messages      []Message
 	MessageWidth  int
-	Dir           string
 }
+
+var Dir string
 
 func (s *Screen) Init() tea.Cmd {
 	return tick

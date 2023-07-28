@@ -15,7 +15,7 @@ func FileList(s *Screen, screen [][]string, path string) [][]string {
 	files, err := os.ReadDir(path)
 	if err != nil {
 		s.SetMessage(err.Error())
-		s.Dir = config.Cfg.ImageSaveDirectory
+		Dir = config.Cfg.ImageSaveDirectory
 	}
 
 	var width int

@@ -8,7 +8,6 @@ import (
 	_ "image/png"
 	"math"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -20,7 +19,7 @@ func (s *Screen) loadFromImafe(path string) {
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-
+			s.SetMessage(err.Error())
 		}
 	}(file)
 
@@ -40,7 +39,7 @@ func (s *Screen) loadFromImafe(path string) {
 			ratio = int(math.Ceil(float64(bounds.Max.Y)/float64(s.Rows)) / 2)
 		}
 	}
-	s.SetMessage(strconv.Itoa(ratio))
+
 	s.Pixels = []Pixel{}
 	var y int
 	for i := bounds.Min.Y; i < bounds.Max.Y; i += int(float64(ratio) / pixelRatio) {

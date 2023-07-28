@@ -21,7 +21,7 @@ func drawMenu(s *Screen, screen [][]string) {
 	case symbolColor:
 		DrawSymbolColorMenu(s, screen)
 	case file:
-		FileList(s, screen, s.Dir)
+		FileList(s, screen, Dir)
 	case help:
 		DrawHelpMenu(s, screen)
 	case shape:

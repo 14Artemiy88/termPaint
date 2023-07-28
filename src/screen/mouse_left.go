@@ -60,24 +60,24 @@ func selectSymbol(msg tea.MouseMsg, s *Screen) {
 func selectFile(msg tea.MouseMsg, s *Screen) {
 
 	if filePath, ok := s.FileList[msg.Y]; ok {
-		info, err := os.Stat(s.Dir + filePath)
+		info, err := os.Stat(Dir + filePath)
 		if err != nil {
 			s.SetMessage(err.Error())
 		}
 		if info.IsDir() {
-			s.Dir += filePath
+			Dir += filePath
 		} else {
 			s.MenuType = None
-			ext := filepath.Ext(s.Dir + filePath)
+			ext := filepath.Ext(Dir + filePath)
 			if ext == ".txt" {
-				content, err := os.ReadFile(s.Dir + filePath)
+				content, err := os.ReadFile(Dir + filePath)
 				if err != nil {
 					s.SetMessage(err.Error())
 				}
 				s.LoadImage(string(content))
 			}
 			if ext == ".jpg" || ext == ".png" {
-				s.loadFromImafe(s.Dir + filePath)
+				s.loadFromImafe(Dir + filePath)
 			}
 		}
 	}
