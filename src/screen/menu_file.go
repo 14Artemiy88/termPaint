@@ -11,6 +11,8 @@ import (
 
 const fileX = 3
 
+var Dir string
+
 func FileList(s *Screen, screen [][]string, path string) [][]string {
 	files, err := os.ReadDir(path)
 	if err != nil {

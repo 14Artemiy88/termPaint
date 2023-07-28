@@ -9,6 +9,14 @@ import (
 
 const MenuSymbolColorWidth = 15
 
+type Input struct {
+	lock  bool
+	value string
+	color string
+}
+
+var input Input
+
 var Colors = map[int]string{
 	17: "r",
 	19: "g",

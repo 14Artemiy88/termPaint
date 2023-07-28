@@ -65,9 +65,9 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 
 	// set cursor or color
 	case tea.KeyRunes:
-		if s.MenuType == symbolColor && s.InputLock {
+		if s.MenuType == symbolColor && input.lock {
 			if _, err := strconv.Atoi(string(msg.Runes)); err == nil {
-				s.Input += string(msg.Runes)
+				input.value += string(msg.Runes)
 			} else {
 				s.SetMessage(err.Error())
 			}

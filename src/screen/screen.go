@@ -18,15 +18,10 @@ type Screen struct {
 	FileList      map[int]string
 	FileListWidth int
 	Save          bool
-	InputLock     bool
-	Input         string
-	InputColor    string
 	File          string
 	Messages      []Message
 	MessageWidth  int
 }
-
-var Dir string
 
 func (s *Screen) Init() tea.Cmd {
 	return tick

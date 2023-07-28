@@ -78,15 +78,15 @@ func onMenu(msg tea.MouseMsg, s *Screen) {
 	_, okSymbol := config.Cfg.Symbols[msg.Y][msg.X]
 	c, okColor := Colors[msg.Y]
 	if okColor && msg.X < MenuSymbolColorWidth {
-		s.InputLock = true
-		s.InputColor = c
+		input.lock = true
+		input.color = c
 		CC.Brush = Pointer
 	} else {
-		s.InputLock = false
-		if len(s.Input) > 0 {
-			CC.Color[s.InputColor] = color.SetColor(s.Input)
+		input.lock = false
+		if len(input.value) > 0 {
+			CC.Color[input.color] = color.SetColor(input.value)
 		}
-		s.Input = ""
+		input.value = ""
 	}
 	if !okSymbol && !okColor {
 		s.X = MenuSymbolColorWidth + 1
