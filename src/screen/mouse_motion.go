@@ -26,7 +26,7 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 	if msg.X <= xMin {
 		switch s.MenuType {
 		case symbolColor:
-			onMenu(msg, s)
+			onMenu(msg)
 		case file:
 			onFile(msg, s)
 		case shape:
@@ -73,7 +73,7 @@ func onFile(msg tea.MouseMsg, s *Screen) {
 	}
 }
 
-func onMenu(msg tea.MouseMsg, s *Screen) {
+func onMenu(msg tea.MouseMsg) {
 	CC.Brush = Empty
 	_, okSymbol := config.Cfg.Symbols[msg.Y][msg.X]
 	c, okColor := Colors[msg.Y]
