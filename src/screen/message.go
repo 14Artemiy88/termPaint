@@ -11,11 +11,14 @@ type Message struct {
 	text     string
 }
 
-func (s *Screen) SetMessage(text string) {
-	s.Messages = append(s.Messages, Message{text: text, liveTime: config.Cfg.NotificationTime})
+var Msg []Message
+var MsgWidth int
+
+func SetMessage(text string) {
+	Msg = append(Msg, Message{text: text, liveTime: config.Cfg.NotificationTime})
 	textLen := len(text)
-	if textLen > s.MessageWidth {
-		s.MessageWidth = textLen
+	if textLen > MsgWidth {
+		MsgWidth = textLen
 	}
 }
 

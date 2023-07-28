@@ -55,7 +55,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 	case tea.KeyCtrlS:
 		s.Save = true
 		s.MenuType = None
-		s.Messages = []Message{}
+		Msg = []Message{}
 
 	// del file
 	case tea.KeyDelete:
@@ -69,7 +69,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 			if _, err := strconv.Atoi(string(msg.Runes)); err == nil {
 				input.value += string(msg.Runes)
 			} else {
-				s.SetMessage(err.Error())
+				SetMessage(err.Error())
 			}
 		} else {
 			CC.setCursor(string(msg.Runes))

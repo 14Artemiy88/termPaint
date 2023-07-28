@@ -19,8 +19,6 @@ type Screen struct {
 	FileListWidth int
 	Save          bool
 	File          string
-	Messages      []Message
-	MessageWidth  int
 }
 
 func (s *Screen) Init() tea.Cmd {
@@ -31,14 +29,14 @@ func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tickMsg:
 		var delCount int
-		for k, m := range s.Messages {
+		for k, m := range Msg {
 			if m.liveTime > 0 {
-				s.Messages[k].liveTime--
+				Msg[k].liveTime--
 			} else {
 				delCount++
 			}
 		}
-		s.Messages = s.Messages[delCount:]
+		Msg = Msg[delCount:]
 
 		return s, tick
 
@@ -76,8 +74,8 @@ func (s *Screen) View() string {
 
 	drawMenu(s, screen)
 
-	if len(s.Messages) > 0 {
-		DrawMsg(s.Messages, s.MessageWidth, screen)
+	if len(Msg) > 0 {
+		DrawMsg(Msg, MsgWidth, screen)
 	}
 
 	if !s.Save {

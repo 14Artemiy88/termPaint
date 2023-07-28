@@ -32,9 +32,9 @@ func main() {
 	if _, err := os.Stat(config.Cfg.ImageSaveDirectory); os.IsNotExist(err) {
 		errDir := os.MkdirAll(config.Cfg.ImageSaveDirectory, 0755)
 		if errDir != nil {
-			s.SetMessage(err.Error())
+			screen.SetMessage(err.Error())
 		}
-		s.SetMessage("Directory " + config.Cfg.ImageSaveDirectory + " successfully created.")
+		screen.SetMessage("Directory " + config.Cfg.ImageSaveDirectory + " successfully created.")
 	}
 
 	if _, err := p.Run(); err != nil {

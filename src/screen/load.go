@@ -14,18 +14,18 @@ import (
 func (s *Screen) loadFromImafe(path string) {
 	file, err := os.Open(path)
 	if err != nil {
-		s.SetMessage(err.Error())
+		SetMessage(err.Error())
 	}
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-			s.SetMessage(err.Error())
+			SetMessage(err.Error())
 		}
 	}(file)
 
 	img, _, err := image.Decode(file)
 	if err != nil {
-		s.SetMessage(err.Error())
+		SetMessage(err.Error())
 	}
 
 	bounds := img.Bounds()
@@ -71,7 +71,7 @@ func (s *Screen) LoadImage(screenStrong string) {
 	}
 	if len(errors) > 0 {
 		for _, i := range errors {
-			s.SetMessage(i)
+			SetMessage(i)
 		}
 	}
 }

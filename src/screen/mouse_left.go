@@ -46,7 +46,7 @@ func selectColor(msg tea.MouseMsg, s *Screen) {
 	if symbol, ok := config.Cfg.Symbols[msg.Y][msg.X]; ok {
 		CC.setCursor(symbol)
 		if config.Cfg.Notifications.SetSymbol {
-			s.SetMessage("Set " + symbol)
+			SetMessage("Set " + symbol)
 		}
 	}
 }
@@ -61,7 +61,7 @@ func selectFile(msg tea.MouseMsg, s *Screen) {
 	if filePath, ok := s.FileList[msg.Y]; ok {
 		info, err := os.Stat(Dir + filePath)
 		if err != nil {
-			s.SetMessage(err.Error())
+			SetMessage(err.Error())
 		}
 		if info.IsDir() {
 			Dir += filePath
@@ -71,7 +71,7 @@ func selectFile(msg tea.MouseMsg, s *Screen) {
 			if ext == ".txt" {
 				content, err := os.ReadFile(Dir + filePath)
 				if err != nil {
-					s.SetMessage(err.Error())
+					SetMessage(err.Error())
 				}
 				s.LoadImage(string(content))
 			}

@@ -16,7 +16,7 @@ var Dir string
 func FileList(s *Screen, screen [][]string, path string) [][]string {
 	files, err := os.ReadDir(path)
 	if err != nil {
-		s.SetMessage(err.Error())
+		SetMessage(err.Error())
 		Dir = config.Cfg.ImageSaveDirectory
 	}
 
@@ -66,12 +66,12 @@ func FileList(s *Screen, screen [][]string, path string) [][]string {
 func SaveImage(image string, s *Screen) {
 	f, err := os.Create(config.Cfg.ImageSaveDirectory + time.Now().Format(config.Cfg.ImageSaveNameFormat))
 	if err != nil {
-		s.SetMessage(err.Error())
+		SetMessage(err.Error())
 	}
 	defer func(f *os.File) {
 		err := f.Close()
 		if err != nil {
-			s.SetMessage(err.Error())
+			SetMessage(err.Error())
 		}
 	}(f)
 	lines := strings.Split(image, "\n")
@@ -81,7 +81,7 @@ func SaveImage(image string, s *Screen) {
 	}
 	_, err = f.WriteString(newImage)
 	if err != nil {
-		s.SetMessage(err.Error())
+		SetMessage(err.Error())
 	}
-	s.SetMessage("Saved as " + f.Name())
+	SetMessage("Saved as " + f.Name())
 }
