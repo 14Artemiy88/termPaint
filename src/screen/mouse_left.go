@@ -92,41 +92,41 @@ func draw(msg tea.MouseMsg, s *Screen) {
 
 	switch CC.Brush {
 	case Dot:
-		drawDot(s, Pixel{X: msg.X, Y: msg.Y, Symbol: symbol})
+		drawDot(Pixel{X: msg.X, Y: msg.Y, Symbol: symbol})
 	case GLine:
-		drawGLine(s, msg.X, msg.Y, symbol)
+		drawGLine(msg.X, msg.Y, symbol)
 	case VLine:
-		drawVLine(s, msg.X, msg.Y, symbol)
+		drawVLine(msg.X, msg.Y, symbol)
 	case ESquare:
-		drawESquare(s, msg.X, msg.Y, symbol)
+		drawESquare(msg.X, msg.Y, symbol)
 	case FSquare:
-		drawFSquare(s, msg.X, msg.Y, symbol)
+		drawFSquare(msg.X, msg.Y, symbol)
 	case ECircle:
-		drawECircle(s, msg.X, msg.Y, symbol)
+		drawECircle(msg.X, msg.Y, symbol)
 	case FCircle:
-		drawFCircle(s, msg.X, msg.Y, symbol)
+		drawFCircle(msg.X, msg.Y, symbol)
 	case ContinuousLine, SmoothContinuousLine, FatContinuousLine, DoubleContinuousLine:
-		drawContinuousLine(s, msg.X, msg.Y)
+		drawContinuousLine(msg.X, msg.Y)
 	}
 }
 
-func drawDot(s *Screen, pixel Pixel) {
+func drawDot(pixel Pixel) {
 	Pixels.add(pixel)
 }
 
-func drawGLine(s *Screen, x int, y int, symbol string) {
+func drawGLine(x int, y int, symbol string) {
 	for i := 0; i < CC.Width; i++ {
 		Pixels.add(Pixel{X: x + i, Y: y, Symbol: symbol})
 	}
 }
 
-func drawVLine(s *Screen, x int, y int, symbol string) {
+func drawVLine(x int, y int, symbol string) {
 	for i := 0; i < CC.Width; i++ {
 		Pixels.add(Pixel{X: x, Y: y + i, Symbol: symbol})
 	}
 }
 
-func drawESquare(s *Screen, x int, y int, symbol string) {
+func drawESquare(x int, y int, symbol string) {
 	for i := 0; i < CC.Height; i++ {
 		for j := 0; j < CC.Width; j++ {
 			if j > 0 && j < CC.Width-1 && i > 0 && i < CC.Height-1 {
@@ -137,7 +137,7 @@ func drawESquare(s *Screen, x int, y int, symbol string) {
 	}
 }
 
-func drawFSquare(s *Screen, x int, y int, symbol string) {
+func drawFSquare(x int, y int, symbol string) {
 	for i := 0; i < CC.Height; i++ {
 		for j := 0; j < CC.Width; j++ {
 			Pixels.add(Pixel{X: x + j, Y: y + i, Symbol: symbol})
@@ -145,7 +145,7 @@ func drawFSquare(s *Screen, x int, y int, symbol string) {
 	}
 }
 
-func drawECircle(s *Screen, X int, Y int, symbol string) {
+func drawECircle(X int, Y int, symbol string) {
 	R := CC.Width / 2
 	k := 5
 	for y := -R * k; y <= R*k; y++ {
@@ -158,7 +158,7 @@ func drawECircle(s *Screen, X int, Y int, symbol string) {
 	}
 }
 
-func drawFCircle(s *Screen, X int, Y int, symbol string) {
+func drawFCircle(X int, Y int, symbol string) {
 	R := CC.Width / 2
 	k := 5
 	for y := -R * k; y <= R*k; y++ {
@@ -170,7 +170,7 @@ func drawFCircle(s *Screen, X int, Y int, symbol string) {
 	}
 }
 
-func drawContinuousLine(s *Screen, X int, Y int) {
+func drawContinuousLine(X int, Y int) {
 	x := X - StorePixel[1].X // -1 0 1
 	y := Y - StorePixel[1].Y // -1 0 1
 	if x != 0 || y != 0 {
