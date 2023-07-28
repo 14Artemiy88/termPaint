@@ -42,10 +42,10 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 	}
 
 	if msg.X > xMin && msg.X < s.Columns {
-		s.X = msg.X
+		CC.X = msg.X
 	}
 	if msg.Y > 0 && msg.Y < s.Rows {
-		s.Y = msg.Y
+		CC.Y = msg.Y
 	}
 }
 
@@ -89,6 +89,6 @@ func onMenu(msg tea.MouseMsg, s *Screen) {
 		input.value = ""
 	}
 	if !okSymbol && !okColor {
-		s.X = MenuSymbolColorWidth + 1
+		CC.X = MenuSymbolColorWidth + 1
 	}
 }

@@ -8,8 +8,6 @@ import (
 )
 
 type Screen struct {
-	X             int
-	Y             int
 	Columns       int
 	Rows          int
 	Pixels        pixels
@@ -47,8 +45,8 @@ func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		MouseBind(msg, s)
 
 	case tea.WindowSizeMsg:
-		s.X = msg.Width / 2
-		s.Y = msg.Height / 2
+		CC.X = msg.Width / 2
+		CC.Y = msg.Height / 2
 		s.Columns = msg.Width
 		s.Rows = msg.Height
 	}
@@ -79,7 +77,7 @@ func (s *Screen) View() string {
 	}
 
 	if !s.Save {
-		DrawCursor(s, screen)
+		CC.DrawCursor(screen)
 	}
 
 	var screenString string
