@@ -12,20 +12,20 @@ import (
 
 func mouseLeft(msg tea.MouseMsg, s *Screen) {
 	if s.MenuType == symbolColor && msg.X < MenuSymbolColorWidth {
-		selectSymbol(msg, s)
+		selectSymbol(msg)
 		selectColor(msg, s)
 	} else if s.MenuType == file && msg.X < s.FileListWidth {
 		selectFile(msg, s)
 	} else if s.MenuType == shape && msg.X < MenuShapeWidth {
-		selectShape(msg, s)
+		selectShape(msg)
 	} else if s.MenuType == line && msg.X < MenuLineWidth {
-		selectLine(msg, s)
+		selectLine(msg)
 	} else {
 		draw(msg, s)
 	}
 }
 
-func selectLine(msg tea.MouseMsg, s *Screen) {
+func selectLine(msg tea.MouseMsg) {
 	if line, ok := menuLineList[msg.Y]; ok {
 		CC.Store.Brush = line.LineType
 		if line.LineType == Dot {
@@ -36,7 +36,7 @@ func selectLine(msg tea.MouseMsg, s *Screen) {
 	}
 }
 
-func selectShape(msg tea.MouseMsg, s *Screen) {
+func selectShape(msg tea.MouseMsg) {
 	if sh, ok := shapeList[msg.Y]; ok {
 		CC.Store.Brush = sh.shapeType
 	}
@@ -51,14 +51,13 @@ func selectColor(msg tea.MouseMsg, s *Screen) {
 	}
 }
 
-func selectSymbol(msg tea.MouseMsg, s *Screen) {
+func selectSymbol(msg tea.MouseMsg) {
 	if c, ok := Colors[msg.Y]; ok {
 		CC.Color[c] = color.MinMaxColor(CC.Color[c])
 	}
 }
 
 func selectFile(msg tea.MouseMsg, s *Screen) {
-
 	if filePath, ok := s.FileList[msg.Y]; ok {
 		info, err := os.Stat(Dir + filePath)
 		if err != nil {

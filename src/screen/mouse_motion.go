@@ -30,9 +30,9 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 		case file:
 			onFile(msg, s)
 		case shape:
-			onShape(msg, s)
+			onShape(msg)
 		case line:
-			onLine(msg, s)
+			onLine(msg)
 		default:
 			CC.Brush = Empty
 		}
@@ -49,14 +49,14 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 	}
 }
 
-func onLine(msg tea.MouseMsg, s *Screen) {
+func onLine(msg tea.MouseMsg) {
 	CC.Brush = Empty
 	if _, ok := menuLineList[msg.Y]; ok {
 		CC.Brush = Pointer
 	}
 }
 
-func onShape(msg tea.MouseMsg, s *Screen) {
+func onShape(msg tea.MouseMsg) {
 	CC.Brush = Empty
 	if _, ok := shapeList[msg.Y]; ok {
 		CC.Brush = Pointer

@@ -20,7 +20,7 @@ const colorX = 3
 func DrawSymbolColorMenu(s *Screen, screen [][]string) [][]string {
 	ClearMenu(s, screen, MenuSymbolColorWidth)
 	drawSymbolMenu(screen)
-	drawColorMenu(s, screen)
+	drawColorMenu(screen)
 	str := "Help " + strings.Repeat("─", MenuSymbolColorWidth-len("Help")-2) + "┤"
 	DrawString(1, s.Rows-2, str, screen)
 	DrawString(2, s.Rows-1, "Press Enter", screen)
@@ -40,7 +40,7 @@ func drawSymbolMenu(screen [][]string) [][]string {
 	return screen
 }
 
-func drawColorMenu(s *Screen, screen [][]string) [][]string {
+func drawColorMenu(screen [][]string) [][]string {
 	str := "Color " + strings.Repeat("─", MenuSymbolColorWidth-len("Color")-2) + "┤"
 	DrawString(1, 15, str, screen)
 	for y, line := range Colors {
