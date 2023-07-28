@@ -3,6 +3,7 @@ package screen
 import (
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	tea "github.com/charmbracelet/bubbletea"
@@ -28,24 +29,24 @@ func mouseLeft(msg tea.MouseMsg, s *Screen) {
 
 func selectLine(msg tea.MouseMsg) {
 	if line, ok := menuLineList[msg.Y]; ok {
-		CC.Store.Brush = line.LineType
-		if line.LineType == Dot {
-			CC.setCursor(config.Cfg.DefaultCursor)
+		cursor.CC.Store.Brush = line.LineType
+		if line.LineType == cursor.Dot {
+			cursor.CC.SetCursor(config.Cfg.DefaultCursor)
 		} else {
-			CC.setCursor(line.Cursor)
+			cursor.CC.SetCursor(line.Cursor)
 		}
 	}
 }
 
 func selectShape(msg tea.MouseMsg) {
 	if sh, ok := shapeList[msg.Y]; ok {
-		CC.Store.Brush = sh.shapeType
+		cursor.CC.Store.Brush = sh.shapeType
 	}
 }
 
 func selectColor(msg tea.MouseMsg) {
 	if symbol, ok := config.Cfg.Symbols[msg.Y][msg.X]; ok {
-		CC.setCursor(symbol)
+		cursor.CC.SetCursor(symbol)
 		if config.Cfg.Notifications.SetSymbol {
 			SetMessage("Set " + symbol)
 		}
@@ -54,7 +55,7 @@ func selectColor(msg tea.MouseMsg) {
 
 func selectSymbol(msg tea.MouseMsg) {
 	if c, ok := Colors[msg.Y]; ok {
-		CC.Color[c] = color.MinMaxColor(CC.Color[c])
+		cursor.CC.Color[c] = color.MinMaxColor(cursor.CC.Color[c])
 	}
 }
 
@@ -85,28 +86,28 @@ func selectFile(msg tea.MouseMsg, s *Screen) {
 
 func draw(msg tea.MouseMsg) {
 	symbol := utils.FgRgb(
-		CC.Color["r"],
-		CC.Color["g"],
-		CC.Color["b"],
-		CC.Symbol,
+		cursor.CC.Color["r"],
+		cursor.CC.Color["g"],
+		cursor.CC.Color["b"],
+		cursor.CC.Symbol,
 	)
 
-	switch CC.Brush {
-	case Dot:
+	switch cursor.CC.Brush {
+	case cursor.Dot:
 		drawDot(pixel.Pixel{X: msg.X, Y: msg.Y, Symbol: symbol})
-	case GLine:
+	case cursor.GLine:
 		drawGLine(msg.X, msg.Y, symbol)
-	case VLine:
+	case cursor.VLine:
 		drawVLine(msg.X, msg.Y, symbol)
-	case ESquare:
+	case cursor.ESquare:
 		drawESquare(msg.X, msg.Y, symbol)
-	case FSquare:
+	case cursor.FSquare:
 		drawFSquare(msg.X, msg.Y, symbol)
-	case ECircle:
+	case cursor.ECircle:
 		drawECircle(msg.X, msg.Y, symbol)
-	case FCircle:
+	case cursor.FCircle:
 		drawFCircle(msg.X, msg.Y, symbol)
-	case ContinuousLine, SmoothContinuousLine, FatContinuousLine, DoubleContinuousLine:
+	case cursor.ContinuousLine, cursor.SmoothContinuousLine, cursor.FatContinuousLine, cursor.DoubleContinuousLine:
 		drawContinuousLine(msg.X, msg.Y)
 	}
 }
@@ -116,21 +117,21 @@ func drawDot(p pixel.Pixel) {
 }
 
 func drawGLine(x int, y int, symbol string) {
-	for i := 0; i < CC.Width; i++ {
+	for i := 0; i < cursor.CC.Width; i++ {
 		pixel.Pixels.Add(pixel.Pixel{X: x + i, Y: y, Symbol: symbol})
 	}
 }
 
 func drawVLine(x int, y int, symbol string) {
-	for i := 0; i < CC.Width; i++ {
+	for i := 0; i < cursor.CC.Width; i++ {
 		pixel.Pixels.Add(pixel.Pixel{X: x, Y: y + i, Symbol: symbol})
 	}
 }
 
 func drawESquare(x int, y int, symbol string) {
-	for i := 0; i < CC.Height; i++ {
-		for j := 0; j < CC.Width; j++ {
-			if j > 0 && j < CC.Width-1 && i > 0 && i < CC.Height-1 {
+	for i := 0; i < cursor.CC.Height; i++ {
+		for j := 0; j < cursor.CC.Width; j++ {
+			if j > 0 && j < cursor.CC.Width-1 && i > 0 && i < cursor.CC.Height-1 {
 				continue
 			}
 			pixel.Pixels.Add(pixel.Pixel{X: x + j, Y: y + i, Symbol: symbol})
@@ -139,15 +140,15 @@ func drawESquare(x int, y int, symbol string) {
 }
 
 func drawFSquare(x int, y int, symbol string) {
-	for i := 0; i < CC.Height; i++ {
-		for j := 0; j < CC.Width; j++ {
+	for i := 0; i < cursor.CC.Height; i++ {
+		for j := 0; j < cursor.CC.Width; j++ {
 			pixel.Pixels.Add(pixel.Pixel{X: x + j, Y: y + i, Symbol: symbol})
 		}
 	}
 }
 
 func drawECircle(X int, Y int, symbol string) {
-	R := CC.Width / 2
+	R := cursor.CC.Width / 2
 	k := 5
 	for y := -R * k; y <= R*k; y++ {
 		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.PixelRatio)
@@ -160,7 +161,7 @@ func drawECircle(X int, Y int, symbol string) {
 }
 
 func drawFCircle(X int, Y int, symbol string) {
-	R := CC.Width / 2
+	R := cursor.CC.Width / 2
 	k := 5
 	for y := -R * k; y <= R*k; y++ {
 		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.PixelRatio)
@@ -175,7 +176,7 @@ func drawContinuousLine(X int, Y int) {
 	x := X - pixel.StorePixel[1].X // -1 0 1
 	y := Y - pixel.StorePixel[1].Y // -1 0 1
 	if x != 0 || y != 0 {
-		line := CC.Store.Symbol
+		line := cursor.CC.Store.Symbol
 		if pixel.StorePixel[1].Symbol != "" {
 			if x < -1 || x > 1 || y < -1 || y > 1 {
 				pixel.StorePixel = [2]pixel.Pixel{}
@@ -184,11 +185,11 @@ func drawContinuousLine(X int, Y int) {
 			}
 			if x == 0 {
 				line = gvLine[line]["v"]
-				CC.setCursor(line)
+				cursor.CC.SetCursor(line)
 			}
 			if y == 0 {
 				line = gvLine[line]["g"]
-				CC.setCursor(line)
+				cursor.CC.SetCursor(line)
 			}
 		}
 
@@ -196,9 +197,9 @@ func drawContinuousLine(X int, Y int) {
 			X: X,
 			Y: Y,
 			Symbol: utils.FgRgb(
-				CC.Color["r"],
-				CC.Color["g"],
-				CC.Color["b"],
+				cursor.CC.Color["r"],
+				cursor.CC.Color["g"],
+				cursor.CC.Color["b"],
 				line,
 			),
 		}
@@ -225,10 +226,10 @@ func drawContinuousLine(X int, Y int) {
 				X: pixel.StorePixel[1].X,
 				Y: pixel.StorePixel[1].Y,
 				Symbol: utils.FgRgb(
-					CC.Color["r"],
-					CC.Color["g"],
-					CC.Color["b"],
-					drawLine[CC.Store.Brush][pr][r],
+					cursor.CC.Color["r"],
+					cursor.CC.Color["g"],
+					cursor.CC.Color["b"],
+					drawLine[cursor.CC.Store.Brush][pr][r],
 				),
 			},
 		)

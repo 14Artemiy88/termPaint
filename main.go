@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/screen"
 	tea "github.com/charmbracelet/bubbletea"
 	"log"
@@ -11,15 +12,15 @@ import (
 func main() {
 	config.InitConfig()
 	s := &screen.Screen{}
-	screen.CC = screen.Cursor{
+	cursor.CC = cursor.Cursor{
 		Symbol: config.Cfg.DefaultCursor,
 		Color:  config.Cfg.DefaultColor,
-		Brush:  screen.Dot,
+		Brush:  cursor.Dot,
 		Width:  4,
 		Height: 4,
-		Store: screen.Store{
+		Store: cursor.Store{
 			Symbol: config.Cfg.DefaultCursor,
-			Brush:  screen.Dot,
+			Brush:  cursor.Dot,
 		},
 	}
 	screen.Dir = config.Cfg.ImageSaveDirectory

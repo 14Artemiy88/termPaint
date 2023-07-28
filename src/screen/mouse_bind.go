@@ -3,6 +3,7 @@ package screen
 import (
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -22,34 +23,34 @@ func MouseBind(msg tea.MouseMsg, s *Screen) {
 		pixel.Pixels = []pixel.Pixel{}
 
 	case tea.MouseWheelDown:
-		if c, ok := Colors[msg.Y]; ok && CC.Brush == Pointer {
-			CC.Color[c] = color.Decrease(CC.Color[c])
+		if c, ok := Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {
+			cursor.CC.Color[c] = color.Decrease(cursor.CC.Color[c])
 		}
-		if CC.Brush > Dot && CC.Symbol != config.Cfg.Pointer {
+		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != config.Cfg.Pointer {
 			if msg.Ctrl {
-				if CC.Store.Brush == ESquare || CC.Store.Brush == FSquare {
-					if CC.Height > 1 {
-						CC.Height--
+				if cursor.CC.Store.Brush == cursor.ESquare || cursor.CC.Store.Brush == cursor.FSquare {
+					if cursor.CC.Height > 1 {
+						cursor.CC.Height--
 					}
 				}
 			} else {
-				if CC.Width > 1 {
-					CC.Width--
+				if cursor.CC.Width > 1 {
+					cursor.CC.Width--
 				}
 			}
 		}
 
 	case tea.MouseWheelUp:
-		if c, ok := Colors[msg.Y]; ok && CC.Brush == Pointer {
-			CC.Color[c] = color.Increase(CC.Color[c])
+		if c, ok := Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {
+			cursor.CC.Color[c] = color.Increase(cursor.CC.Color[c])
 		}
-		if CC.Brush > Dot && CC.Symbol != config.Cfg.Pointer {
+		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != config.Cfg.Pointer {
 			if msg.Ctrl {
-				if CC.Store.Brush == ESquare || CC.Store.Brush == FSquare {
-					CC.Height++
+				if cursor.CC.Store.Brush == cursor.ESquare || cursor.CC.Store.Brush == cursor.FSquare {
+					cursor.CC.Height++
 				}
 			} else {
-				CC.Width++
+				cursor.CC.Width++
 			}
 		}
 	}

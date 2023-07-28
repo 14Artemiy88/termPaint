@@ -1,4 +1,4 @@
-package screen
+package cursor
 
 import (
 	"github.com/14Artemiy88/termPaint/src/config"
@@ -10,7 +10,7 @@ import (
 type Cursor struct {
 	X      int
 	Y      int
-	Brush  cursorType
+	Brush  Type
 	Width  int
 	Height int
 	Symbol string
@@ -22,13 +22,13 @@ var CC Cursor
 
 type Store struct {
 	Symbol string
-	Brush  cursorType
+	Brush  Type
 }
 
-type cursorType int
+type Type int
 
 const (
-	Empty cursorType = iota
+	Empty Type = iota
 	Pointer
 	Dot
 	GLine
@@ -43,7 +43,7 @@ const (
 	DoubleContinuousLine
 )
 
-func (c *Cursor) setCursor(cursor string) {
+func (c *Cursor) SetCursor(cursor string) {
 	c.Symbol = cursor
 	c.Store.Symbol = cursor
 }

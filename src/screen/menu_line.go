@@ -1,6 +1,7 @@
 package screen
 
 import (
+	"github.com/14Artemiy88/termPaint/src/cursor"
 	"strings"
 )
 
@@ -8,26 +9,26 @@ const MenuLineWidth = 10
 
 var menuLineList = map[int]Line{
 	3: {
-		LineType: Dot,
+		LineType: cursor.Dot,
 		LineMenu: "•",
 	},
 	5: {
-		LineType: SmoothContinuousLine,
+		LineType: cursor.SmoothContinuousLine,
 		LineMenu: "╭─╯",
 		Cursor:   "─",
 	},
 	7: {
-		LineType: ContinuousLine,
+		LineType: cursor.ContinuousLine,
 		LineMenu: "┌─┘",
 		Cursor:   "─",
 	},
 	9: {
-		LineType: FatContinuousLine,
+		LineType: cursor.FatContinuousLine,
 		LineMenu: "┏━┛",
 		Cursor:   "━",
 	},
 	11: {
-		LineType: DoubleContinuousLine,
+		LineType: cursor.DoubleContinuousLine,
 		LineMenu: "╔═╝",
 		Cursor:   "═",
 	},
@@ -64,11 +65,11 @@ var doubleLineList = map[route]map[route]string{
 	stay:      {stay: "O", right: "═", left: "═", up: "║", down: "║"},
 }
 
-var drawLine = map[cursorType]map[route]map[route]string{
-	ContinuousLine:       lineList,
-	SmoothContinuousLine: smoothLineList,
-	FatContinuousLine:    fatLineList,
-	DoubleContinuousLine: doubleLineList,
+var drawLine = map[cursor.Type]map[route]map[route]string{
+	cursor.ContinuousLine:       lineList,
+	cursor.SmoothContinuousLine: smoothLineList,
+	cursor.FatContinuousLine:    fatLineList,
+	cursor.DoubleContinuousLine: doubleLineList,
 }
 
 var gvLine = map[string]map[string]string{
@@ -111,7 +112,7 @@ var getRoute = map[int]map[int]route{
 }
 
 type Line struct {
-	LineType cursorType
+	LineType cursor.Type
 	LineMenu string
 	Cursor   string
 }

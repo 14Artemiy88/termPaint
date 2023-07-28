@@ -3,6 +3,7 @@ package screen
 import (
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/cursor"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -34,39 +35,39 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 		case line:
 			onLine(msg)
 		default:
-			CC.Brush = Empty
+			cursor.CC.Brush = cursor.Empty
 		}
 	} else {
-		CC.Symbol = CC.Store.Symbol
-		CC.Brush = CC.Store.Brush
+		cursor.CC.Symbol = cursor.CC.Store.Symbol
+		cursor.CC.Brush = cursor.CC.Store.Brush
 	}
 
 	if msg.X > xMin && msg.X < s.Columns {
-		CC.X = msg.X
+		cursor.CC.X = msg.X
 	}
 	if msg.Y > 0 && msg.Y < s.Rows {
-		CC.Y = msg.Y
+		cursor.CC.Y = msg.Y
 	}
 }
 
 func onLine(msg tea.MouseMsg) {
-	CC.Brush = Empty
+	cursor.CC.Brush = cursor.Empty
 	if _, ok := menuLineList[msg.Y]; ok {
-		CC.Brush = Pointer
+		cursor.CC.Brush = cursor.Pointer
 	}
 }
 
 func onShape(msg tea.MouseMsg) {
-	CC.Brush = Empty
+	cursor.CC.Brush = cursor.Empty
 	if _, ok := shapeList[msg.Y]; ok {
-		CC.Brush = Pointer
+		cursor.CC.Brush = cursor.Pointer
 	}
 }
 
 func onFile(msg tea.MouseMsg, s *Screen) {
-	CC.Brush = Empty
+	cursor.CC.Brush = cursor.Empty
 	if file, ok := s.FileList[msg.Y]; ok {
-		CC.Brush = Pointer
+		cursor.CC.Brush = cursor.Pointer
 		s.File = file
 	} else {
 		s.File = ""
@@ -74,21 +75,21 @@ func onFile(msg tea.MouseMsg, s *Screen) {
 }
 
 func onMenu(msg tea.MouseMsg) {
-	CC.Brush = Empty
+	cursor.CC.Brush = cursor.Empty
 	_, okSymbol := config.Cfg.Symbols[msg.Y][msg.X]
 	c, okColor := Colors[msg.Y]
 	if okColor && msg.X < MenuSymbolColorWidth {
 		input.lock = true
 		input.color = c
-		CC.Brush = Pointer
+		cursor.CC.Brush = cursor.Pointer
 	} else {
 		input.lock = false
 		if len(input.value) > 0 {
-			CC.Color[input.color] = color.SetColor(input.value)
+			cursor.CC.Color[input.color] = color.SetColor(input.value)
 		}
 		input.value = ""
 	}
 	if !okSymbol && !okColor {
-		CC.X = MenuSymbolColorWidth + 1
+		cursor.CC.X = MenuSymbolColorWidth + 1
 	}
 }

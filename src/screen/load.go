@@ -2,6 +2,7 @@ package screen
 
 import (
 	"fmt"
+	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"image"
@@ -48,7 +49,7 @@ func (s *Screen) loadFromImafe(path string) {
 		for j := bounds.Min.X; j < bounds.Max.X; j += ratio {
 			color := img.At(j, i)
 			r, g, b, _ := color.RGBA()
-			symbol := utils.FgRgb(int(r/257), int(g/257), int(b/257), CC.Symbol)
+			symbol := utils.FgRgb(int(r/257), int(g/257), int(b/257), cursor.CC.Symbol)
 			pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Symbol: symbol})
 			x++
 		}

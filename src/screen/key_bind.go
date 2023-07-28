@@ -1,6 +1,7 @@
 package screen
 
 import (
+	"github.com/14Artemiy88/termPaint/src/cursor"
 	tea "github.com/charmbracelet/bubbletea"
 	"os"
 	"strconv"
@@ -72,7 +73,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 				SetMessage(err.Error())
 			}
 		} else {
-			CC.setCursor(string(msg.Runes))
+			cursor.CC.SetCursor(string(msg.Runes))
 		}
 	}
 

@@ -1,6 +1,7 @@
 package screen
 
 import (
+	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	tea "github.com/charmbracelet/bubbletea"
@@ -44,8 +45,8 @@ func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		MouseBind(msg, s)
 
 	case tea.WindowSizeMsg:
-		CC.X = msg.Width / 2
-		CC.Y = msg.Height / 2
+		cursor.CC.X = msg.Width / 2
+		cursor.CC.Y = msg.Height / 2
 		s.Columns = msg.Width
 		s.Rows = msg.Height
 	}
@@ -76,7 +77,7 @@ func (s *Screen) View() string {
 	}
 
 	if !s.Save {
-		CC.DrawCursor(screen)
+		cursor.CC.DrawCursor(screen)
 	}
 
 	var screenString string
