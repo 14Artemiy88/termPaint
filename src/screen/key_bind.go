@@ -60,8 +60,8 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 
 	// del file
 	case tea.KeyDelete:
-		if len(s.File) > 0 {
-			_ = os.Remove(s.File)
+		if len(File) > 0 {
+			_ = os.Remove(File)
 		}
 
 	// set cursor or color

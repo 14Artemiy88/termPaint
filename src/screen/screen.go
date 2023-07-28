@@ -16,7 +16,6 @@ type Screen struct {
 	FileList      map[int]string
 	FileListWidth int
 	Save          bool
-	File          string
 }
 
 func (s *Screen) Init() tea.Cmd {

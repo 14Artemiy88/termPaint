@@ -12,6 +12,7 @@ import (
 const fileX = 3
 
 var Dir string
+var File string
 
 func FileList(s *Screen, screen [][]string, path string) [][]string {
 	files, err := os.ReadDir(path)
