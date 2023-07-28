@@ -21,7 +21,7 @@ func mouseLeft(msg tea.MouseMsg, s *Screen) {
 	} else if s.MenuType == line && msg.X < MenuLineWidth {
 		selectLine(msg)
 	} else {
-		draw(msg, s)
+		draw(msg)
 	}
 }
 
@@ -82,7 +82,7 @@ func selectFile(msg tea.MouseMsg, s *Screen) {
 	}
 }
 
-func draw(msg tea.MouseMsg, s *Screen) {
+func draw(msg tea.MouseMsg) {
 	symbol := utils.FgRgb(
 		CC.Color["r"],
 		CC.Color["g"],
