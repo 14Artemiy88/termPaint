@@ -29,7 +29,7 @@ func mouseMotion(msg tea.MouseMsg, s *Screen) {
 		case symbolColor:
 			onMenu(msg)
 		case file:
-			onFile(msg, s)
+			onFile(msg)
 		case shape:
 			onShape(msg)
 		case line:
@@ -64,9 +64,9 @@ func onShape(msg tea.MouseMsg) {
 	}
 }
 
-func onFile(msg tea.MouseMsg, s *Screen) {
+func onFile(msg tea.MouseMsg) {
 	cursor.CC.Brush = cursor.Empty
-	if file, ok := s.FileList[msg.Y]; ok {
+	if file, ok := FileList[msg.Y]; ok {
 		cursor.CC.Brush = cursor.Pointer
 		File = file
 	} else {

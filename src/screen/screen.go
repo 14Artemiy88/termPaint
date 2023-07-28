@@ -13,7 +13,6 @@ type Screen struct {
 	Columns  int
 	Rows     int
 	MenuType menuType
-	FileList map[int]string
 	Save     bool
 }
 

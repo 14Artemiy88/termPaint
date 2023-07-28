@@ -11,11 +11,14 @@ import (
 
 const fileX = 3
 
-var Dir string
-var File string
-var FileListWidth int
+var (
+	Dir           string
+	File          string
+	FileList      map[int]string
+	FileListWidth int
+)
 
-func FileList(s *Screen, screen [][]string, path string) [][]string {
+func FileMenu(s *Screen, screen [][]string, path string) [][]string {
 	files, err := os.ReadDir(path)
 	if err != nil {
 		SetMessage(err.Error())
@@ -46,20 +49,20 @@ func FileList(s *Screen, screen [][]string, path string) [][]string {
 
 	Y := 3
 	if config.Cfg.ShowFolder {
-		s.FileList = make(map[int]string, len(fileList)+len(dirList)+1)
-		s.FileList[2] = "../"
+		FileList = make(map[int]string, len(fileList)+len(dirList)+1)
+		FileList[2] = "../"
 		DrawString(fileX, 2, "..", screen)
 		for _, dirName := range dirList {
 			DrawString(fileX, Y, fmt.Sprintf("🗀 %v", dirName), screen)
-			s.FileList[Y] = dirName + "/"
+			FileList[Y] = dirName + "/"
 			Y++
 		}
 	} else {
-		s.FileList = make(map[int]string, len(fileList)+1)
+		FileList = make(map[int]string, len(fileList)+1)
 	}
 	for y, fileName := range fileList {
 		DrawString(fileX, Y+y, fmt.Sprintf("🖹 %v", fileName), screen)
-		s.FileList[Y+y] = fileName
+		FileList[Y+y] = fileName
 	}
 
 	return screen

@@ -60,7 +60,7 @@ func selectSymbol(msg tea.MouseMsg) {
 }
 
 func selectFile(msg tea.MouseMsg, s *Screen) {
-	if filePath, ok := s.FileList[msg.Y]; ok {
+	if filePath, ok := FileList[msg.Y]; ok {
 		info, err := os.Stat(Dir + filePath)
 		if err != nil {
 			SetMessage(err.Error())
