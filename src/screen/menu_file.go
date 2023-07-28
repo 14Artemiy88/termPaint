@@ -43,7 +43,7 @@ func FileMenu(s *Screen, screen [][]string, path string) [][]string {
 		}
 	}
 	FileListWidth = width + 6
-	ClearMenu(s, screen, FileListWidth)
+	ClearMenu(screen, FileListWidth)
 	str := "File " + strings.Repeat("─", FileListWidth-len("File")-2) + "┐"
 	DrawString(1, 1, str, screen)
 

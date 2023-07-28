@@ -42,7 +42,7 @@ func DrawString(X int, Y int, val string, screen [][]string) [][]string {
 	return screen
 }
 
-func ClearMenu(s *Screen, screen [][]string, width int) [][]string {
+func ClearMenu(screen [][]string, width int) [][]string {
 	for y := 0; y < Size.Rows; y++ {
 		for x := 0; x < width; x++ {
 			utils.SetByKeys(x, y, " ", screen)

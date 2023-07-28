@@ -7,7 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func mouseMotion(msg tea.MouseMsg, s *Screen) {
+func mouseMotion(msg tea.MouseMsg) {
 	var xMin int
 	switch MenuType {
 	case symbolColor:

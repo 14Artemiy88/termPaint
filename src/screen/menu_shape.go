@@ -24,7 +24,7 @@ type Shape struct {
 }
 
 func drawShapeMenu(s *Screen, screen [][]string) [][]string {
-	ClearMenu(s, screen, MenuShapeWidth)
+	ClearMenu(screen, MenuShapeWidth)
 	str := "Shape " + strings.Repeat("─", MenuShapeWidth-len("Shape")-2) + "┐"
 	DrawString(1, 1, str, screen)
 

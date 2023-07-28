@@ -11,7 +11,7 @@ import (
 func MouseBind(msg tea.MouseMsg, s *Screen) {
 	switch msg.Type {
 	case tea.MouseMotion:
-		mouseMotion(msg, s)
+		mouseMotion(msg)
 
 	case tea.MouseLeft:
 		mouseLeft(msg.X, msg.Y, s)

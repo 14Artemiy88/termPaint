@@ -118,7 +118,7 @@ type Line struct {
 }
 
 func drawLineMenu(s *Screen, screen [][]string) [][]string {
-	ClearMenu(s, screen, MenuShapeWidth)
+	ClearMenu(screen, MenuShapeWidth)
 	str := "Line " + strings.Repeat("─", MenuLineWidth-len("Line")) + "┐"
 	DrawString(1, 1, str, screen)
 
