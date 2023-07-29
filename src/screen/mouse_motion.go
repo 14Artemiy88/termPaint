@@ -11,23 +11,23 @@ import (
 
 func mouseMotion(msg tea.MouseMsg) {
 	var xMin int
-	switch menu.MenuType {
+	switch menu.Type {
 	case menu.SymbolColor:
-		xMin = menu.MenuSymbolColorWidth
+		xMin = menu.SymbolColorWidth
 	case menu.File:
 		xMin = menu.FileListWidth
 	case menu.Help:
 		xMin = menu.HelpWidth
 	case menu.Shape:
-		xMin = menu.MenuShapeWidth
+		xMin = menu.ShapeWidth
 	case menu.Line:
-		xMin = menu.MenuLineWidth
+		xMin = menu.LineWidth
 	default:
 		xMin = 0
 	}
 
 	if msg.X <= xMin {
-		switch menu.MenuType {
+		switch menu.Type {
 		case menu.SymbolColor:
 			onMenu(msg)
 		case menu.File:
@@ -54,7 +54,7 @@ func mouseMotion(msg tea.MouseMsg) {
 
 func onLine(msg tea.MouseMsg) {
 	cursor.CC.Brush = cursor.Empty
-	if _, ok := menu.MenuLineList[msg.Y]; ok {
+	if _, ok := menu.LineList[msg.Y]; ok {
 		cursor.CC.Brush = cursor.Pointer
 	}
 }
@@ -80,7 +80,7 @@ func onMenu(msg tea.MouseMsg) {
 	cursor.CC.Brush = cursor.Empty
 	_, okSymbol := config.Cfg.Symbols[msg.Y][msg.X]
 	c, okColor := menu.Colors[msg.Y]
-	if okColor && msg.X < menu.MenuSymbolColorWidth {
+	if okColor && msg.X < menu.SymbolColorWidth {
 		menu.Input.Lock = true
 		menu.Input.Color = c
 		cursor.CC.Brush = cursor.Pointer
@@ -92,6 +92,6 @@ func onMenu(msg tea.MouseMsg) {
 		menu.Input.Value = ""
 	}
 	if !okSymbol && !okColor {
-		cursor.CC.X = menu.MenuSymbolColorWidth + 1
+		cursor.CC.X = menu.SymbolColorWidth + 1
 	}
 }

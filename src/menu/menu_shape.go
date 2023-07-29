@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-const MenuShapeWidth = 12
+const ShapeWidth = 12
 
 var ShapeList = map[int]ShapeStruct{
 	3:  {ShapeType: cursor.Dot, ShapeSymbol: "•"},
@@ -25,8 +25,8 @@ type ShapeStruct struct {
 }
 
 func drawShapeMenu(screen [][]string) [][]string {
-	ClearMenu(screen, MenuShapeWidth)
-	str := "Shape " + strings.Repeat("─", MenuShapeWidth-len("Shape")-2) + "┐"
+	ClearMenu(screen, ShapeWidth)
+	str := "Shape " + strings.Repeat("─", ShapeWidth-len("Shape")-2) + "┐"
 	utils.DrawString(1, 1, str, screen)
 
 	for y, sh := range ShapeList {

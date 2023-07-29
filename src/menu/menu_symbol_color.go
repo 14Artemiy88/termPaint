@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-const MenuSymbolColorWidth = 15
+const SymbolColorWidth = 15
 
 type InputStruct struct {
 	Lock  bool
@@ -28,10 +28,10 @@ var Colors = map[int]string{
 const colorX = 3
 
 func DrawSymbolColorMenu(screen [][]string) [][]string {
-	ClearMenu(screen, MenuSymbolColorWidth)
+	ClearMenu(screen, SymbolColorWidth)
 	drawSymbolMenu(screen)
 	drawColorMenu(screen)
-	str := "Help " + strings.Repeat("─", MenuSymbolColorWidth-len("Help")-2) + "┤"
+	str := "Help " + strings.Repeat("─", SymbolColorWidth-len("Help")-2) + "┤"
 	utils.DrawString(1, size.Size.Rows-2, str, screen)
 	utils.DrawString(2, size.Size.Rows-1, "Press Enter", screen)
 
@@ -39,7 +39,7 @@ func DrawSymbolColorMenu(screen [][]string) [][]string {
 }
 
 func drawSymbolMenu(screen [][]string) [][]string {
-	str := "Symbol " + strings.Repeat("─", MenuSymbolColorWidth-len("Symbol")-2) + "┐"
+	str := "Symbol " + strings.Repeat("─", SymbolColorWidth-len("Symbol")-2) + "┐"
 	utils.DrawString(1, 1, str, screen)
 	for y, line := range config.Cfg.Symbols {
 		for x, symbol := range line {
@@ -51,7 +51,7 @@ func drawSymbolMenu(screen [][]string) [][]string {
 }
 
 func drawColorMenu(screen [][]string) [][]string {
-	str := "Color " + strings.Repeat("─", MenuSymbolColorWidth-len("Color")-2) + "┤"
+	str := "Color " + strings.Repeat("─", SymbolColorWidth-len("Color")-2) + "┤"
 	utils.DrawString(1, 15, str, screen)
 	for y, line := range Colors {
 		utils.DrawString(colorX+2, y, strconv.Itoa(cursor.CC.Color[line]), screen)

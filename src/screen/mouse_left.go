@@ -14,14 +14,14 @@ import (
 )
 
 func mouseLeft(X int, Y int, s *Screen) {
-	if menu.MenuType == menu.SymbolColor && X < menu.MenuSymbolColorWidth {
+	if menu.Type == menu.SymbolColor && X < menu.SymbolColorWidth {
 		selectSymbol(Y)
 		selectColor(X, Y)
-	} else if menu.MenuType == menu.File && X < menu.FileListWidth {
+	} else if menu.Type == menu.File && X < menu.FileListWidth {
 		selectFile(Y, s)
-	} else if menu.MenuType == menu.Shape && X < menu.MenuShapeWidth {
+	} else if menu.Type == menu.Shape && X < menu.ShapeWidth {
 		selectShape(Y)
-	} else if menu.MenuType == menu.Line && X < menu.MenuLineWidth {
+	} else if menu.Type == menu.Line && X < menu.LineWidth {
 		selectLine(Y)
 	} else {
 		draw(X, Y)
@@ -29,7 +29,7 @@ func mouseLeft(X int, Y int, s *Screen) {
 }
 
 func selectLine(Y int) {
-	if line, ok := menu.MenuLineList[Y]; ok {
+	if line, ok := menu.LineList[Y]; ok {
 		cursor.CC.Store.Brush = line.LineType
 		if line.LineType == cursor.Dot {
 			cursor.CC.SetCursor(config.Cfg.DefaultCursor)
@@ -69,7 +69,7 @@ func selectFile(Y int, s *Screen) {
 		if info.IsDir() {
 			menu.Dir += filePath
 		} else {
-			menu.MenuType = menu.None
+			menu.Type = menu.None
 			ext := filepath.Ext(menu.Dir + filePath)
 			if ext == ".txt" {
 				content, err := os.ReadFile(menu.Dir + filePath)

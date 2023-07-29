@@ -16,10 +16,10 @@ const (
 	Line
 )
 
-var MenuType menuType
+var Type menuType
 
 func DrawMenu(screen [][]string) {
-	switch MenuType {
+	switch Type {
 	case SymbolColor:
 		DrawSymbolColorMenu(screen)
 	case File:

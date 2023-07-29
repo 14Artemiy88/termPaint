@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-const MenuLineWidth = 10
+const LineWidth = 10
 
 type LineStruct struct {
 	LineType cursor.Type
@@ -14,7 +14,7 @@ type LineStruct struct {
 	Cursor   string
 }
 
-var MenuLineList = map[int]LineStruct{
+var LineList = map[int]LineStruct{
 	3: {
 		LineType: cursor.Dot,
 		LineMenu: "•",
@@ -119,11 +119,11 @@ var GetRoute = map[int]map[int]Route{
 }
 
 func drawLineMenu(screen [][]string) [][]string {
-	ClearMenu(screen, MenuShapeWidth)
-	str := "Line " + strings.Repeat("─", MenuLineWidth-len("Line")) + "┐"
+	ClearMenu(screen, ShapeWidth)
+	str := "Line " + strings.Repeat("─", LineWidth-len("Line")) + "┐"
 	utils.DrawString(1, 1, str, screen)
 
-	for y, line := range MenuLineList {
+	for y, line := range LineList {
 		utils.DrawString(3, y, line.LineMenu, screen)
 	}
 
