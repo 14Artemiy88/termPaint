@@ -55,7 +55,7 @@ var menu = []menuItem{
 	},
 	{
 		Y:     22,
-		title: "File",
+		title: "FilePath",
 		end:   "┤",
 		item: []string{
 			"Left   - Click to select file",

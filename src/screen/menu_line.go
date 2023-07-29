@@ -7,7 +7,13 @@ import (
 
 const MenuLineWidth = 10
 
-var menuLineList = map[int]Line{
+type LineStruct struct {
+	LineType cursor.Type
+	LineMenu string
+	Cursor   string
+}
+
+var menuLineList = map[int]LineStruct{
 	3: {
 		LineType: cursor.Dot,
 		LineMenu: "•",
@@ -109,12 +115,6 @@ var getRoute = map[int]map[int]route{
 		1:  right,
 		0:  stay,
 	},
-}
-
-type Line struct {
-	LineType cursor.Type
-	LineMenu string
-	Cursor   string
 }
 
 func drawLineMenu(screen [][]string) [][]string {

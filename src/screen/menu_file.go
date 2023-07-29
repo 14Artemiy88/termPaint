@@ -13,7 +13,7 @@ const fileX = 3
 
 var (
 	Dir           string
-	File          string
+	FilePath      string
 	FileList      map[int]string
 	FileListWidth int
 )
@@ -44,7 +44,7 @@ func FileMenu(screen [][]string, path string) [][]string {
 	}
 	FileListWidth = width + 6
 	ClearMenu(screen, FileListWidth)
-	str := "File " + strings.Repeat("─", FileListWidth-len("File")-2) + "┐"
+	str := "FilePath " + strings.Repeat("─", FileListWidth-len("FilePath")-2) + "┐"
 	DrawString(1, 1, str, screen)
 
 	Y := 3

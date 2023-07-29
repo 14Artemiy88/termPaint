@@ -69,9 +69,9 @@ func onFile(msg tea.MouseMsg) {
 	cursor.CC.Brush = cursor.Empty
 	if file, ok := FileList[msg.Y]; ok {
 		cursor.CC.Brush = cursor.Pointer
-		File = file
+		FilePath = file
 	} else {
-		File = ""
+		FilePath = ""
 	}
 }
 
