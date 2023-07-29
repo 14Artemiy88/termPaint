@@ -14,7 +14,7 @@ const (
 	File
 	help
 	shape
-	line
+	Line
 )
 
 var MenuType menuType
@@ -29,7 +29,7 @@ func drawMenu(screen [][]string) {
 		DrawHelpMenu(screen)
 	case shape:
 		drawShapeMenu(screen)
-	case line:
+	case Line:
 		drawLineMenu(screen)
 	}
 }

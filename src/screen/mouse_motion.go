@@ -19,7 +19,7 @@ func mouseMotion(msg tea.MouseMsg) {
 		xMin = HelpWidth
 	case shape:
 		xMin = MenuShapeWidth
-	case line:
+	case Line:
 		xMin = MenuLineWidth
 	default:
 		xMin = 0
@@ -33,7 +33,7 @@ func mouseMotion(msg tea.MouseMsg) {
 			onFile(msg)
 		case shape:
 			onShape(msg)
-		case line:
+		case Line:
 			onLine(msg)
 		default:
 			cursor.CC.Brush = cursor.Empty

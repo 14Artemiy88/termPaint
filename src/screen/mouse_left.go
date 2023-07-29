@@ -19,7 +19,7 @@ func mouseLeft(X int, Y int, s *Screen) {
 		selectFile(Y, s)
 	} else if MenuType == shape && X < MenuShapeWidth {
 		selectShape(Y)
-	} else if MenuType == line && X < MenuLineWidth {
+	} else if MenuType == Line && X < MenuLineWidth {
 		selectLine(Y)
 	} else {
 		draw(X, Y)
