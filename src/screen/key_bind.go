@@ -47,12 +47,12 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 		}
 
 	// line
-	case tea.KeyF5:
-		if menu.Type == menu.Line {
-			menu.Type = menu.None
-		} else {
-			menu.Type = menu.Line
-		}
+	//case tea.KeyF5:
+	//	if menu.Type == menu.Line {
+	//		menu.Type = menu.None
+	//	} else {
+	//		menu.Type = menu.Line
+	//	}
 
 	// save
 	case tea.KeyCtrlS:
