@@ -30,10 +30,10 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 
 	// file
 	case tea.KeyCtrlO, tea.KeyF3:
-		if MenuType == file {
+		if MenuType == File {
 			MenuType = None
 		} else {
-			MenuType = file
+			MenuType = File
 		}
 
 	// shape

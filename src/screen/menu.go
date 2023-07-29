@@ -11,7 +11,7 @@ type menuType int
 const (
 	None menuType = iota
 	symbolColor
-	file
+	File
 	help
 	shape
 	line
@@ -23,7 +23,7 @@ func drawMenu(screen [][]string) {
 	switch MenuType {
 	case symbolColor:
 		DrawSymbolColorMenu(screen)
-	case file:
+	case File:
 		FileMenu(screen, Dir)
 	case help:
 		DrawHelpMenu(screen)
