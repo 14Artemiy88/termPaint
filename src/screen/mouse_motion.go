@@ -11,11 +11,11 @@ import (
 func mouseMotion(msg tea.MouseMsg) {
 	var xMin int
 	switch MenuType {
-	case symbolColor:
+	case SymbolColor:
 		xMin = MenuSymbolColorWidth
 	case File:
 		xMin = FileListWidth
-	case help:
+	case Help:
 		xMin = HelpWidth
 	case shape:
 		xMin = MenuShapeWidth
@@ -27,7 +27,7 @@ func mouseMotion(msg tea.MouseMsg) {
 
 	if msg.X <= xMin {
 		switch MenuType {
-		case symbolColor:
+		case SymbolColor:
 			onMenu(msg)
 		case File:
 			onFile(msg)

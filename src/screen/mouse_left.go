@@ -12,7 +12,7 @@ import (
 )
 
 func mouseLeft(X int, Y int, s *Screen) {
-	if MenuType == symbolColor && X < MenuSymbolColorWidth {
+	if MenuType == SymbolColor && X < MenuSymbolColorWidth {
 		selectSymbol(Y)
 		selectColor(X, Y)
 	} else if MenuType == File && X < FileListWidth {

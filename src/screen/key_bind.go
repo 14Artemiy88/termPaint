@@ -12,20 +12,20 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 	case tea.KeyCtrlC, tea.KeyEsc:
 		return s, tea.Quit
 
-	// help
+	// Help
 	case tea.KeyEnter, tea.KeyCtrlH, tea.KeyF1:
-		if MenuType == help {
+		if MenuType == Help {
 			MenuType = None
 		} else {
-			MenuType = help
+			MenuType = Help
 		}
 
 	// menu
 	case tea.KeyTab, tea.KeyF2:
-		if MenuType == symbolColor {
+		if MenuType == SymbolColor {
 			MenuType = None
 		} else {
-			MenuType = symbolColor
+			MenuType = SymbolColor
 		}
 
 	// file
@@ -66,7 +66,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 
 	// set cursor or color
 	case tea.KeyRunes:
-		if MenuType == symbolColor && input.lock {
+		if MenuType == SymbolColor && input.lock {
 			if _, err := strconv.Atoi(string(msg.Runes)); err == nil {
 				input.value += string(msg.Runes)
 			} else {
