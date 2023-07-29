@@ -13,7 +13,7 @@ const (
 	SymbolColor
 	File
 	Help
-	shape
+	Shape
 	Line
 )
 
@@ -27,7 +27,7 @@ func drawMenu(screen [][]string) {
 		FileMenu(screen, Dir)
 	case Help:
 		DrawHelpMenu(screen)
-	case shape:
+	case Shape:
 		drawShapeMenu(screen)
 	case Line:
 		drawLineMenu(screen)

@@ -8,7 +8,7 @@ import (
 
 const MenuShapeWidth = 12
 
-var shapeList = map[int]Shape{
+var shapeList = map[int]ShapeStruct{
 	3:  {shapeType: cursor.Dot, shapeSymbol: "•"},
 	5:  {shapeType: cursor.GLine, shapeSymbol: "━"},
 	7:  {shapeType: cursor.VLine, shapeSymbol: "┃"},
@@ -18,7 +18,7 @@ var shapeList = map[int]Shape{
 	15: {shapeType: cursor.FCircle, shapeSymbol: "●"},
 }
 
-type Shape struct {
+type ShapeStruct struct {
 	shapeType   cursor.Type
 	shapeSymbol string
 }

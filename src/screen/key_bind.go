@@ -38,10 +38,10 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 
 	// shape
 	case tea.KeyF4:
-		if MenuType == shape {
+		if MenuType == Shape {
 			MenuType = None
 		} else {
-			MenuType = shape
+			MenuType = Shape
 		}
 
 	// line
