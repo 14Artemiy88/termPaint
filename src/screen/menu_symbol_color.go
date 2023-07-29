@@ -3,6 +3,7 @@ package screen
 import (
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
+	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"strconv"
 	"strings"
@@ -31,8 +32,8 @@ func DrawSymbolColorMenu(screen [][]string) [][]string {
 	drawSymbolMenu(screen)
 	drawColorMenu(screen)
 	str := "Help " + strings.Repeat("─", MenuSymbolColorWidth-len("Help")-2) + "┤"
-	DrawString(1, Size.Rows-2, str, screen)
-	DrawString(2, Size.Rows-1, "Press Enter", screen)
+	DrawString(1, size.Size.Rows-2, str, screen)
+	DrawString(2, size.Size.Rows-1, "Press Enter", screen)
 
 	return screen
 }

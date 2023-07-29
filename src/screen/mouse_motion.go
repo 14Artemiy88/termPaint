@@ -4,6 +4,7 @@ import (
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
+	"github.com/14Artemiy88/termPaint/src/size"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -42,10 +43,10 @@ func mouseMotion(msg tea.MouseMsg) {
 		cursor.CC.Brush = cursor.CC.Store.Brush
 	}
 
-	if msg.X > xMin && msg.X < Size.Columns {
+	if msg.X > xMin && msg.X < size.Size.Columns {
 		cursor.CC.X = msg.X
 	}
-	if msg.Y > 0 && msg.Y < Size.Rows {
+	if msg.Y > 0 && msg.Y < size.Size.Rows {
 		cursor.CC.Y = msg.Y
 	}
 }

@@ -1,6 +1,7 @@
 package screen
 
 import (
+	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"strings"
 )
@@ -43,7 +44,7 @@ func DrawString(X int, Y int, val string, screen [][]string) [][]string {
 }
 
 func ClearMenu(screen [][]string, width int) [][]string {
-	for y := 0; y < Size.Rows; y++ {
+	for y := 0; y < size.Size.Rows; y++ {
 		for x := 0; x < width; x++ {
 			utils.SetByKeys(x, y, " ", screen)
 		}
