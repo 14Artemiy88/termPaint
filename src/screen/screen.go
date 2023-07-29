@@ -2,6 +2,8 @@ package screen
 
 import (
 	"github.com/14Artemiy88/termPaint/src/cursor"
+	"github.com/14Artemiy88/termPaint/src/menu"
+	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
@@ -22,14 +24,14 @@ func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tickMsg:
 		var delCount int
-		for k, m := range Msg {
-			if m.liveTime > 0 {
-				Msg[k].liveTime--
+		for k, m := range message.Msg {
+			if m.LiveTime > 0 {
+				message.Msg[k].LiveTime--
 			} else {
 				delCount++
 			}
 		}
-		Msg = Msg[delCount:]
+		message.Msg = message.Msg[delCount:]
 
 		return s, tick
 
@@ -65,10 +67,10 @@ func (s *Screen) View() string {
 		utils.SetByKeys(p.X, p.Y, p.Symbol, screen)
 	}
 
-	drawMenu(screen)
+	menu.DrawMenu(screen)
 
-	if len(Msg) > 0 {
-		DrawMsg(Msg, MsgWidth, screen)
+	if len(message.Msg) > 0 {
+		message.DrawMsg(message.Msg, message.MsgWidth, screen)
 	}
 
 	if !s.Save {
@@ -85,7 +87,7 @@ func (s *Screen) View() string {
 
 	if s.Save {
 		s.Save = false
-		SaveImage(screenString)
+		menu.SaveImage(screenString)
 	}
 
 	return screenString

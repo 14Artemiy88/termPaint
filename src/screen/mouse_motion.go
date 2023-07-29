@@ -4,36 +4,37 @@ import (
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
+	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/size"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 func mouseMotion(msg tea.MouseMsg) {
 	var xMin int
-	switch MenuType {
-	case SymbolColor:
-		xMin = MenuSymbolColorWidth
-	case File:
-		xMin = FileListWidth
-	case Help:
-		xMin = HelpWidth
-	case Shape:
-		xMin = MenuShapeWidth
-	case Line:
-		xMin = MenuLineWidth
+	switch menu.MenuType {
+	case menu.SymbolColor:
+		xMin = menu.MenuSymbolColorWidth
+	case menu.File:
+		xMin = menu.FileListWidth
+	case menu.Help:
+		xMin = menu.HelpWidth
+	case menu.Shape:
+		xMin = menu.MenuShapeWidth
+	case menu.Line:
+		xMin = menu.MenuLineWidth
 	default:
 		xMin = 0
 	}
 
 	if msg.X <= xMin {
-		switch MenuType {
-		case SymbolColor:
+		switch menu.MenuType {
+		case menu.SymbolColor:
 			onMenu(msg)
-		case File:
+		case menu.File:
 			onFile(msg)
-		case Shape:
+		case menu.Shape:
 			onShape(msg)
-		case Line:
+		case menu.Line:
 			onLine(msg)
 		default:
 			cursor.CC.Brush = cursor.Empty
@@ -53,44 +54,44 @@ func mouseMotion(msg tea.MouseMsg) {
 
 func onLine(msg tea.MouseMsg) {
 	cursor.CC.Brush = cursor.Empty
-	if _, ok := menuLineList[msg.Y]; ok {
+	if _, ok := menu.MenuLineList[msg.Y]; ok {
 		cursor.CC.Brush = cursor.Pointer
 	}
 }
 
 func onShape(msg tea.MouseMsg) {
 	cursor.CC.Brush = cursor.Empty
-	if _, ok := shapeList[msg.Y]; ok {
+	if _, ok := menu.ShapeList[msg.Y]; ok {
 		cursor.CC.Brush = cursor.Pointer
 	}
 }
 
 func onFile(msg tea.MouseMsg) {
 	cursor.CC.Brush = cursor.Empty
-	if file, ok := FileList[msg.Y]; ok {
+	if file, ok := menu.FileList[msg.Y]; ok {
 		cursor.CC.Brush = cursor.Pointer
-		FilePath = file
+		menu.FilePath = file
 	} else {
-		FilePath = ""
+		menu.FilePath = ""
 	}
 }
 
 func onMenu(msg tea.MouseMsg) {
 	cursor.CC.Brush = cursor.Empty
 	_, okSymbol := config.Cfg.Symbols[msg.Y][msg.X]
-	c, okColor := Colors[msg.Y]
-	if okColor && msg.X < MenuSymbolColorWidth {
-		input.lock = true
-		input.color = c
+	c, okColor := menu.Colors[msg.Y]
+	if okColor && msg.X < menu.MenuSymbolColorWidth {
+		menu.Input.Lock = true
+		menu.Input.Color = c
 		cursor.CC.Brush = cursor.Pointer
 	} else {
-		input.lock = false
-		if len(input.value) > 0 {
-			cursor.CC.Color[input.color] = color.SetColor(input.value)
+		menu.Input.Lock = false
+		if len(menu.Input.Value) > 0 {
+			cursor.CC.Color[menu.Input.Color] = color.SetColor(menu.Input.Value)
 		}
-		input.value = ""
+		menu.Input.Value = ""
 	}
 	if !okSymbol && !okColor {
-		cursor.CC.X = MenuSymbolColorWidth + 1
+		cursor.CC.X = menu.MenuSymbolColorWidth + 1
 	}
 }

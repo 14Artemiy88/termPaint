@@ -1,9 +1,8 @@
-package screen
+package menu
 
 import (
 	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
-	"strings"
 )
 
 type menuType int
@@ -19,7 +18,7 @@ const (
 
 var MenuType menuType
 
-func drawMenu(screen [][]string) {
+func DrawMenu(screen [][]string) {
 	switch MenuType {
 	case SymbolColor:
 		DrawSymbolColorMenu(screen)
@@ -32,15 +31,6 @@ func drawMenu(screen [][]string) {
 	case Line:
 		drawLineMenu(screen)
 	}
-}
-
-func DrawString(X int, Y int, val string, screen [][]string) [][]string {
-	str := strings.Split(val, "")
-	for k, symbol := range str {
-		utils.SetByKeys(X+k, Y, symbol, screen)
-	}
-
-	return screen
 }
 
 func ClearMenu(screen [][]string, width int) [][]string {

@@ -1,6 +1,9 @@
 package utils
 
-import "strconv"
+import (
+	"strconv"
+	"strings"
+)
 
 const Reset = "\u001B[0m"
 
@@ -18,6 +21,15 @@ func isset(arr [][]string, first int, second int) bool {
 func SetByKeys(X int, Y int, val string, screen [][]string) [][]string {
 	if isset(screen, Y, X) {
 		screen[Y][X] = val
+	}
+
+	return screen
+}
+
+func DrawString(X int, Y int, val string, screen [][]string) [][]string {
+	str := strings.Split(val, "")
+	for k, symbol := range str {
+		SetByKeys(X+k, Y, symbol, screen)
 	}
 
 	return screen

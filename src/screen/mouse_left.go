@@ -4,6 +4,8 @@ import (
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
+	"github.com/14Artemiy88/termPaint/src/menu"
+	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"math"
@@ -12,14 +14,14 @@ import (
 )
 
 func mouseLeft(X int, Y int, s *Screen) {
-	if MenuType == SymbolColor && X < MenuSymbolColorWidth {
+	if menu.MenuType == menu.SymbolColor && X < menu.MenuSymbolColorWidth {
 		selectSymbol(Y)
 		selectColor(X, Y)
-	} else if MenuType == File && X < FileListWidth {
+	} else if menu.MenuType == menu.File && X < menu.FileListWidth {
 		selectFile(Y, s)
-	} else if MenuType == Shape && X < MenuShapeWidth {
+	} else if menu.MenuType == menu.Shape && X < menu.MenuShapeWidth {
 		selectShape(Y)
-	} else if MenuType == Line && X < MenuLineWidth {
+	} else if menu.MenuType == menu.Line && X < menu.MenuLineWidth {
 		selectLine(Y)
 	} else {
 		draw(X, Y)
@@ -27,7 +29,7 @@ func mouseLeft(X int, Y int, s *Screen) {
 }
 
 func selectLine(Y int) {
-	if line, ok := menuLineList[Y]; ok {
+	if line, ok := menu.MenuLineList[Y]; ok {
 		cursor.CC.Store.Brush = line.LineType
 		if line.LineType == cursor.Dot {
 			cursor.CC.SetCursor(config.Cfg.DefaultCursor)
@@ -38,8 +40,8 @@ func selectLine(Y int) {
 }
 
 func selectShape(Y int) {
-	if sh, ok := shapeList[Y]; ok {
-		cursor.CC.Store.Brush = sh.shapeType
+	if sh, ok := menu.ShapeList[Y]; ok {
+		cursor.CC.Store.Brush = sh.ShapeType
 	}
 }
 
@@ -47,37 +49,37 @@ func selectColor(X int, Y int) {
 	if symbol, ok := config.Cfg.Symbols[Y][X]; ok {
 		cursor.CC.SetCursor(symbol)
 		if config.Cfg.Notifications.SetSymbol {
-			SetMessage("Set " + symbol)
+			message.SetMessage("Set " + symbol)
 		}
 	}
 }
 
 func selectSymbol(Y int) {
-	if c, ok := Colors[Y]; ok {
+	if c, ok := menu.Colors[Y]; ok {
 		cursor.CC.Color[c] = color.MinMaxColor(cursor.CC.Color[c])
 	}
 }
 
 func selectFile(Y int, s *Screen) {
-	if filePath, ok := FileList[Y]; ok {
-		info, err := os.Stat(Dir + filePath)
+	if filePath, ok := menu.FileList[Y]; ok {
+		info, err := os.Stat(menu.Dir + filePath)
 		if err != nil {
-			SetMessage(err.Error())
+			message.SetMessage(err.Error())
 		}
 		if info.IsDir() {
-			Dir += filePath
+			menu.Dir += filePath
 		} else {
-			MenuType = None
-			ext := filepath.Ext(Dir + filePath)
+			menu.MenuType = menu.None
+			ext := filepath.Ext(menu.Dir + filePath)
 			if ext == ".txt" {
-				content, err := os.ReadFile(Dir + filePath)
+				content, err := os.ReadFile(menu.Dir + filePath)
 				if err != nil {
-					SetMessage(err.Error())
+					message.SetMessage(err.Error())
 				}
 				s.LoadImage(string(content))
 			}
 			if ext == ".jpg" || ext == ".png" {
-				s.loadFromImafe(Dir + filePath)
+				s.loadFromImafe(menu.Dir + filePath)
 			}
 		}
 	}
@@ -183,11 +185,11 @@ func drawContinuousLine(X int, Y int) {
 				y = 0
 			}
 			if x == 0 {
-				line = gvLine[line]["v"]
+				line = menu.GVLine[line]["v"]
 				cursor.CC.SetCursor(line)
 			}
 			if y == 0 {
-				line = gvLine[line]["g"]
+				line = menu.GVLine[line]["g"]
 				cursor.CC.SetCursor(line)
 			}
 		}
@@ -206,7 +208,7 @@ func drawContinuousLine(X int, Y int) {
 
 		var px int
 		var py int
-		var pr route
+		var pr menu.Route
 		if pixel.StorePixel[0].Symbol != "" {
 			px = X - pixel.StorePixel[0].X
 			py = Y - pixel.StorePixel[0].Y
@@ -217,8 +219,8 @@ func drawContinuousLine(X int, Y int) {
 				py = 0
 			}
 		}
-		r := getRoute[y][x]
-		pr = getRoute[py][px]
+		r := menu.GetRoute[y][x]
+		pr = menu.GetRoute[py][px]
 
 		pixel.Pixels.Add(
 			pixel.Pixel{
@@ -228,7 +230,7 @@ func drawContinuousLine(X int, Y int) {
 					cursor.CC.Color["r"],
 					cursor.CC.Color["g"],
 					cursor.CC.Color["b"],
-					drawLine[cursor.CC.Store.Brush][pr][r],
+					menu.DrawLine[cursor.CC.Store.Brush][pr][r],
 				),
 			},
 		)

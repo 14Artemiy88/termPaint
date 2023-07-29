@@ -1,4 +1,4 @@
-package screen
+package message
 
 import (
 	"github.com/14Artemiy88/termPaint/src/config"
@@ -7,7 +7,7 @@ import (
 )
 
 type Message struct {
-	liveTime int
+	LiveTime int
 	text     string
 }
 
@@ -15,7 +15,7 @@ var Msg []Message
 var MsgWidth int
 
 func SetMessage(text string) {
-	Msg = append(Msg, Message{text: text, liveTime: config.Cfg.NotificationTime})
+	Msg = append(Msg, Message{text: text, LiveTime: config.Cfg.NotificationTime})
 	textLen := len(text)
 	if textLen > MsgWidth {
 		MsgWidth = textLen
@@ -25,7 +25,7 @@ func SetMessage(text string) {
 func DrawMsg(messages []Message, width int, screen [][]string) [][]string {
 	ClearMessage(screen, width+5, len(messages)+2)
 	for k, m := range messages {
-		DrawString(1, 1+k, m.text, screen)
+		utils.DrawString(1, 1+k, m.text, screen)
 	}
 	return screen
 }
@@ -37,7 +37,7 @@ func ClearMessage(screen [][]string, width int, height int) [][]string {
 		}
 		utils.SetByKeys(width, y, "│", screen)
 	}
-	DrawString(0, height, strings.Repeat("─", width)+"┘", screen)
+	utils.DrawString(0, height, strings.Repeat("─", width)+"┘", screen)
 
 	return screen
 }

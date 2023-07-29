@@ -3,6 +3,7 @@ package screen
 import (
 	"fmt"
 	"github.com/14Artemiy88/termPaint/src/cursor"
+	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
@@ -17,18 +18,18 @@ import (
 func (s *Screen) loadFromImafe(path string) {
 	file, err := os.Open(path)
 	if err != nil {
-		SetMessage(err.Error())
+		message.SetMessage(err.Error())
 	}
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-			SetMessage(err.Error())
+			message.SetMessage(err.Error())
 		}
 	}(file)
 
 	img, _, err := image.Decode(file)
 	if err != nil {
-		SetMessage(err.Error())
+		message.SetMessage(err.Error())
 	}
 
 	bounds := img.Bounds()
@@ -74,7 +75,7 @@ func (s *Screen) LoadImage(screenString string) {
 	}
 	if len(errors) > 0 {
 		for _, i := range errors {
-			SetMessage(i)
+			message.SetMessage(i)
 		}
 	}
 }

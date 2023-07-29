@@ -1,4 +1,4 @@
-package screen
+package menu
 
 import (
 	"github.com/14Artemiy88/termPaint/src/config"
@@ -11,13 +11,13 @@ import (
 
 const MenuSymbolColorWidth = 15
 
-type Input struct {
-	lock  bool
-	value string
-	color string
+type InputStruct struct {
+	Lock  bool
+	Value string
+	Color string
 }
 
-var input Input
+var Input InputStruct
 
 var Colors = map[int]string{
 	17: "r",
@@ -32,15 +32,15 @@ func DrawSymbolColorMenu(screen [][]string) [][]string {
 	drawSymbolMenu(screen)
 	drawColorMenu(screen)
 	str := "Help " + strings.Repeat("─", MenuSymbolColorWidth-len("Help")-2) + "┤"
-	DrawString(1, size.Size.Rows-2, str, screen)
-	DrawString(2, size.Size.Rows-1, "Press Enter", screen)
+	utils.DrawString(1, size.Size.Rows-2, str, screen)
+	utils.DrawString(2, size.Size.Rows-1, "Press Enter", screen)
 
 	return screen
 }
 
 func drawSymbolMenu(screen [][]string) [][]string {
 	str := "Symbol " + strings.Repeat("─", MenuSymbolColorWidth-len("Symbol")-2) + "┐"
-	DrawString(1, 1, str, screen)
+	utils.DrawString(1, 1, str, screen)
 	for y, line := range config.Cfg.Symbols {
 		for x, symbol := range line {
 			utils.SetByKeys(x, y, symbol, screen)
@@ -52,9 +52,9 @@ func drawSymbolMenu(screen [][]string) [][]string {
 
 func drawColorMenu(screen [][]string) [][]string {
 	str := "Color " + strings.Repeat("─", MenuSymbolColorWidth-len("Color")-2) + "┤"
-	DrawString(1, 15, str, screen)
+	utils.DrawString(1, 15, str, screen)
 	for y, line := range Colors {
-		DrawString(colorX+2, y, strconv.Itoa(cursor.CC.Color[line]), screen)
+		utils.DrawString(colorX+2, y, strconv.Itoa(cursor.CC.Color[line]), screen)
 		switch line {
 		case "r":
 			utils.SetByKeys(colorX, y, utils.FgRgb(cursor.CC.Color[line], 0, 0, "█"), screen)

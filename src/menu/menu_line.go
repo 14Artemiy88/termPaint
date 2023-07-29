@@ -1,7 +1,8 @@
-package screen
+package menu
 
 import (
 	"github.com/14Artemiy88/termPaint/src/cursor"
+	"github.com/14Artemiy88/termPaint/src/utils"
 	"strings"
 )
 
@@ -13,7 +14,7 @@ type LineStruct struct {
 	Cursor   string
 }
 
-var menuLineList = map[int]LineStruct{
+var MenuLineList = map[int]LineStruct{
 	3: {
 		LineType: cursor.Dot,
 		LineMenu: "•",
@@ -40,14 +41,14 @@ var menuLineList = map[int]LineStruct{
 	},
 }
 
-var lineList = map[route]map[route]string{
+var lineList = map[Route]map[Route]string{
 	upLeft:    {up: "└", left: "┐"},
 	upRight:   {up: "┘", right: "┌"},
 	downLeft:  {down: "┌", left: "┘"},
 	downRight: {down: "┐", right: "└"},
 	stay:      {stay: "O", right: "─", left: "─", up: "│", down: "│"},
 }
-var smoothLineList = map[route]map[route]string{
+var smoothLineList = map[Route]map[Route]string{
 	upLeft:    {up: "╰", left: "╮"},
 	upRight:   {up: "╯", right: "╭"},
 	downLeft:  {down: "╭", left: "╯"},
@@ -55,7 +56,7 @@ var smoothLineList = map[route]map[route]string{
 	stay:      {stay: "O", right: "─", left: "─", up: "│", down: "│"},
 }
 
-var fatLineList = map[route]map[route]string{
+var fatLineList = map[Route]map[Route]string{
 	upLeft:    {up: "┗", left: "┓"},
 	upRight:   {up: "┛", right: "┏"},
 	downLeft:  {down: "┏", left: "┛"},
@@ -63,7 +64,7 @@ var fatLineList = map[route]map[route]string{
 	stay:      {stay: "O", right: "━", left: "━", up: "┃", down: "┃"},
 }
 
-var doubleLineList = map[route]map[route]string{
+var doubleLineList = map[Route]map[Route]string{
 	upLeft:    {up: "╚", left: "╗"},
 	upRight:   {up: "╝", right: "╔"},
 	downLeft:  {down: "╔", left: "╝"},
@@ -71,23 +72,23 @@ var doubleLineList = map[route]map[route]string{
 	stay:      {stay: "O", right: "═", left: "═", up: "║", down: "║"},
 }
 
-var drawLine = map[cursor.Type]map[route]map[route]string{
+var DrawLine = map[cursor.Type]map[Route]map[Route]string{
 	cursor.ContinuousLine:       lineList,
 	cursor.SmoothContinuousLine: smoothLineList,
 	cursor.FatContinuousLine:    fatLineList,
 	cursor.DoubleContinuousLine: doubleLineList,
 }
 
-var gvLine = map[string]map[string]string{
+var GVLine = map[string]map[string]string{
 	"─": {"v": "│", "g": "─"},
 	"━": {"v": "┃", "g": "━"},
 	"═": {"v": "║", "g": "═"},
 }
 
-type route int
+type Route int
 
 const (
-	stay route = iota
+	stay Route = iota
 	up
 	down
 	left
@@ -98,7 +99,7 @@ const (
 	downRight
 )
 
-var getRoute = map[int]map[int]route{
+var GetRoute = map[int]map[int]Route{
 	// Y: X
 	-1: {
 		-1: upLeft,
@@ -120,10 +121,10 @@ var getRoute = map[int]map[int]route{
 func drawLineMenu(screen [][]string) [][]string {
 	ClearMenu(screen, MenuShapeWidth)
 	str := "Line " + strings.Repeat("─", MenuLineWidth-len("Line")) + "┐"
-	DrawString(1, 1, str, screen)
+	utils.DrawString(1, 1, str, screen)
 
-	for y, line := range menuLineList {
-		DrawString(3, y, line.LineMenu, screen)
+	for y, line := range MenuLineList {
+		utils.DrawString(3, y, line.LineMenu, screen)
 	}
 
 	return screen

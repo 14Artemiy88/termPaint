@@ -1,6 +1,7 @@
-package screen
+package menu
 
 import (
+	"github.com/14Artemiy88/termPaint/src/utils"
 	"strings"
 )
 
@@ -78,10 +79,10 @@ func DrawHelpMenu(screen [][]string) [][]string {
 func (m menuItem) DrawMenuItem(screen [][]string) [][]string {
 	var str string
 	str = m.title + " " + strings.Repeat("─", HelpWidth-2-len(m.title)) + m.end
-	DrawString(1, m.Y, str, screen)
+	utils.DrawString(1, m.Y, str, screen)
 	for k, i := range m.item {
 		str = i
-		DrawString(3, m.Y+1+k, str, screen)
+		utils.DrawString(3, m.Y+1+k, str, screen)
 	}
 
 	return screen

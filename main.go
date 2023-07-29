@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
+	"github.com/14Artemiy88/termPaint/src/menu"
+	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/screen"
 	tea "github.com/charmbracelet/bubbletea"
 	"log"
@@ -23,7 +25,7 @@ func main() {
 			Brush:  cursor.Dot,
 		},
 	}
-	screen.Dir = config.Cfg.ImageSaveDirectory
+	menu.Dir = config.Cfg.ImageSaveDirectory
 	p := tea.NewProgram(
 		s,
 		tea.WithAltScreen(),
@@ -33,9 +35,9 @@ func main() {
 	if _, err := os.Stat(config.Cfg.ImageSaveDirectory); os.IsNotExist(err) {
 		errDir := os.MkdirAll(config.Cfg.ImageSaveDirectory, 0755)
 		if errDir != nil {
-			screen.SetMessage(err.Error())
+			message.SetMessage(err.Error())
 		}
-		screen.SetMessage("Directory " + config.Cfg.ImageSaveDirectory + " successfully created.")
+		message.SetMessage("Directory " + config.Cfg.ImageSaveDirectory + " successfully created.")
 	}
 
 	if _, err := p.Run(); err != nil {

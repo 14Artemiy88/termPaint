@@ -1,8 +1,10 @@
-package screen
+package menu
 
 import (
 	"fmt"
 	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/message"
+	"github.com/14Artemiy88/termPaint/src/utils"
 	"os"
 	"path/filepath"
 	"strings"
@@ -21,7 +23,7 @@ var (
 func FileMenu(screen [][]string, path string) [][]string {
 	files, err := os.ReadDir(path)
 	if err != nil {
-		SetMessage(err.Error())
+		message.SetMessage(err.Error())
 		Dir = config.Cfg.ImageSaveDirectory
 	}
 
@@ -45,15 +47,15 @@ func FileMenu(screen [][]string, path string) [][]string {
 	FileListWidth = width + 6
 	ClearMenu(screen, FileListWidth)
 	str := "FilePath " + strings.Repeat("─", FileListWidth-len("FilePath")-2) + "┐"
-	DrawString(1, 1, str, screen)
+	utils.DrawString(1, 1, str, screen)
 
 	Y := 3
 	if config.Cfg.ShowFolder {
 		FileList = make(map[int]string, len(fileList)+len(dirList)+1)
 		FileList[2] = "../"
-		DrawString(fileX, 2, "..", screen)
+		utils.DrawString(fileX, 2, "..", screen)
 		for _, dirName := range dirList {
-			DrawString(fileX, Y, fmt.Sprintf("🗀 %v", dirName), screen)
+			utils.DrawString(fileX, Y, fmt.Sprintf("🗀 %v", dirName), screen)
 			FileList[Y] = dirName + "/"
 			Y++
 		}
@@ -61,7 +63,7 @@ func FileMenu(screen [][]string, path string) [][]string {
 		FileList = make(map[int]string, len(fileList)+1)
 	}
 	for y, fileName := range fileList {
-		DrawString(fileX, Y+y, fmt.Sprintf("🖹 %v", fileName), screen)
+		utils.DrawString(fileX, Y+y, fmt.Sprintf("🖹 %v", fileName), screen)
 		FileList[Y+y] = fileName
 	}
 
@@ -71,12 +73,12 @@ func FileMenu(screen [][]string, path string) [][]string {
 func SaveImage(image string) {
 	f, err := os.Create(config.Cfg.ImageSaveDirectory + time.Now().Format(config.Cfg.ImageSaveNameFormat))
 	if err != nil {
-		SetMessage(err.Error())
+		message.SetMessage(err.Error())
 	}
 	defer func(f *os.File) {
 		err := f.Close()
 		if err != nil {
-			SetMessage(err.Error())
+			message.SetMessage(err.Error())
 		}
 	}(f)
 	lines := strings.Split(image, "\n")
@@ -86,7 +88,7 @@ func SaveImage(image string) {
 	}
 	_, err = f.WriteString(newImage)
 	if err != nil {
-		SetMessage(err.Error())
+		message.SetMessage(err.Error())
 	}
-	SetMessage("Saved as " + f.Name())
+	message.SetMessage("Saved as " + f.Name())
 }

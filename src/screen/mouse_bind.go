@@ -4,6 +4,7 @@ import (
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
+	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -23,7 +24,7 @@ func MouseBind(msg tea.MouseMsg, s *Screen) {
 		pixel.Pixels = []pixel.Pixel{}
 
 	case tea.MouseWheelDown:
-		if c, ok := Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {
+		if c, ok := menu.Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {
 			cursor.CC.Color[c] = color.Decrease(cursor.CC.Color[c])
 		}
 		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != config.Cfg.Pointer {
@@ -41,7 +42,7 @@ func MouseBind(msg tea.MouseMsg, s *Screen) {
 		}
 
 	case tea.MouseWheelUp:
-		if c, ok := Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {
+		if c, ok := menu.Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {
 			cursor.CC.Color[c] = color.Increase(cursor.CC.Color[c])
 		}
 		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != config.Cfg.Pointer {
