@@ -105,7 +105,7 @@ func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 		R := CC.Width / 2
 		k := 5
 		for y := -R * k; y <= R*k; y++ {
-			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.PixelRatio)
+			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
 			ky := int(math.Round(float64(y) / float64(k)))
 			utils.SetByKeys(c.X+x, c.Y+ky, symbol, screen)
 			utils.SetByKeys(c.X-x, c.Y+ky, symbol, screen)
@@ -115,7 +115,7 @@ func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 		R := CC.Width / 2
 		k := 5
 		for y := -R * k; y <= R*k; y++ {
-			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.PixelRatio)
+			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
 			ky := int(math.Round(float64(y) / float64(k)))
 			for i := -x; i <= x; i++ {
 				utils.SetByKeys(c.X+i, c.Y+ky, symbol, screen)

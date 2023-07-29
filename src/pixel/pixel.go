@@ -1,6 +1,6 @@
 package pixel
 
-const PixelRatio = .4583333333333333
+const Ratio = .4583333333333333
 
 type Pixel struct {
 	X      int

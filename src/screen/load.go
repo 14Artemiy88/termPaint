@@ -46,7 +46,7 @@ func (s *Screen) loadFromImafe(path string) {
 
 	pixel.Pixels = []pixel.Pixel{}
 	var y int
-	for i := bounds.Min.Y; i < bounds.Max.Y; i += int(float64(ratio) / pixel.PixelRatio) {
+	for i := bounds.Min.Y; i < bounds.Max.Y; i += int(float64(ratio) / pixel.Ratio) {
 		var x int
 		for j := bounds.Min.X; j < bounds.Max.X; j += ratio {
 			color := img.At(j, i)

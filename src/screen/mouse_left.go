@@ -152,7 +152,7 @@ func drawECircle(X int, Y int, symbol string) {
 	R := cursor.CC.Width / 2
 	k := 5
 	for y := -R * k; y <= R*k; y++ {
-		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.PixelRatio)
+		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
 		ky := int(math.Round(float64(y) / float64(k)))
 		pixel.Pixels.Add(
 			pixel.Pixel{X: X + x, Y: Y + ky, Symbol: symbol},
@@ -165,7 +165,7 @@ func drawFCircle(X int, Y int, symbol string) {
 	R := cursor.CC.Width / 2
 	k := 5
 	for y := -R * k; y <= R*k; y++ {
-		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.PixelRatio)
+		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
 		ky := int(math.Round(float64(y) / float64(k)))
 		for i := -x; i <= x; i++ {
 			pixel.Pixels.Add(pixel.Pixel{X: X + i, Y: Y + ky, Symbol: symbol})

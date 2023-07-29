@@ -25,7 +25,6 @@ type Config struct {
 		SaveImage           bool `mapstructure:"save_image"`
 		LoadImageSizeErrors bool `mapstructure:"load_image_size_errors"`
 	} `mapstructure:"notifications"`
-	//Notifications map[string]bool `mapstructure:"notifications"`
 }
 
 func InitConfig() {
