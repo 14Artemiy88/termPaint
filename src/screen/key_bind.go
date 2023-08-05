@@ -1,6 +1,7 @@
 package screen
 
 import (
+	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/message"
@@ -71,6 +72,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 		if menu.Type == menu.SymbolColor && menu.Input.Lock {
 			if _, err := strconv.Atoi(string(msg.Runes)); err == nil {
 				menu.Input.Value += string(msg.Runes)
+				cursor.CC.Color[menu.Input.Color] = color.SetColor(menu.Input.Value)
 			} else {
 				message.SetMessage(err.Error())
 			}

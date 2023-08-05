@@ -1,7 +1,6 @@
 package screen
 
 import (
-	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
@@ -86,9 +85,6 @@ func onMenu(msg tea.MouseMsg) {
 		cursor.CC.Brush = cursor.Pointer
 	} else {
 		menu.Input.Lock = false
-		if len(menu.Input.Value) > 0 {
-			cursor.CC.Color[menu.Input.Color] = color.SetColor(menu.Input.Value)
-		}
 		menu.Input.Value = ""
 	}
 	if !okSymbol && !okColor {
