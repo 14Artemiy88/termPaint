@@ -16,7 +16,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 		return s, tea.Quit
 
 	// Help
-	case tea.KeyEnter, tea.KeyCtrlH, tea.KeyF1:
+	case tea.KeyCtrlH, tea.KeyF1:
 		if menu.Type == menu.Help {
 			menu.Type = menu.None
 		} else {
@@ -58,6 +58,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 	// save
 	case tea.KeyCtrlS:
 		s.Save = true
+		s.ShowInputSave = true
 		menu.Type = menu.None
 		message.Msg = []message.Message{}
 
@@ -66,6 +67,12 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 		if len(menu.FilePath) > 0 {
 			_ = os.Remove(menu.FilePath)
 		}
+
+	case tea.KeyBackspace:
+		menu.Input.Value = menu.Input.Value[:len(menu.Input.Value)-1]
+
+	case tea.KeyEnter:
+		s.ShowInputSave = false
 
 	// set cursor or color
 	case tea.KeyRunes:
@@ -76,6 +83,8 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 			} else {
 				message.SetMessage(err.Error())
 			}
+		} else if s.ShowInputSave {
+			menu.Input.Value += string(msg.Runes)
 		} else {
 			cursor.CC.SetCursor(string(msg.Runes))
 		}

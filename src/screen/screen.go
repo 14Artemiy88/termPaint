@@ -13,11 +13,17 @@ import (
 )
 
 type Screen struct {
-	Save bool
+	ShowInputSave bool
+	Save          bool
 }
 
 func (s *Screen) Init() tea.Cmd {
 	return tick
+}
+
+var blink = map[bool]string{
+	true:  "|",
+	false: " ",
 }
 
 func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -32,6 +38,13 @@ func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		}
 		message.Msg = message.Msg[delCount:]
+
+		menu.BlinkCursor = blink[menu.BlinkPhase]
+		menu.BlinkTime--
+		if menu.BlinkTime == 0 {
+			menu.BlinkPhase = !menu.BlinkPhase
+			menu.BlinkTime = menu.DefBlinkTime
+		}
 
 		return s, tick
 
@@ -76,6 +89,9 @@ func (s *Screen) View() string {
 	if !s.Save {
 		cursor.CC.DrawCursor(screen)
 	}
+	if s.ShowInputSave {
+		menu.DrawSaveInput(screen)
+	}
 
 	var screenString string
 	for i, line := range screen {
@@ -85,7 +101,7 @@ func (s *Screen) View() string {
 		}
 	}
 
-	if s.Save {
+	if s.Save && !s.ShowInputSave {
 		s.Save = false
 		menu.SaveImage(screenString)
 	}

@@ -20,6 +20,14 @@ var (
 	FileListWidth int
 )
 
+var BlinkCursor string
+
+var BlinkPhase bool
+
+const DefBlinkTime = 50
+
+var BlinkTime = DefBlinkTime
+
 func FileMenu(screen [][]string, path string) [][]string {
 	files, err := os.ReadDir(path)
 	if err != nil {
@@ -71,7 +79,11 @@ func FileMenu(screen [][]string, path string) [][]string {
 }
 
 func SaveImage(image string) {
-	f, err := os.Create(config.Cfg.ImageSaveDirectory + time.Now().Format(config.Cfg.ImageSaveNameFormat))
+	fileName := config.Cfg.ImageSaveDirectory + time.Now().Format(config.Cfg.ImageSaveNameFormat)
+	if len(Input.Value) > 0 {
+		fileName = Input.Value + ".txt"
+	}
+	f, err := os.Create(fileName)
 	if err != nil {
 		message.SetMessage(err.Error())
 	}
@@ -91,4 +103,28 @@ func SaveImage(image string) {
 		message.SetMessage(err.Error())
 	}
 	message.SetMessage("Saved as " + f.Name())
+}
+
+func DrawSaveInput(screen [][]string) [][]string {
+	width := 20
+	fileNameLen := len(Input.Value + BlinkCursor + ".txt")
+	if fileNameLen >= width {
+		width = fileNameLen + 2
+	}
+	clearSaveInput(screen, width, 3)
+	utils.DrawString(1, 1, Input.Value+BlinkCursor+".txt", screen)
+
+	return screen
+}
+
+func clearSaveInput(screen [][]string, width int, height int) [][]string {
+	for y := -1; y < height; y++ {
+		for x := -1; x < width; x++ {
+			utils.SetByKeys(x, y, " ", screen)
+		}
+		utils.SetByKeys(width, y, "│", screen)
+	}
+	utils.DrawString(0, height, strings.Repeat("─", width)+"┘", screen)
+
+	return screen
 }

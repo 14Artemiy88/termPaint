@@ -33,7 +33,7 @@ func DrawSymbolColorMenu(screen [][]string) [][]string {
 	drawColorMenu(screen)
 	str := "Help " + strings.Repeat("─", SymbolColorWidth-len("Help")-2) + "┤"
 	utils.DrawString(1, size.Size.Rows-2, str, screen)
-	utils.DrawString(2, size.Size.Rows-1, "Press Enter", screen)
+	utils.DrawString(2, size.Size.Rows-1, "Press Ctrl+H", screen)
 
 	return screen
 }
