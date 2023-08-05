@@ -23,14 +23,14 @@ func SetMessage(text string) {
 }
 
 func DrawMsg(messages []Message, width int, screen [][]string) [][]string {
-	ClearMessage(screen, width+5, len(messages)+2)
+	clearMessage(screen, width+5, len(messages)+2)
 	for k, m := range messages {
 		utils.DrawString(1, 1+k, m.text, screen)
 	}
 	return screen
 }
 
-func ClearMessage(screen [][]string, width int, height int) [][]string {
+func clearMessage(screen [][]string, width int, height int) [][]string {
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
 			utils.SetByKeys(x, y, " ", screen)
