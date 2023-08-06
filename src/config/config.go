@@ -13,6 +13,7 @@ type Config struct {
 	DefaultColor        map[string]int         `mapstructure:"default_color"`
 	Pointer             string                 `mapstructure:"pointer"`
 	PointerColor        map[string]int         `mapstructure:"pointer_color"`
+	FillCursor          string                 `mapstructure:"fill_cursor"`
 	Symbols             map[int]map[int]string `mapstructure:"symbols"`
 	ShowFolder          bool                   `mapstructure:"show_folder"`
 	ShowHiddenFolder    bool                   `mapstructure:"show_hidden_folder"`

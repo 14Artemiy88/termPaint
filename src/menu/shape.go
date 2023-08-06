@@ -17,6 +17,7 @@ var ShapeList = map[int]ShapeStruct{
 	11: {ShapeType: cursor.FSquare, ShapeSymbol: "■"},
 	13: {ShapeType: cursor.ECircle, ShapeSymbol: "○"},
 	15: {ShapeType: cursor.FCircle, ShapeSymbol: "●"},
+	17: {ShapeType: cursor.Fill, ShapeSymbol: "Fill"},
 }
 
 type ShapeStruct struct {
@@ -34,12 +35,12 @@ func drawShapeMenu(screen [][]string) [][]string {
 	}
 	switch cursor.CC.Store.Brush {
 	case cursor.GLine, cursor.VLine:
-		utils.DrawString(1, 17, "Length: "+strconv.Itoa(cursor.CC.Width), screen)
+		utils.DrawString(1, 19, "Length: "+strconv.Itoa(cursor.CC.Width), screen)
 	case cursor.ESquare, cursor.FSquare:
-		utils.DrawString(1, 17, "Width: "+strconv.Itoa(cursor.CC.Width), screen)
-		utils.DrawString(1, 18, "Height: "+strconv.Itoa(cursor.CC.Height), screen)
+		utils.DrawString(1, 19, "Width: "+strconv.Itoa(cursor.CC.Width), screen)
+		utils.DrawString(1, 20, "Height: "+strconv.Itoa(cursor.CC.Height), screen)
 	case cursor.ECircle, cursor.FCircle:
-		utils.DrawString(1, 17, "Radius: "+strconv.Itoa(cursor.CC.Width), screen)
+		utils.DrawString(1, 19, "Radius: "+strconv.Itoa(cursor.CC.Width), screen)
 	}
 
 	return screen

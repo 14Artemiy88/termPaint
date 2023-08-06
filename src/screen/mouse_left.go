@@ -1,12 +1,14 @@
 package screen
 
 import (
+	"fmt"
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
+	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"math"
 	"os"
@@ -15,8 +17,8 @@ import (
 
 func mouseLeft(X int, Y int, s *Screen) {
 	if menu.Type == menu.SymbolColor && X < menu.SymbolColorWidth {
-		selectSymbol(Y)
-		selectColor(X, Y)
+		selectColor(Y)
+		selectSymbol(X, Y)
 	} else if menu.Type == menu.File && X < menu.FileListWidth {
 		selectFile(Y, s)
 	} else if menu.Type == menu.Shape && X < menu.ShapeWidth {
@@ -45,7 +47,7 @@ func selectShape(Y int) {
 	}
 }
 
-func selectColor(X int, Y int) {
+func selectSymbol(X int, Y int) {
 	if symbol, ok := config.Cfg.Symbols[Y][X]; ok {
 		cursor.CC.SetCursor(symbol)
 		if config.Cfg.Notifications.SetSymbol {
@@ -54,7 +56,7 @@ func selectColor(X int, Y int) {
 	}
 }
 
-func selectSymbol(Y int) {
+func selectColor(Y int) {
 	if c, ok := menu.Colors[Y]; ok {
 		cursor.CC.Color[c] = color.MinMaxColor(cursor.CC.Color[c])
 	}
@@ -108,8 +110,43 @@ func draw(X int, Y int) {
 		drawECircle(X, Y, symbol)
 	case cursor.FCircle:
 		drawFCircle(X, Y, symbol)
+	case cursor.Fill:
+		changedSymbols := make(map[string]Coord)
+		changedSymbols["_"] = Coord{X: X, Y: Y}
+		drawFill(symbol, Pixels[Y][X], changedSymbols, size.Size.Width)
 	case cursor.ContinuousLine, cursor.SmoothContinuousLine, cursor.FatContinuousLine, cursor.DoubleContinuousLine:
 		drawContinuousLine(X, Y)
+	}
+}
+
+func drawFill(symbol string, changedSymbol string, changedSymbols map[string]Coord, N int) {
+	symbols := make(map[string]Coord)
+	var key string
+	for _, p := range changedSymbols {
+		if utils.Isset(Pixels, p.Y+1, p.X) && Pixels[p.Y+1][p.X] == changedSymbol {
+			key = fmt.Sprintf("%d-%d", p.Y+1, p.X)
+			symbols[key] = Coord{Y: p.Y + 1, X: p.X}
+			pixel.Pixels.Add(pixel.Pixel{Y: p.Y + 1, X: p.X, Symbol: symbol})
+		}
+		if utils.Isset(Pixels, p.Y-1, p.X) && Pixels[p.Y-1][p.X] == changedSymbol {
+			key = fmt.Sprintf("%d-%d", p.Y-1, p.X)
+			symbols[key] = Coord{Y: p.Y - 1, X: p.X}
+			pixel.Pixels.Add(pixel.Pixel{Y: p.Y - 1, X: p.X, Symbol: symbol})
+		}
+		if utils.Isset(Pixels, p.Y, p.X+1) && Pixels[p.Y][p.X+1] == changedSymbol {
+			key = fmt.Sprintf("%d-%d", p.Y+1, p.X+1)
+			symbols[key] = Coord{Y: p.Y, X: p.X + 1}
+			pixel.Pixels.Add(pixel.Pixel{Y: p.Y, X: p.X + 1, Symbol: symbol})
+		}
+		if utils.Isset(Pixels, p.Y, p.X-1) && (Pixels[p.Y][p.X-1] == changedSymbol || Pixels[p.Y][p.X-1] == config.Cfg.FillCursor) {
+			key = fmt.Sprintf("%d-%d", p.Y, p.X-1)
+			symbols[key] = Coord{Y: p.Y, X: p.X - 1}
+			pixel.Pixels.Add(pixel.Pixel{Y: p.Y, X: p.X - 1, Symbol: symbol})
+		}
+	}
+	if len(symbols) > 0 && N > 0 {
+		N--
+		drawFill(symbol, changedSymbol, symbols, N)
 	}
 }
 

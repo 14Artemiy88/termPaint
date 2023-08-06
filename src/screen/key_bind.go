@@ -55,6 +55,14 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 	//		menu.Type = menu.Line
 	//	}
 
+	case tea.KeyCtrlF:
+		if cursor.CC.Brush == cursor.Fill {
+			cursor.CC.Store.Brush = cursor.Dot
+		} else {
+			cursor.CC.Store.Brush = cursor.Fill
+		}
+		//cursor.CC.SetCursor(config.Cfg.FillCursor)
+
 	// save
 	case tea.KeyCtrlS:
 		s.Save = true

@@ -34,7 +34,7 @@ func DrawMenu(screen [][]string) {
 }
 
 func ClearMenu(screen [][]string, width int) [][]string {
-	for y := 0; y < size.Size.Rows; y++ {
+	for y := 0; y < size.Size.Height; y++ {
 		for x := 0; x < width; x++ {
 			utils.SetByKeys(x, y, " ", screen)
 		}

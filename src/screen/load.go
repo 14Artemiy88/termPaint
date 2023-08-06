@@ -34,13 +34,13 @@ func (s *Screen) loadFromImafe(path string) {
 
 	bounds := img.Bounds()
 	ratio := 1
-	if size.Size.Rows > size.Size.Columns {
-		if bounds.Max.X > size.Size.Columns {
-			ratio = int(math.Ceil(float64(bounds.Max.X) / float64(size.Size.Columns)))
+	if size.Size.Height > size.Size.Width {
+		if bounds.Max.X > size.Size.Width {
+			ratio = int(math.Ceil(float64(bounds.Max.X) / float64(size.Size.Width)))
 		}
 	} else {
-		if bounds.Max.Y > size.Size.Rows {
-			ratio = int(math.Ceil(float64(bounds.Max.Y)/float64(size.Size.Rows)) / 2)
+		if bounds.Max.Y > size.Size.Height {
+			ratio = int(math.Ceil(float64(bounds.Max.Y)/float64(size.Size.Height)) / 2)
 		}
 	}
 
@@ -65,8 +65,8 @@ func (s *Screen) LoadImage(screenString string) {
 	lines := strings.Split(screenString, "\n")
 	rows := len(lines)
 	errors := make(map[string]string, 2)
-	if rows > size.Size.Rows {
-		errors["rows"] = fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, size.Size.Rows)
+	if rows > size.Size.Height {
+		errors["rows"] = fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, size.Size.Height)
 	}
 	if strings.Contains(screenString, "\u001B") {
 		loadColored(lines, rows, errors)
@@ -85,10 +85,10 @@ func loadWhite(lines []string, rows int, errors map[string]string) map[string]st
 		line := strings.Split(lines[y], "")
 		var maxX int
 		for x, symbol := range line {
-			if x >= size.Size.Columns-1 {
+			if x >= size.Size.Width-1 {
 				if maxX == 0 {
 					maxX = x
-					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, size.Size.Columns)
+					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, size.Size.Width)
 				}
 				maxX++
 			}
@@ -107,10 +107,10 @@ func loadColored(lines []string, rows int, errors map[string]string) map[string]
 		var skip int
 		var maxX int
 		for _, symbol := range line {
-			if x >= size.Size.Columns-1 {
+			if x >= size.Size.Width-1 {
 				if maxX == 0 {
 					maxX = x
-					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, size.Size.Columns)
+					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, size.Size.Width)
 				}
 				maxX++
 			}

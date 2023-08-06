@@ -17,6 +17,11 @@ type Screen struct {
 	Save          bool
 }
 
+type Coord struct {
+	X int
+	Y int
+}
+
 func (s *Screen) Init() tea.Cmd {
 	return tick
 }
@@ -25,6 +30,8 @@ var blink = map[bool]string{
 	true:  "|",
 	false: " ",
 }
+
+var Pixels [][]string
 
 func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
@@ -57,46 +64,46 @@ func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		cursor.CC.X = msg.Width / 2
 		cursor.CC.Y = msg.Height / 2
-		size.Size.Columns = msg.Width
-		size.Size.Rows = msg.Height
+		size.Size.Width = msg.Width
+		size.Size.Height = msg.Height
 	}
 
 	return s, nil
 }
 
 func (s *Screen) View() string {
-	if size.Size.Rows == 0 {
+	if size.Size.Height == 0 {
 		return ""
 	}
 
-	screen := make([][]string, size.Size.Rows)
-
-	// draw Empty Screen
-	for i := 0; i < size.Size.Rows; i++ {
-		screen[i] = strings.Split(strings.Repeat(" ", size.Size.Columns), "")
+	Pixels = make([][]string, size.Size.Height)
+	for i := 0; i < size.Size.Height; i++ {
+		if len(Pixels) > i {
+			Pixels[i] = strings.Split(strings.Repeat(" ", size.Size.Width), "")
+		}
 	}
 
 	for _, p := range pixel.Pixels {
-		utils.SetByKeys(p.X, p.Y, p.Symbol, screen)
+		utils.SetByKeys(p.X, p.Y, p.Symbol, Pixels)
 	}
 
-	menu.DrawMenu(screen)
+	menu.DrawMenu(Pixels)
 
 	if len(message.Msg) > 0 {
-		message.DrawMsg(message.Msg, message.MsgWidth, screen)
+		message.DrawMsg(message.Msg, message.MsgWidth, Pixels)
 	}
 
 	if !s.Save {
-		cursor.CC.DrawCursor(screen)
+		cursor.CC.DrawCursor(Pixels)
 	}
 	if s.ShowInputSave {
-		menu.DrawSaveInput(screen)
+		menu.DrawSaveInput(Pixels)
 	}
 
 	var screenString string
-	for i, line := range screen {
+	for i, line := range Pixels {
 		screenString += strings.Join(line, "")
-		if i < len(screen)-1 {
+		if i < len(Pixels)-1 {
 			screenString += "\n"
 		}
 	}

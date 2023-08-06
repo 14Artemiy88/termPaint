@@ -10,6 +10,8 @@ pointer_color:
     G: 170
     B: 170
 
+fill_cursor: "\U000F0266"
+
 symbols:
     3:
         2: "┌"

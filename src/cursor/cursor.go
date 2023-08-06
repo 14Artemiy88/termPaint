@@ -41,6 +41,7 @@ const (
 	SmoothContinuousLine
 	FatContinuousLine
 	DoubleContinuousLine
+	Fill
 )
 
 func (c *Cursor) SetCursor(cursor string) {
@@ -50,12 +51,12 @@ func (c *Cursor) SetCursor(cursor string) {
 
 func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 	symbol := utils.FgRgb(
-		CC.Color["r"],
-		CC.Color["g"],
-		CC.Color["b"],
-		CC.Symbol,
+		c.Color["r"],
+		c.Color["g"],
+		c.Color["b"],
+		c.Symbol,
 	)
-	switch CC.Brush {
+	switch c.Brush {
 	case Empty:
 	case Pointer:
 		c.X = 1
@@ -66,7 +67,14 @@ func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 			config.Cfg.Pointer,
 		)
 		utils.SetByKeys(1, c.Y, symbol, screen)
-
+	//case Fill:
+	//	symbol = utils.FgRgb(
+	//		config.Cfg.PointerColor["r"],
+	//		config.Cfg.PointerColor["g"],
+	//		config.Cfg.PointerColor["b"],
+	//		config.Cfg.FillCursor,
+	//	)
+	//	utils.SetByKeys(c.X-1, c.Y, symbol, screen)
 	case Dot,
 		ContinuousLine,
 		SmoothContinuousLine,
@@ -75,19 +83,19 @@ func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 		utils.SetByKeys(c.X, c.Y, symbol, screen)
 
 	case GLine:
-		for i := 0; i < CC.Width; i++ {
+		for i := 0; i < c.Width; i++ {
 			utils.SetByKeys(c.X+i, c.Y, symbol, screen)
 		}
 
 	case VLine:
-		for i := 0; i < CC.Width; i++ {
+		for i := 0; i < c.Width; i++ {
 			utils.SetByKeys(c.X, c.Y+i, symbol, screen)
 		}
 
 	case ESquare:
-		for y := 0; y < CC.Height; y++ {
-			for x := 0; x < CC.Width; x++ {
-				if x > 0 && x < CC.Width-1 && y > 0 && y < CC.Height-1 {
+		for y := 0; y < c.Height; y++ {
+			for x := 0; x < c.Width; x++ {
+				if x > 0 && x < c.Width-1 && y > 0 && y < c.Height-1 {
 					continue
 				}
 				utils.SetByKeys(c.X+x, c.Y+y, symbol, screen)
@@ -95,14 +103,14 @@ func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 		}
 
 	case FSquare:
-		for y := 0; y < CC.Height; y++ {
-			for x := 0; x < CC.Width; x++ {
+		for y := 0; y < c.Height; y++ {
+			for x := 0; x < c.Width; x++ {
 				utils.SetByKeys(c.X+x, c.Y+y, symbol, screen)
 			}
 		}
 
 	case ECircle:
-		R := CC.Width / 2
+		R := c.Width / 2
 		k := 5
 		for y := -R * k; y <= R*k; y++ {
 			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
@@ -112,7 +120,7 @@ func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 		}
 
 	case FCircle:
-		R := CC.Width / 2
+		R := c.Width / 2
 		k := 5
 		for y := -R * k; y <= R*k; y++ {
 			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)

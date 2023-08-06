@@ -1,8 +1,8 @@
 package size
 
 type size struct {
-	Columns int
-	Rows    int
+	Width  int
+	Height int
 }
 
 var Size size
