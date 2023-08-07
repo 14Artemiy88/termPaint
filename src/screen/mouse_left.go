@@ -138,7 +138,7 @@ func drawFill(symbol string, changedSymbol string, changedSymbols map[string]Coo
 			symbols[key] = Coord{Y: p.Y, X: p.X + 1}
 			pixel.Pixels.Add(pixel.Pixel{Y: p.Y, X: p.X + 1, Symbol: symbol})
 		}
-		if utils.Isset(Pixels, p.Y, p.X-1) && (Pixels[p.Y][p.X-1] == changedSymbol || Pixels[p.Y][p.X-1] == config.Cfg.FillCursor) {
+		if utils.Isset(Pixels, p.Y, p.X-1) && Pixels[p.Y][p.X-1] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y, p.X-1)
 			symbols[key] = Coord{Y: p.Y, X: p.X - 1}
 			pixel.Pixels.Add(pixel.Pixel{Y: p.Y, X: p.X - 1, Symbol: symbol})

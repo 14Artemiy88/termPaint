@@ -82,6 +82,9 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 	case tea.KeyEnter:
 		s.ShowInputSave = false
 
+	case tea.KeySpace:
+		cursor.CC.SetCursor(msg.String())
+
 	// set cursor or color
 	case tea.KeyRunes:
 		if menu.Type == menu.SymbolColor && menu.Input.Lock {
