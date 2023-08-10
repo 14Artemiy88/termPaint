@@ -1,6 +1,7 @@
 package menu
 
 import (
+	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"strings"
 )
@@ -8,7 +9,7 @@ import (
 type menuItem struct {
 	Y     int
 	title string
-	item  []string
+	item  []map[string]string
 	end   string
 }
 
@@ -17,50 +18,50 @@ var menu = []menuItem{
 		Y:     1,
 		title: "Keys",
 		end:   "┐",
-		item: []string{
-			"ESC      - Exit",
-			"Tab      - Menu",
-			"Ctrl+S   - Save in txt file",
-			"Ctrl+O   - Load Image",
-			"Enter    - Show this help menu",
-			"Any char - Set this Symbol",
+		item: []map[string]string{
+			{"key": "ESC     ", "text": "Exit"},
+			{"key": "Tab     ", "text": "Menu"},
+			{"key": "Ctrl+S  ", "text": "Save in txt file"},
+			{"key": "Ctrl+O  ", "text": "Load Image"},
+			{"key": "Enter   ", "text": "Show this help menu"},
+			{"key": "Any char", "text": "Set this Symbol"},
 		},
 	},
 	{
-		Y:     9,
+		Y:     10,
 		title: "Mouse",
 		end:   "┤",
-		item: []string{
-			"Left   - Draw",
-			"Right  - Erase",
-			"Middle - Clear Screen",
+		item: []map[string]string{
+			{"key": "Left  ", "text": "Draw"},
+			{"key": "Right ", "text": "Erase"},
+			{"key": "Middle", "text": "Clear Screen"},
 		},
 	},
 	{
-		Y:     14,
+		Y:     16,
 		title: "Symbol",
 		end:   "┤",
-		item: []string{
-			"Click to select Symbol",
+		item: []map[string]string{
+			{"key": "", "text": "Click to select Symbol"},
 		},
 	},
 	{
-		Y:     17,
+		Y:     20,
 		title: "Color",
 		end:   "┤",
-		item: []string{
-			"Scroll      - Decrease/increase",
-			"Click       - Set 0/255",
-			"Press [0-9] - Set color",
+		item: []map[string]string{
+			{"key": "Scroll     ", "text": "Decrease/increase"},
+			{"key": "Click      ", "text": "Set 0/255"},
+			{"key": "Press [0-9]", "text": "Set color"},
 		},
 	},
 	{
-		Y:     22,
+		Y:     26,
 		title: "FilePath",
 		end:   "┤",
-		item: []string{
-			"Left   - Click to select file",
-			"Delete - Press to delete file",
+		item: []map[string]string{
+			{"key": "Left  ", "text": "Click to select file"},
+			{"key": "Delete", "text": "Press to delete file"},
 		},
 	},
 }
@@ -78,11 +79,16 @@ func DrawHelpMenu(screen [][]string) [][]string {
 
 func (m menuItem) DrawMenuItem(screen [][]string) [][]string {
 	var str string
-	str = m.title + " " + strings.Repeat("─", HelpWidth-2-len(m.title)) + m.end
-	utils.DrawString(1, m.Y, str, screen)
-	for k, i := range m.item {
-		str = i
-		utils.DrawString(3, m.Y+1+k, str, screen)
+	str = strings.Repeat("─", HelpWidth-2-len(m.title)) + m.end
+	utils.DrawString(1, m.Y, m.title, color.Yellow, screen)
+	utils.DrawString(len(m.title)+2, m.Y, str, color.Gray, screen)
+
+	for k, str := range m.item {
+		lenKey := len(str["key"])
+		if lenKey > 0 {
+			utils.DrawString(3, m.Y+2+k, str["key"], color.Green, screen)
+		}
+		utils.DrawString(lenKey+7, m.Y+2+k, str["text"], color.White, screen)
 	}
 
 	return screen

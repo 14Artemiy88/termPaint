@@ -1,6 +1,19 @@
 package color
 
-import "strconv"
+import (
+	"strconv"
+)
+
+var White = Color{R: 255, G: 255, B: 255}
+var Green = Color{R: 2, G: 186, B: 31}
+var Yellow = Color{R: 190, G: 175, B: 0}
+var Gray = Color{R: 150, G: 150, B: 150}
+
+type Color struct {
+	R int
+	G int
+	B int
+}
 
 func SetColor(color string) int {
 	c, _ := strconv.Atoi(color)

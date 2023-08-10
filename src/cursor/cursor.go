@@ -1,6 +1,7 @@
 package cursor
 
 import (
+	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
@@ -50,23 +51,13 @@ func (c *Cursor) SetCursor(cursor string) {
 }
 
 func (c *Cursor) DrawCursor(screen [][]string) [][]string {
-	symbol := utils.FgRgb(
-		c.Color["r"],
-		c.Color["g"],
-		c.Color["b"],
-		c.Symbol,
-	)
+	clr := color.Color{R: c.Color["r"], G: c.Color["g"], B: c.Color["b"]}
 	switch c.Brush {
 	case Empty:
 	case Pointer:
 		c.X = 1
-		symbol = utils.FgRgb(
-			config.Cfg.PointerColor["r"],
-			config.Cfg.PointerColor["g"],
-			config.Cfg.PointerColor["b"],
-			config.Cfg.Pointer,
-		)
-		utils.SetByKeys(1, c.Y, symbol, screen)
+		clr = color.Color{R: config.Cfg.PointerColor["r"], G: config.Cfg.PointerColor["g"], B: config.Cfg.PointerColor["b"]}
+		utils.SetByKeys(1, c.Y, config.Cfg.Pointer, clr, screen)
 	//case Fill:
 	//	symbol = utils.FgRgb(
 	//		config.Cfg.PointerColor["r"],
@@ -80,16 +71,16 @@ func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 		SmoothContinuousLine,
 		FatContinuousLine,
 		DoubleContinuousLine:
-		utils.SetByKeys(c.X, c.Y, symbol, screen)
+		utils.SetByKeys(c.X, c.Y, c.Symbol, clr, screen)
 
 	case GLine:
 		for i := 0; i < c.Width; i++ {
-			utils.SetByKeys(c.X+i, c.Y, symbol, screen)
+			utils.SetByKeys(c.X+i, c.Y, c.Symbol, clr, screen)
 		}
 
 	case VLine:
 		for i := 0; i < c.Width; i++ {
-			utils.SetByKeys(c.X, c.Y+i, symbol, screen)
+			utils.SetByKeys(c.X, c.Y+i, c.Symbol, clr, screen)
 		}
 
 	case ESquare:
@@ -98,14 +89,14 @@ func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 				if x > 0 && x < c.Width-1 && y > 0 && y < c.Height-1 {
 					continue
 				}
-				utils.SetByKeys(c.X+x, c.Y+y, symbol, screen)
+				utils.SetByKeys(c.X+x, c.Y+y, c.Symbol, clr, screen)
 			}
 		}
 
 	case FSquare:
 		for y := 0; y < c.Height; y++ {
 			for x := 0; x < c.Width; x++ {
-				utils.SetByKeys(c.X+x, c.Y+y, symbol, screen)
+				utils.SetByKeys(c.X+x, c.Y+y, c.Symbol, clr, screen)
 			}
 		}
 
@@ -115,8 +106,8 @@ func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 		for y := -R * k; y <= R*k; y++ {
 			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
 			ky := int(math.Round(float64(y) / float64(k)))
-			utils.SetByKeys(c.X+x, c.Y+ky, symbol, screen)
-			utils.SetByKeys(c.X-x, c.Y+ky, symbol, screen)
+			utils.SetByKeys(c.X+x, c.Y+ky, c.Symbol, clr, screen)
+			utils.SetByKeys(c.X-x, c.Y+ky, c.Symbol, clr, screen)
 		}
 
 	case FCircle:
@@ -126,7 +117,7 @@ func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
 			ky := int(math.Round(float64(y) / float64(k)))
 			for i := -x; i <= x; i++ {
-				utils.SetByKeys(c.X+i, c.Y+ky, symbol, screen)
+				utils.SetByKeys(c.X+i, c.Y+ky, c.Symbol, clr, screen)
 			}
 		}
 	}

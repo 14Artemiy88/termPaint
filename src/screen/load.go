@@ -2,6 +2,7 @@ package screen
 
 import (
 	"fmt"
+	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
@@ -15,7 +16,7 @@ import (
 	"strings"
 )
 
-func (s *Screen) loadFromImafe(path string) {
+func (s *Screen) loadFromImage(path string) {
 	file, err := os.Open(path)
 	if err != nil {
 		message.SetMessage(err.Error())
@@ -92,7 +93,7 @@ func loadWhite(lines []string, rows int, errors map[string]string) map[string]st
 				}
 				maxX++
 			}
-			pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Symbol: symbol})
+			pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Color: color.White, Symbol: symbol})
 		}
 	}
 

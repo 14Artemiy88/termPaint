@@ -1,6 +1,7 @@
 package menu
 
 import (
+	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"strings"
@@ -121,10 +122,10 @@ var GetRoute = map[int]map[int]Route{
 func drawLineMenu(screen [][]string) [][]string {
 	ClearMenu(screen, ShapeWidth)
 	str := "Line " + strings.Repeat("─", LineWidth-len("Line")) + "┐"
-	utils.DrawString(1, 1, str, screen)
+	utils.DrawString(1, 1, str, color.White, screen)
 
 	for y, line := range LineList {
-		utils.DrawString(3, y, line.LineMenu, screen)
+		utils.DrawString(3, y, line.LineMenu, color.White, screen)
 	}
 
 	return screen

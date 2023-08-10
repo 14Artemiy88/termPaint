@@ -84,7 +84,7 @@ func (s *Screen) View() string {
 	}
 
 	for _, p := range pixel.Pixels {
-		utils.SetByKeys(p.X, p.Y, p.Symbol, Pixels)
+		utils.SetByKeys(p.X, p.Y, p.Symbol, p.Color, Pixels)
 	}
 
 	menu.DrawMenu(Pixels)

@@ -2,6 +2,7 @@ package menu
 
 import (
 	"fmt"
+	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/utils"
@@ -55,15 +56,15 @@ func FileMenu(screen [][]string, path string) [][]string {
 	FileListWidth = width + 6
 	ClearMenu(screen, FileListWidth)
 	str := "FilePath " + strings.Repeat("─", FileListWidth-len("FilePath")-2) + "┐"
-	utils.DrawString(1, 1, str, screen)
+	utils.DrawString(1, 1, str, color.White, screen)
 
 	Y := 3
 	if config.Cfg.ShowFolder {
 		FileList = make(map[int]string, len(fileList)+len(dirList)+1)
 		FileList[2] = "../"
-		utils.DrawString(fileX, 2, "..", screen)
+		utils.DrawString(fileX, 2, "..", color.White, screen)
 		for _, dirName := range dirList {
-			utils.DrawString(fileX, Y, fmt.Sprintf("🗀 %v", dirName), screen)
+			utils.DrawString(fileX, Y, fmt.Sprintf("🗀 %v", dirName), color.White, screen)
 			FileList[Y] = dirName + "/"
 			Y++
 		}
@@ -71,7 +72,7 @@ func FileMenu(screen [][]string, path string) [][]string {
 		FileList = make(map[int]string, len(fileList)+1)
 	}
 	for y, fileName := range fileList {
-		utils.DrawString(fileX, Y+y, fmt.Sprintf("🖹 %v", fileName), screen)
+		utils.DrawString(fileX, Y+y, fmt.Sprintf("🖹 %v", fileName), color.White, screen)
 		FileList[Y+y] = fileName
 	}
 
@@ -112,7 +113,7 @@ func DrawSaveInput(screen [][]string) [][]string {
 		width = fileNameLen + 2
 	}
 	clearSaveInput(screen, width, 3)
-	utils.DrawString(1, 1, Input.Value+BlinkCursor+".txt", screen)
+	utils.DrawString(1, 1, Input.Value+BlinkCursor+".txt", color.White, screen)
 
 	return screen
 }
@@ -120,11 +121,11 @@ func DrawSaveInput(screen [][]string) [][]string {
 func clearSaveInput(screen [][]string, width int, height int) [][]string {
 	for y := -1; y < height; y++ {
 		for x := -1; x < width; x++ {
-			utils.SetByKeys(x, y, " ", screen)
+			utils.SetByKeys(x, y, " ", color.White, screen)
 		}
-		utils.SetByKeys(width, y, "│", screen)
+		utils.SetByKeys(width, y, "│", color.White, screen)
 	}
-	utils.DrawString(0, height, strings.Repeat("─", width)+"┘", screen)
+	utils.DrawString(0, height, strings.Repeat("─", width)+"┘", color.White, screen)
 
 	return screen
 }

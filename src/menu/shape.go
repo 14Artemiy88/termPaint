@@ -1,6 +1,7 @@
 package menu
 
 import (
+	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"strconv"
@@ -27,20 +28,25 @@ type ShapeStruct struct {
 
 func drawShapeMenu(screen [][]string) [][]string {
 	ClearMenu(screen, ShapeWidth)
-	str := "Shape " + strings.Repeat("─", ShapeWidth-len("Shape")-2) + "┐"
-	utils.DrawString(1, 1, str, screen)
+	str := strings.Repeat("─", ShapeWidth-len("Shape")-2) + "┐"
+	utils.DrawString(1, 1, "Shape", color.Yellow, screen)
+	utils.DrawString(len("Shape")+2, 1, str, color.Gray, screen)
 
 	for y, sh := range ShapeList {
-		utils.DrawString(3, y, sh.ShapeSymbol, screen)
+		utils.DrawString(3, y, sh.ShapeSymbol, color.White, screen)
 	}
 	switch cursor.CC.Store.Brush {
 	case cursor.GLine, cursor.VLine:
-		utils.DrawString(1, 19, "Length: "+strconv.Itoa(cursor.CC.Width), screen)
+		utils.DrawString(1, 19, "Length: "+strconv.Itoa(cursor.CC.Width), color.Green, screen)
+		utils.DrawString(len("Length:")+2, 19, strconv.Itoa(cursor.CC.Width), color.White, screen)
 	case cursor.ESquare, cursor.FSquare:
-		utils.DrawString(1, 19, "Width: "+strconv.Itoa(cursor.CC.Width), screen)
-		utils.DrawString(1, 20, "Height: "+strconv.Itoa(cursor.CC.Height), screen)
+		utils.DrawString(1, 19, "Width: "+strconv.Itoa(cursor.CC.Width), color.Green, screen)
+		utils.DrawString(1, 20, "Height: "+strconv.Itoa(cursor.CC.Height), color.Green, screen)
+		utils.DrawString(len("Width:")+2, 19, strconv.Itoa(cursor.CC.Width), color.White, screen)
+		utils.DrawString(len("Height:")+2, 20, strconv.Itoa(cursor.CC.Height), color.White, screen)
 	case cursor.ECircle, cursor.FCircle:
-		utils.DrawString(1, 19, "Radius: "+strconv.Itoa(cursor.CC.Width), screen)
+		utils.DrawString(1, 19, "Radius: ", color.Green, screen)
+		utils.DrawString(len("Radius:")+2, 19, strconv.Itoa(cursor.CC.Width), color.White, screen)
 	}
 
 	return screen
