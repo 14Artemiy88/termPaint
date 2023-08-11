@@ -125,22 +125,22 @@ func drawFill(symbol string, clr color.Color, changedSymbol string, changedSymbo
 		if utils.Isset(Pixels, p.Y+1, p.X) && Pixels[p.Y+1][p.X] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y+1, p.X)
 			symbols[key] = Coord{Y: p.Y + 1, X: p.X}
-			pixel.Pixels.Add(pixel.Pixel{Y: p.Y + 1, X: p.X, Symbol: symbol})
+			pixel.Pixels.Add(pixel.Pixel{Y: p.Y + 1, X: p.X, Color: clr, Symbol: symbol})
 		}
 		if utils.Isset(Pixels, p.Y-1, p.X) && Pixels[p.Y-1][p.X] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y-1, p.X)
 			symbols[key] = Coord{Y: p.Y - 1, X: p.X}
-			pixel.Pixels.Add(pixel.Pixel{Y: p.Y - 1, X: p.X, Symbol: symbol})
+			pixel.Pixels.Add(pixel.Pixel{Y: p.Y - 1, X: p.X, Color: clr, Symbol: symbol})
 		}
 		if utils.Isset(Pixels, p.Y, p.X+1) && Pixels[p.Y][p.X+1] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y+1, p.X+1)
 			symbols[key] = Coord{Y: p.Y, X: p.X + 1}
-			pixel.Pixels.Add(pixel.Pixel{Y: p.Y, X: p.X + 1, Symbol: symbol})
+			pixel.Pixels.Add(pixel.Pixel{Y: p.Y, X: p.X + 1, Color: clr, Symbol: symbol})
 		}
 		if utils.Isset(Pixels, p.Y, p.X-1) && Pixels[p.Y][p.X-1] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y, p.X-1)
 			symbols[key] = Coord{Y: p.Y, X: p.X - 1}
-			pixel.Pixels.Add(pixel.Pixel{Y: p.Y, X: p.X - 1, Symbol: symbol})
+			pixel.Pixels.Add(pixel.Pixel{Y: p.Y, X: p.X - 1, Color: clr, Symbol: symbol})
 		}
 	}
 	if len(symbols) > 0 && N > 0 {
