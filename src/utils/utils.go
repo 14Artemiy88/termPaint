@@ -1,18 +1,15 @@
 package utils
 
 import (
+	"fmt"
 	"github.com/14Artemiy88/termPaint/src/color"
-	"strconv"
 	"strings"
 )
 
 const Reset = "\u001B[0m"
 
 func FgRgb(r int, g int, b int, symbol string) string {
-	if r == 255 && g == 255 && b == 255 {
-		return symbol
-	}
-	return "\033[38;2;" + strconv.Itoa(r) + ";" + strconv.Itoa(g) + ";" + strconv.Itoa(b) + "m" + symbol + Reset
+	return fmt.Sprintf("\033[38;2;%d;%d;%dm%s", r, g, b, symbol)
 }
 
 func DrawString(X int, Y int, val string, color color.Color, screen [][]string) [][]string {

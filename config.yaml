@@ -1,3 +1,8 @@
+background: true
+background_color:
+    R: 22
+    G: 22
+    B: 22
 default_cursor: "#"
 default_color:
     R: 255

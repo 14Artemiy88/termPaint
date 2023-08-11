@@ -1,6 +1,8 @@
 package screen
 
 import (
+	"fmt"
+	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/message"
@@ -76,30 +78,44 @@ func (s *Screen) View() string {
 		return ""
 	}
 
-	Pixels = make([][]string, size.Size.Height)
-	for i := 0; i < size.Size.Height; i++ {
-		if len(Pixels) > i {
-			Pixels[i] = strings.Split(strings.Repeat(" ", size.Size.Width), "")
-		}
-	}
-
-	for _, p := range pixel.Pixels {
-		utils.SetByKeys(p.X, p.Y, p.Symbol, p.Color, Pixels)
-	}
-
+	drawClearScreen()
+	drawScreen()
 	menu.DrawMenu(Pixels)
+	showMsg()
+	s.showCursor()
+	s.showSaveInput()
+	screenString := setScreenString()
+	s.save(screenString)
 
-	if len(message.Msg) > 0 {
-		message.DrawMsg(message.Msg, message.MsgWidth, Pixels)
-	}
+	return screen(screenString)
+}
 
+func (s *Screen) showCursor() {
 	if !s.Save {
 		cursor.CC.DrawCursor(Pixels)
 	}
+}
+
+func (s *Screen) save(screenString string) {
+	if s.Save && !s.ShowInputSave {
+		s.Save = false
+		menu.SaveImage(screenString)
+	}
+}
+
+func (s *Screen) showSaveInput() {
 	if s.ShowInputSave {
 		menu.DrawSaveInput(Pixels)
 	}
+}
 
+func showMsg() {
+	if len(message.Msg) > 0 {
+		message.DrawMsg(message.Msg, message.MsgWidth, Pixels)
+	}
+}
+
+func setScreenString() string {
 	var screenString string
 	for i, line := range Pixels {
 		screenString += strings.Join(line, "")
@@ -108,12 +124,36 @@ func (s *Screen) View() string {
 		}
 	}
 
-	if s.Save && !s.ShowInputSave {
-		s.Save = false
-		menu.SaveImage(screenString)
+	return screenString
+}
+
+func screen(screenString string) string {
+	if config.Cfg.Background {
+		screenString = fmt.Sprintf(
+			"\033[48;2;%d;%d;%dm%s",
+			config.Cfg.BackgroundColor["r"],
+			config.Cfg.BackgroundColor["g"],
+			config.Cfg.BackgroundColor["b"],
+			screenString,
+		)
 	}
 
 	return screenString
+}
+
+func drawScreen() {
+	for _, p := range pixel.Pixels {
+		utils.SetByKeys(p.X, p.Y, p.Symbol, p.Color, Pixels)
+	}
+}
+
+func drawClearScreen() {
+	Pixels = make([][]string, size.Size.Height)
+	for i := 0; i < size.Size.Height; i++ {
+		if len(Pixels) > i {
+			Pixels[i] = strings.Split(strings.Repeat(" ", size.Size.Width), "")
+		}
+	}
 }
 
 type tickMsg time.Time

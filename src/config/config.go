@@ -9,6 +9,8 @@ import (
 var Cfg Config
 
 type Config struct {
+	Background          bool                   `mapstructure:"background"`
+	BackgroundColor     map[string]int         `mapstructure:"background_color"`
 	DefaultCursor       string                 `mapstructure:"default_cursor"`
 	DefaultColor        map[string]int         `mapstructure:"default_color"`
 	Pointer             string                 `mapstructure:"pointer"`

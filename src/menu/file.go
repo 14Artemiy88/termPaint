@@ -64,7 +64,7 @@ func FileMenu(screen [][]string, path string) [][]string {
 		FileList[2] = "../"
 		utils.DrawString(fileX, 2, "..", color.White, screen)
 		for _, dirName := range dirList {
-			utils.DrawString(fileX, Y, fmt.Sprintf("🗀 %v", dirName), color.White, screen)
+			utils.DrawString(fileX, Y, fmt.Sprintf("🗀 %v", dirName), color.Cian, screen)
 			FileList[Y] = dirName + "/"
 			Y++
 		}
