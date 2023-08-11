@@ -55,8 +55,10 @@ func FileMenu(screen [][]string, path string) [][]string {
 	}
 	FileListWidth = width + 6
 	ClearMenu(screen, FileListWidth)
-	str := "FilePath " + strings.Repeat("─", FileListWidth-len("FilePath")-2) + "┐"
-	utils.DrawString(1, 1, str, color.White, screen)
+	title := "FilePath"
+	str := strings.Repeat("─", FileListWidth-len(title)-2) + "┐"
+	utils.DrawString(1, 1, title, color.Yellow, screen)
+	utils.DrawString(len(title)+2, 1, str, color.Gray, screen)
 
 	Y := 3
 	if config.Cfg.ShowFolder {
@@ -64,15 +66,22 @@ func FileMenu(screen [][]string, path string) [][]string {
 		FileList[2] = "../"
 		utils.DrawString(fileX, 2, "..", color.White, screen)
 		for _, dirName := range dirList {
-			utils.DrawString(fileX, Y, fmt.Sprintf("🗀 %v", dirName), color.Cian, screen)
+			utils.DrawString(fileX, Y, fmt.Sprintf("\uE5FF  %v", dirName), color.Cian, screen)
 			FileList[Y] = dirName + "/"
 			Y++
 		}
 	} else {
 		FileList = make(map[int]string, len(fileList)+1)
 	}
+	extIcon := map[string]string{
+		".txt": "\uF15C",
+		".png": "",
+		".jpg": "",
+	}
 	for y, fileName := range fileList {
-		utils.DrawString(fileX, Y+y, fmt.Sprintf("🖹 %v", fileName), color.White, screen)
+		ext := filepath.Ext(fileName)
+		icon := extIcon[ext]
+		utils.DrawString(fileX, Y+y, fmt.Sprintf("%s  %s", icon, fileName), color.White, screen)
 		FileList[Y+y] = fileName
 	}
 
