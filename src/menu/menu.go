@@ -6,31 +6,34 @@ import (
 	"github.com/14Artemiy88/termPaint/src/utils"
 )
 
-type menuType int
+type MenuType int
 
 const (
-	None menuType = iota
+	None MenuType = iota
 	SymbolColor
 	File
 	Help
 	Shape
 	Line
+	Config
 )
 
-var Type menuType
+var Type MenuType
 
 func DrawMenu(screen [][]string) {
 	switch Type {
 	case SymbolColor:
-		DrawSymbolColorMenu(screen)
+		drawSymbolColorMenu(screen)
 	case File:
-		FileMenu(screen, Dir)
+		fileMenu(screen, Dir)
 	case Help:
-		DrawHelpMenu(screen)
+		drawHelpMenu(screen)
 	case Shape:
 		drawShapeMenu(screen)
 	case Line:
 		drawLineMenu(screen)
+	case Config:
+		drawConfigMenu(screen)
 	}
 }
 

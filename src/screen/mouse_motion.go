@@ -21,6 +21,8 @@ func mouseMotion(msg tea.MouseMsg) {
 		xMin = menu.ShapeWidth
 	case menu.Line:
 		xMin = menu.LineWidth
+	case menu.Config:
+		xMin = menu.ConfigWidth
 	default:
 		xMin = 0
 	}

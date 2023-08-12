@@ -17,43 +17,27 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 
 	// Help
 	case tea.KeyCtrlH, tea.KeyF1:
-		if menu.Type == menu.Help {
-			menu.Type = menu.None
-		} else {
-			menu.Type = menu.Help
-		}
+		switchMenu(menu.Help)
 
 	// menu
 	case tea.KeyTab, tea.KeyF2:
-		if menu.Type == menu.SymbolColor {
-			menu.Type = menu.None
-		} else {
-			menu.Type = menu.SymbolColor
-		}
+		switchMenu(menu.SymbolColor)
 
 	// file
 	case tea.KeyCtrlO, tea.KeyF3:
-		if menu.Type == menu.File {
-			menu.Type = menu.None
-		} else {
-			menu.Type = menu.File
-		}
+		switchMenu(menu.File)
 
 	// shape
 	case tea.KeyF4:
-		if menu.Type == menu.Shape {
-			menu.Type = menu.None
-		} else {
-			menu.Type = menu.Shape
-		}
+		switchMenu(menu.Shape)
 
 	// line
 	//case tea.KeyF5:
-	//	if menu.Type == menu.Line {
-	//		menu.Type = menu.None
-	//	} else {
-	//		menu.Type = menu.Line
-	//	}
+	//	switchMenu(menu.Line)
+
+	// shape
+	case tea.KeyF6, tea.KeyCtrlK:
+		switchMenu(menu.Config)
 
 	case tea.KeyCtrlF:
 		if cursor.CC.Brush == cursor.Fill {
@@ -102,4 +86,12 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 	}
 
 	return s, nil
+}
+
+func switchMenu(menuType menu.MenuType) {
+	if menu.Type == menuType {
+		menu.Type = menu.None
+	} else {
+		menu.Type = menuType
+	}
 }

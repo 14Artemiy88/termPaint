@@ -29,7 +29,7 @@ const DefBlinkTime = 50
 
 var BlinkTime = DefBlinkTime
 
-func FileMenu(screen [][]string, path string) [][]string {
+func fileMenu(screen [][]string, path string) [][]string {
 	files, err := os.ReadDir(path)
 	if err != nil {
 		message.SetMessage(err.Error())
@@ -53,7 +53,7 @@ func FileMenu(screen [][]string, path string) [][]string {
 			fileList = append(fileList, fileName)
 		}
 	}
-	FileListWidth = width + 6
+	FileListWidth = width + 10
 	ClearMenu(screen, FileListWidth)
 	title := "FilePath"
 	str := strings.Repeat("─", FileListWidth-len(title)-2) + "┐"

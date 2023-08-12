@@ -11,14 +11,14 @@ import (
 const ShapeWidth = 12
 
 var ShapeList = map[int]ShapeStruct{
-	3:  {ShapeType: cursor.Dot, ShapeSymbol: "•"},
-	5:  {ShapeType: cursor.GLine, ShapeSymbol: "━"},
+	3:  {ShapeType: cursor.Dot, ShapeSymbol: "\uF444"},
+	5:  {ShapeType: cursor.GLine, ShapeSymbol: "━━"},
 	7:  {ShapeType: cursor.VLine, ShapeSymbol: "┃"},
-	9:  {ShapeType: cursor.ESquare, ShapeSymbol: "🞎"},
-	11: {ShapeType: cursor.FSquare, ShapeSymbol: "■"},
-	13: {ShapeType: cursor.ECircle, ShapeSymbol: "○"},
-	15: {ShapeType: cursor.FCircle, ShapeSymbol: "●"},
-	17: {ShapeType: cursor.Fill, ShapeSymbol: "Fill"},
+	9:  {ShapeType: cursor.ESquare, ShapeSymbol: "\uEA72"},
+	11: {ShapeType: cursor.FSquare, ShapeSymbol: "\U000F0764"},
+	13: {ShapeType: cursor.ECircle, ShapeSymbol: "\uEABC"},
+	15: {ShapeType: cursor.FCircle, ShapeSymbol: "\uF111"},
+	17: {ShapeType: cursor.Fill, ShapeSymbol: "\U000F0266"},
 }
 
 type ShapeStruct struct {

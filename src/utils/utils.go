@@ -32,3 +32,13 @@ func SetByKeys(X int, Y int, val string, c color.Color, screen [][]string) [][]s
 
 	return screen
 }
+
+func InArray[T comparable](searchValue T, ar []T) bool {
+	for _, v := range ar {
+		if searchValue == v {
+			return true
+		}
+	}
+
+	return false
+}

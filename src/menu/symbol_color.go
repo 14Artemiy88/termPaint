@@ -28,11 +28,11 @@ var Colors = map[int]string{
 
 const colorX = 3
 
-func DrawSymbolColorMenu(screen [][]string) [][]string {
+func drawSymbolColorMenu(screen [][]string) [][]string {
 	ClearMenu(screen, SymbolColorWidth)
 	drawSymbolMenu(screen)
 	drawColorMenu(screen)
-	title := "Symbol"
+	title := "Help"
 	str := strings.Repeat("─", SymbolColorWidth-len(title)-2) + "┤"
 	utils.DrawString(1, size.Size.Height-3, title, color.Yellow, screen)
 	utils.DrawString(len(title)+2, size.Size.Height-3, str, color.Gray, screen)

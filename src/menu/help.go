@@ -66,9 +66,9 @@ var menu = []menuItem{
 	},
 }
 
-const HelpWidth = 37
+const HelpWidth = 40
 
-func DrawHelpMenu(screen [][]string) [][]string {
+func drawHelpMenu(screen [][]string) [][]string {
 	ClearMenu(screen, HelpWidth)
 	for _, mi := range menu {
 		mi.DrawMenuItem(screen)
@@ -88,7 +88,7 @@ func (m menuItem) DrawMenuItem(screen [][]string) [][]string {
 		if lenKey > 0 {
 			utils.DrawString(3, m.Y+2+k, str["key"], color.Green, screen)
 		}
-		utils.DrawString(lenKey+7, m.Y+2+k, str["text"], color.White, screen)
+		utils.DrawString(16, m.Y+2+k, str["text"], color.White, screen)
 	}
 
 	return screen
