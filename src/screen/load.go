@@ -13,6 +13,7 @@ import (
 	_ "image/png"
 	"math"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -50,8 +51,8 @@ func (s *Screen) loadFromImage(path string) {
 	for i := bounds.Min.Y; i < bounds.Max.Y; i += int(float64(ratio) / pixel.Ratio) {
 		var x int
 		for j := bounds.Min.X; j < bounds.Max.X; j += ratio {
-			color := img.At(j, i)
-			r, g, b, _ := color.RGBA()
+			clr := img.At(j, i)
+			r, g, b, _ := clr.RGBA()
 			symbol := utils.FgRgb(int(r/257), int(g/257), int(b/257), cursor.CC.Symbol)
 			pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Symbol: symbol})
 			x++
@@ -101,48 +102,55 @@ func loadWhite(lines []string, rows int, errors map[string]string) map[string]st
 }
 
 func loadColored(lines []string, rows int, errors map[string]string) map[string]string {
+	clr := color.Color{}
+	var symbol string
+	var err error
 	for y := 0; y < rows; y++ {
-		line := strings.Split(lines[y], "")
-		var str string
-		var x int
-		var skip int
-		var maxX int
-		for _, symbol := range line {
-			if x >= size.Size.Width-1 {
-				if maxX == 0 {
-					maxX = x
-					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, size.Size.Width)
+		line := strings.Replace(lines[y], utils.Reset, "", -1)
+		symbolWithColorCode := strings.Split(line, "[38;2;")
+		x := 1
+		for _, part := range symbolWithColorCode {
+			if len(strings.TrimSpace(part)) == 0 {
+				for ; x < len(part); x++ {
+					pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Color: clr, Symbol: " "})
 				}
-				maxX++
-			}
-			if skip > 0 {
-				skip--
 				continue
 			}
-			if symbol == " " {
-				x++
+			colors := strings.Split(part, ";")
+			if len(colors) < 3 {
 				continue
 			}
-			if symbol == "\u001B" {
-				if len(str) > 0 {
-					pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Symbol: str + utils.Reset})
-					skip = len(utils.Reset) - 1
-					str = ""
-					continue
+			clr.R, err = strconv.Atoi(colors[0])
+			if err != nil {
+				message.SetMessage(err.Error())
+			}
+			clr.G, err = strconv.Atoi(colors[1])
+			if err != nil {
+				message.SetMessage(err.Error())
+			}
+			colorNsymbol := strings.Split(colors[2], "m")
+			clr.B, err = strconv.Atoi(colorNsymbol[0])
+			if err != nil {
+				message.SetMessage(err.Error())
+			}
+			symbol = colorNsymbol[1]
+			lenSymbol := len(symbol)
+			trimSymbol := strings.TrimSpace(symbol)
+			if symbol != trimSymbol {
+				leTrimSymbol := len(trimSymbol)
+				if leTrimSymbol == 0 {
+					symbol = " "
 				}
-				str = "\u001B"
-				x++
-				continue
+				pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Color: clr, Symbol: trimSymbol})
+				for j := 0; j < lenSymbol-leTrimSymbol; j++ {
+					x++
+					pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Color: clr, Symbol: " "})
+				}
+			} else {
+				pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Color: clr, Symbol: symbol})
 			}
-			if len(str) == 0 {
-				x++
-				pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Symbol: symbol})
-				continue
-			}
-			str += symbol
+			x++
 		}
-		x++
-		pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Symbol: str})
 	}
 
 	return errors

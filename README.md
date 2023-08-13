@@ -22,9 +22,8 @@ Drawing in the terminal
 ## Requirements
 ```agsl
 go 1.20
-
-https://www.nerdfonts.com/
 ```
+https://www.nerdfonts.com/
 
 ## Installation
 
