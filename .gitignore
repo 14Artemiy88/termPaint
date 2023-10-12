@@ -1,5 +1,6 @@
-.*
+.idea
 vendor/
+.directory
 *.txt
 *.jpg
 *.png
