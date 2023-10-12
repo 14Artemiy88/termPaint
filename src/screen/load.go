@@ -138,9 +138,6 @@ func loadColored(lines []string, rows int, errors map[string]string) map[string]
 			trimSymbol := strings.TrimSpace(symbol)
 			if symbol != trimSymbol {
 				leTrimSymbol := len(trimSymbol)
-				if leTrimSymbol == 0 {
-					symbol = " "
-				}
 				pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Color: clr, Symbol: trimSymbol})
 				for j := 0; j < lenSymbol-leTrimSymbol; j++ {
 					x++
