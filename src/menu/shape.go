@@ -47,6 +47,14 @@ func drawShapeMenu(screen [][]string) [][]string {
 	case cursor.ECircle, cursor.FCircle:
 		utils.DrawString(1, 19, "Radius: ", color.Green, screen)
 		utils.DrawString(len("Radius:")+2, 19, strconv.Itoa(cursor.CC.Width), color.White, screen)
+	case cursor.Empty:
+	case cursor.Pointer:
+	case cursor.Dot:
+	case cursor.ContinuousLine:
+	case cursor.SmoothContinuousLine:
+	case cursor.FatContinuousLine:
+	case cursor.DoubleContinuousLine:
+	case cursor.Fill:
 	}
 
 	return screen

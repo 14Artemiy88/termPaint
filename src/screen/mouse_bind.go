@@ -54,5 +54,7 @@ func MouseBind(msg tea.MouseMsg, s *Screen) {
 				cursor.CC.Width++
 			}
 		}
+	case tea.MouseUnknown:
+	case tea.MouseRelease:
 	}
 }

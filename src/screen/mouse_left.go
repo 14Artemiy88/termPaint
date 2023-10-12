@@ -115,6 +115,8 @@ func draw(X int, Y int) {
 		drawFill(cursor.CC.Symbol, clr, Pixels[Y][X], changedSymbols, size.Size.Width)
 	case cursor.ContinuousLine, cursor.SmoothContinuousLine, cursor.FatContinuousLine, cursor.DoubleContinuousLine:
 		drawContinuousLine(X, Y, clr)
+	case cursor.Empty:
+	case cursor.Pointer:
 	}
 }
 

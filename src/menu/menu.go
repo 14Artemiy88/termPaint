@@ -34,6 +34,7 @@ func DrawMenu(screen [][]string) {
 		drawLineMenu(screen)
 	case Config:
 		drawConfigMenu(screen)
+	case None:
 	}
 }
 

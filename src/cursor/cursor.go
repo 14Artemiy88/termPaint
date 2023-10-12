@@ -58,7 +58,7 @@ func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 		c.X = 1
 		clr = color.Color{R: config.Cfg.PointerColor["r"], G: config.Cfg.PointerColor["g"], B: config.Cfg.PointerColor["b"]}
 		utils.SetByKeys(1, c.Y, config.Cfg.Pointer, clr, screen)
-	//case Fill:
+	case Fill:
 	//	symbol = utils.FgRgb(
 	//		config.Cfg.PointerColor["r"],
 	//		config.Cfg.PointerColor["g"],
