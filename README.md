@@ -28,7 +28,7 @@ https://www.nerdfonts.com/
 ## Installation
 
 ```bash
-curl https://raw.githubusercontent.com/14Artemiy88/termPaint/main/install.sh | bash
+go install github.com/14Artemiy88/termPaint@latest
 ```
 Make sure the Go executables directory ($GOPATH/bin) is added to your PATH environment variable. You can achieve this using the following command:
 ```bash

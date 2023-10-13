@@ -1,9 +1,11 @@
 package screen
 
+import "C"
 import (
 	"fmt"
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/coord"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/message"
@@ -96,7 +98,7 @@ func draw(X int, Y int) {
 
 	switch cursor.CC.Brush {
 	case cursor.Dot:
-		drawDot(pixel.Pixel{X: X, Y: Y, Color: clr, Symbol: cursor.CC.Symbol})
+		drawDot(pixel.Pixel{Coord: coord.Coord{X: X, Y: Y}, Color: clr, Symbol: cursor.CC.Symbol})
 	case cursor.GLine:
 		drawGLine(X, Y, clr, cursor.CC.Symbol)
 	case cursor.VLine:
@@ -110,9 +112,10 @@ func draw(X int, Y int) {
 	case cursor.FCircle:
 		drawFCircle(X, Y, clr, cursor.CC.Symbol)
 	case cursor.Fill:
-		changedSymbols := make(map[string]Coord)
-		changedSymbols["_"] = Coord{X: X, Y: Y}
-		drawFill(cursor.CC.Symbol, clr, Pixels[Y][X], changedSymbols, size.Size.Width)
+		changedSymbols := make(map[string]coord.Coord)
+		key := fmt.Sprintf("%d-%d", Y, X)
+		changedSymbols[key] = coord.Coord{X: X, Y: Y}
+		drawFill(clr, Pixels[Y][X], changedSymbols, size.Size.Width)
 	case cursor.ContinuousLine, cursor.SmoothContinuousLine, cursor.FatContinuousLine, cursor.DoubleContinuousLine:
 		drawContinuousLine(X, Y, clr)
 	case cursor.Empty:
@@ -120,34 +123,38 @@ func draw(X int, Y int) {
 	}
 }
 
-func drawFill(symbol string, clr color.Color, changedSymbol string, changedSymbols map[string]Coord, N int) {
-	symbols := make(map[string]Coord)
+func drawFill(clr color.Color, changedSymbol string, changedSymbols map[string]coord.Coord, N int) {
+	checkSymbols := false
 	var key string
 	for _, p := range changedSymbols {
 		if utils.Isset(Pixels, p.Y+1, p.X) && Pixels[p.Y+1][p.X] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y+1, p.X)
-			symbols[key] = Coord{Y: p.Y + 1, X: p.X}
-			pixel.Pixels.Add(pixel.Pixel{Y: p.Y + 1, X: p.X, Color: clr, Symbol: symbol})
+			changedSymbols[key] = coord.Coord{Y: p.Y + 1, X: p.X}
+			checkSymbols = true
 		}
 		if utils.Isset(Pixels, p.Y-1, p.X) && Pixels[p.Y-1][p.X] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y-1, p.X)
-			symbols[key] = Coord{Y: p.Y - 1, X: p.X}
-			pixel.Pixels.Add(pixel.Pixel{Y: p.Y - 1, X: p.X, Color: clr, Symbol: symbol})
+			changedSymbols[key] = coord.Coord{Y: p.Y - 1, X: p.X}
+			checkSymbols = true
 		}
 		if utils.Isset(Pixels, p.Y, p.X+1) && Pixels[p.Y][p.X+1] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y+1, p.X+1)
-			symbols[key] = Coord{Y: p.Y, X: p.X + 1}
-			pixel.Pixels.Add(pixel.Pixel{Y: p.Y, X: p.X + 1, Color: clr, Symbol: symbol})
+			changedSymbols[key] = coord.Coord{Y: p.Y, X: p.X + 1}
+			checkSymbols = true
 		}
 		if utils.Isset(Pixels, p.Y, p.X-1) && Pixels[p.Y][p.X-1] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y, p.X-1)
-			symbols[key] = Coord{Y: p.Y, X: p.X - 1}
-			pixel.Pixels.Add(pixel.Pixel{Y: p.Y, X: p.X - 1, Color: clr, Symbol: symbol})
+			changedSymbols[key] = coord.Coord{Y: p.Y, X: p.X - 1}
+			checkSymbols = true
 		}
 	}
-	if len(symbols) > 0 && N > 0 {
+	if checkSymbols && N > 0 {
 		N--
-		drawFill(symbol, clr, changedSymbol, symbols, N)
+		drawFill(clr, changedSymbol, changedSymbols, N)
+	} else {
+		for _, p := range changedSymbols {
+			pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{Y: p.Y, X: p.X}, Color: clr, Symbol: cursor.CC.Symbol})
+		}
 	}
 }
 
@@ -157,13 +164,13 @@ func drawDot(p pixel.Pixel) {
 
 func drawGLine(x int, y int, clr color.Color, symbol string) {
 	for i := 0; i < cursor.CC.Width; i++ {
-		pixel.Pixels.Add(pixel.Pixel{X: x + i, Y: y, Color: clr, Symbol: symbol})
+		pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x + i, Y: y}, Color: clr, Symbol: symbol})
 	}
 }
 
 func drawVLine(x int, y int, clr color.Color, symbol string) {
 	for i := 0; i < cursor.CC.Width; i++ {
-		pixel.Pixels.Add(pixel.Pixel{X: x, Y: y + i, Color: clr, Symbol: symbol})
+		pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x, Y: y + i}, Color: clr, Symbol: symbol})
 	}
 }
 
@@ -173,7 +180,7 @@ func drawESquare(x int, y int, clr color.Color, symbol string) {
 			if j > 0 && j < cursor.CC.Width-1 && i > 0 && i < cursor.CC.Height-1 {
 				continue
 			}
-			pixel.Pixels.Add(pixel.Pixel{X: x + j, Y: y + i, Color: clr, Symbol: symbol})
+			pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x + j, Y: y + i}, Color: clr, Symbol: symbol})
 		}
 	}
 }
@@ -181,7 +188,7 @@ func drawESquare(x int, y int, clr color.Color, symbol string) {
 func drawFSquare(x int, y int, clr color.Color, symbol string) {
 	for i := 0; i < cursor.CC.Height; i++ {
 		for j := 0; j < cursor.CC.Width; j++ {
-			pixel.Pixels.Add(pixel.Pixel{X: x + j, Y: y + i, Color: clr, Symbol: symbol})
+			pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x + j, Y: y + i}, Color: clr, Symbol: symbol})
 		}
 	}
 }
@@ -193,8 +200,8 @@ func drawECircle(X int, Y int, clr color.Color, symbol string) {
 		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
 		ky := int(math.Round(float64(y) / float64(k)))
 		pixel.Pixels.Add(
-			pixel.Pixel{X: X + x, Y: Y + ky, Color: clr, Symbol: symbol},
-			pixel.Pixel{X: X - x, Y: Y + ky, Color: clr, Symbol: symbol},
+			pixel.Pixel{Coord: coord.Coord{X: X + x, Y: Y + ky}, Color: clr, Symbol: symbol},
+			pixel.Pixel{Coord: coord.Coord{X: X - x, Y: Y + ky}, Color: clr, Symbol: symbol},
 		)
 	}
 }
@@ -206,14 +213,14 @@ func drawFCircle(X int, Y int, clr color.Color, symbol string) {
 		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
 		ky := int(math.Round(float64(y) / float64(k)))
 		for i := -x; i <= x; i++ {
-			pixel.Pixels.Add(pixel.Pixel{X: X + i, Y: Y + ky, Color: clr, Symbol: symbol})
+			pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: X + i, Y: Y + ky}, Color: clr, Symbol: symbol})
 		}
 	}
 }
 
 func drawContinuousLine(X int, Y int, clr color.Color) {
-	x := X - pixel.StorePixel[1].X // -1 0 1
-	y := Y - pixel.StorePixel[1].Y // -1 0 1
+	x := X - pixel.StorePixel[1].Coord.X // -1 0 1
+	y := Y - pixel.StorePixel[1].Coord.Y // -1 0 1
 	if x != 0 || y != 0 {
 		line := cursor.CC.Store.Symbol
 		if pixel.StorePixel[1].Symbol != "" {
@@ -233,8 +240,10 @@ func drawContinuousLine(X int, Y int, clr color.Color) {
 		}
 
 		p := pixel.Pixel{
-			X:     X,
-			Y:     Y,
+			Coord: coord.Coord{
+				X: X,
+				Y: Y,
+			},
 			Color: clr,
 			Symbol: utils.FgRgb(
 				cursor.CC.Color["r"],
@@ -249,8 +258,8 @@ func drawContinuousLine(X int, Y int, clr color.Color) {
 		var py int
 		var pr menu.Route
 		if pixel.StorePixel[0].Symbol != "" {
-			px = X - pixel.StorePixel[0].X
-			py = Y - pixel.StorePixel[0].Y
+			px = X - pixel.StorePixel[0].Coord.X
+			py = Y - pixel.StorePixel[0].Coord.Y
 			if px > 1 || px < -1 {
 				px = 0
 			}
@@ -263,8 +272,10 @@ func drawContinuousLine(X int, Y int, clr color.Color) {
 
 		pixel.Pixels.Add(
 			pixel.Pixel{
-				X: pixel.StorePixel[1].X,
-				Y: pixel.StorePixel[1].Y,
+				Coord: coord.Coord{
+					X: pixel.StorePixel[1].Coord.X,
+					Y: pixel.StorePixel[1].Coord.Y,
+				},
 				Symbol: utils.FgRgb(
 					cursor.CC.Color["r"],
 					cursor.CC.Color["g"],

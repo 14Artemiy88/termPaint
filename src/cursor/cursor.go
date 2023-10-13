@@ -59,13 +59,7 @@ func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 		clr = color.Color{R: config.Cfg.PointerColor["r"], G: config.Cfg.PointerColor["g"], B: config.Cfg.PointerColor["b"]}
 		utils.SetByKeys(1, c.Y, config.Cfg.Pointer, clr, screen)
 	case Fill:
-	//	symbol = utils.FgRgb(
-	//		config.Cfg.PointerColor["r"],
-	//		config.Cfg.PointerColor["g"],
-	//		config.Cfg.PointerColor["b"],
-	//		config.Cfg.FillCursor,
-	//	)
-	//	utils.SetByKeys(c.X-1, c.Y, symbol, screen)
+		//utils.SetByKeys(c.X-1, c.Y, config.Cfg.FillCursor, clr, screen)
 	case Dot,
 		ContinuousLine,
 		SmoothContinuousLine,

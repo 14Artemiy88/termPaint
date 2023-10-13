@@ -19,11 +19,6 @@ type Screen struct {
 	Save          bool
 }
 
-type Coord struct {
-	X int
-	Y int
-}
-
 func (s *Screen) Init() tea.Cmd {
 	return tick
 }
@@ -143,7 +138,7 @@ func screen(screenString string) string {
 
 func drawScreen() {
 	for _, p := range pixel.Pixels {
-		utils.SetByKeys(p.X, p.Y, p.Symbol, p.Color, Pixels)
+		utils.SetByKeys(p.Coord.X, p.Coord.Y, p.Symbol, p.Color, Pixels)
 	}
 }
 

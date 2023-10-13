@@ -3,6 +3,7 @@ package screen
 import (
 	"fmt"
 	"github.com/14Artemiy88/termPaint/src/color"
+	"github.com/14Artemiy88/termPaint/src/coord"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
@@ -54,7 +55,7 @@ func (s *Screen) loadFromImage(path string) {
 			clr := img.At(j, i)
 			r, g, b, _ := clr.RGBA()
 			symbol := utils.FgRgb(int(r/257), int(g/257), int(b/257), cursor.CC.Symbol)
-			pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Symbol: symbol})
+			pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Symbol: symbol})
 			x++
 		}
 		fmt.Print("\n")
@@ -94,7 +95,7 @@ func loadWhite(lines []string, rows int, errors map[string]string) map[string]st
 				}
 				maxX++
 			}
-			pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Color: color.White, Symbol: symbol})
+			pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: color.White, Symbol: symbol})
 		}
 	}
 
@@ -112,7 +113,7 @@ func loadColored(lines []string, rows int, errors map[string]string) map[string]
 		for _, part := range symbolWithColorCode {
 			if len(strings.TrimSpace(part)) == 0 {
 				for ; x < len(part); x++ {
-					pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Color: clr, Symbol: " "})
+					pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: " "})
 				}
 				continue
 			}
@@ -138,13 +139,13 @@ func loadColored(lines []string, rows int, errors map[string]string) map[string]
 			trimSymbol := strings.TrimSpace(symbol)
 			if symbol != trimSymbol {
 				leTrimSymbol := len(trimSymbol)
-				pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Color: clr, Symbol: trimSymbol})
+				pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: trimSymbol})
 				for j := 0; j < lenSymbol-leTrimSymbol; j++ {
 					x++
-					pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Color: clr, Symbol: " "})
+					pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: " "})
 				}
 			} else {
-				pixel.Pixels.Add(pixel.Pixel{X: x, Y: y, Color: clr, Symbol: symbol})
+				pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: symbol})
 			}
 			x++
 		}

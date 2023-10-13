@@ -3,6 +3,7 @@ package screen
 import (
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/coord"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/pixel"
@@ -18,7 +19,7 @@ func MouseBind(msg tea.MouseMsg, s *Screen) {
 		mouseLeft(msg.X, msg.Y, s)
 
 	case tea.MouseRight:
-		pixel.Pixels.Add(pixel.Pixel{X: msg.X, Y: msg.Y, Symbol: " "})
+		pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: msg.X, Y: msg.Y}, Symbol: " "})
 
 	case tea.MouseMiddle:
 		pixel.Pixels = []pixel.Pixel{}
