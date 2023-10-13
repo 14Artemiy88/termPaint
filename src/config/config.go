@@ -3,12 +3,15 @@ package config
 import (
 	"github.com/spf13/viper"
 	"io"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 )
 
 const configFileName = "config.yaml"
 const configPath = "/.config/termPaint/"
+const githubConfigFile = "https://raw.githubusercontent.com/14Artemiy88/termPaint/main/config.yaml"
 
 var Cfg Config
 
@@ -45,7 +48,7 @@ func InitConfig() {
 		viper.SetConfigFile(homeDir + configPath + configFileName)
 	}
 	if err := viper.ReadInConfig(); err != nil {
-		err := CreateConfigFIle(homeDir + configPath)
+		err := createConfigFIle(homeDir + configPath)
 		if err != nil {
 			log.Fatalf("Error creating Cfg file, %s", err)
 		}
@@ -60,10 +63,10 @@ func InitConfig() {
 	}
 }
 
-func CreateConfigFIle(path string) error {
-	sourceFile, err := os.Open(configFileName)
+func createConfigFIle(path string) error {
+	sourceFile, err := os.Open(configFileName + "123")
 	if err != nil {
-		return err
+		return createConfigFileFromGithub(path)
 	}
 	defer sourceFile.Close()
 
@@ -78,19 +81,40 @@ func CreateConfigFIle(path string) error {
 	}
 	defer destinationFile.Close()
 
-	// use io.Copy to copy the source file to destination file
 	_, err = io.Copy(destinationFile, sourceFile)
 	if err != nil {
 		return err
 	}
 
-	//The copy operation does not copy the file metadata. To do this, we'll explicitly
-	//copy the source file's info to the destination file
-	sourceInfo, err := os.Stat(configFileName)
+	return nil
+}
+
+func createConfigFileFromGithub(path string) error {
+	resp, err := http.Get(githubConfigFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = os.Mkdir(path, 0755)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	destinationFile, err := os.Create(path + configFileName)
 	if err != nil {
 		return err
 	}
 
-	return os.Chmod(configPath, sourceInfo.Mode())
-	//return nil
+	_, err = destinationFile.Write(data)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return nil
 }

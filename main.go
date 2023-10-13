@@ -5,6 +5,7 @@ import (
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/message"
+	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/screen"
 	tea "github.com/charmbracelet/bubbletea"
 	"log"
@@ -13,6 +14,7 @@ import (
 
 func main() {
 	config.InitConfig()
+	pixel.Pixels = map[string]pixel.Pixel{}
 	s := &screen.Screen{}
 	cursor.CC = cursor.Cursor{
 		Symbol: config.Cfg.DefaultCursor,

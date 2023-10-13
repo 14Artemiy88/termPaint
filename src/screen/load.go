@@ -47,7 +47,7 @@ func (s *Screen) loadFromImage(path string) {
 		}
 	}
 
-	pixel.Pixels = []pixel.Pixel{}
+	pixel.Pixels = map[string]pixel.Pixel{}
 	var y int
 	for i := bounds.Min.Y; i < bounds.Max.Y; i += int(float64(ratio) / pixel.Ratio) {
 		var x int
@@ -55,7 +55,7 @@ func (s *Screen) loadFromImage(path string) {
 			clr := img.At(j, i)
 			r, g, b, _ := clr.RGBA()
 			symbol := utils.FgRgb(int(r/257), int(g/257), int(b/257), cursor.CC.Symbol)
-			pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Symbol: symbol})
+			pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Symbol: symbol})
 			x++
 		}
 		fmt.Print("\n")
@@ -64,7 +64,7 @@ func (s *Screen) loadFromImage(path string) {
 }
 
 func (s *Screen) LoadImage(screenString string) {
-	pixel.Pixels = []pixel.Pixel{}
+	pixel.Pixels = map[string]pixel.Pixel{}
 	lines := strings.Split(screenString, "\n")
 	rows := len(lines)
 	errors := make(map[string]string, 2)
@@ -95,7 +95,7 @@ func loadWhite(lines []string, rows int, errors map[string]string) map[string]st
 				}
 				maxX++
 			}
-			pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: color.White, Symbol: symbol})
+			pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: color.White, Symbol: symbol})
 		}
 	}
 
@@ -113,7 +113,7 @@ func loadColored(lines []string, rows int, errors map[string]string) map[string]
 		for _, part := range symbolWithColorCode {
 			if len(strings.TrimSpace(part)) == 0 {
 				for ; x < len(part); x++ {
-					pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: " "})
+					pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: " "})
 				}
 				continue
 			}
@@ -139,13 +139,13 @@ func loadColored(lines []string, rows int, errors map[string]string) map[string]
 			trimSymbol := strings.TrimSpace(symbol)
 			if symbol != trimSymbol {
 				leTrimSymbol := len(trimSymbol)
-				pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: trimSymbol})
+				pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: trimSymbol})
 				for j := 0; j < lenSymbol-leTrimSymbol; j++ {
 					x++
-					pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: " "})
+					pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: " "})
 				}
 			} else {
-				pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: symbol})
+				pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: symbol})
 			}
 			x++
 		}

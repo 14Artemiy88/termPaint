@@ -1,6 +1,7 @@
 package pixel
 
 import (
+	"fmt"
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/coord"
 )
@@ -12,12 +13,15 @@ type Pixel struct {
 	Color  color.Color
 	Symbol string
 }
-type pixels []Pixel
+type pixels map[string]Pixel
 
 var Pixels pixels
 
 var StorePixel [2]Pixel
 
-func (p *pixels) Add(pixel ...Pixel) {
-	*p = append(*p, pixel...)
+func AddPixels(pixels ...Pixel) {
+	for _, pixel := range pixels {
+		key := fmt.Sprintf("%d-%d", pixel.Coord.Y, pixel.Coord.X)
+		Pixels[key] = pixel
+	}
 }

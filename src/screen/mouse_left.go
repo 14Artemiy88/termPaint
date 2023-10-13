@@ -124,53 +124,49 @@ func draw(X int, Y int) {
 }
 
 func drawFill(clr color.Color, changedSymbol string, changedSymbols map[string]coord.Coord, N int) {
-	checkSymbols := false
 	var key string
+	symbols := make(map[string]coord.Coord)
 	for _, p := range changedSymbols {
 		if utils.Isset(Pixels, p.Y+1, p.X) && Pixels[p.Y+1][p.X] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y+1, p.X)
-			changedSymbols[key] = coord.Coord{Y: p.Y + 1, X: p.X}
-			checkSymbols = true
+			symbols[key] = coord.Coord{Y: p.Y + 1, X: p.X}
 		}
 		if utils.Isset(Pixels, p.Y-1, p.X) && Pixels[p.Y-1][p.X] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y-1, p.X)
-			changedSymbols[key] = coord.Coord{Y: p.Y - 1, X: p.X}
-			checkSymbols = true
+			symbols[key] = coord.Coord{Y: p.Y - 1, X: p.X}
 		}
 		if utils.Isset(Pixels, p.Y, p.X+1) && Pixels[p.Y][p.X+1] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y+1, p.X+1)
-			changedSymbols[key] = coord.Coord{Y: p.Y, X: p.X + 1}
-			checkSymbols = true
+			symbols[key] = coord.Coord{Y: p.Y, X: p.X + 1}
 		}
 		if utils.Isset(Pixels, p.Y, p.X-1) && Pixels[p.Y][p.X-1] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y, p.X-1)
-			changedSymbols[key] = coord.Coord{Y: p.Y, X: p.X - 1}
-			checkSymbols = true
+			symbols[key] = coord.Coord{Y: p.Y, X: p.X - 1}
 		}
 	}
-	if checkSymbols && N > 0 {
-		N--
-		drawFill(clr, changedSymbol, changedSymbols, N)
-	} else {
-		for _, p := range changedSymbols {
-			pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{Y: p.Y, X: p.X}, Color: clr, Symbol: cursor.CC.Symbol})
+
+	if len(symbols) > 0 && N > 0 {
+		for _, p := range symbols {
+			pixel.AddPixels(pixel.Pixel{Coord: p, Color: clr, Symbol: cursor.CC.Symbol})
 		}
+		N--
+		drawFill(clr, changedSymbol, symbols, N)
 	}
 }
 
 func drawDot(p pixel.Pixel) {
-	pixel.Pixels.Add(p)
+	pixel.AddPixels(p)
 }
 
 func drawGLine(x int, y int, clr color.Color, symbol string) {
 	for i := 0; i < cursor.CC.Width; i++ {
-		pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x + i, Y: y}, Color: clr, Symbol: symbol})
+		pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x + i, Y: y}, Color: clr, Symbol: symbol})
 	}
 }
 
 func drawVLine(x int, y int, clr color.Color, symbol string) {
 	for i := 0; i < cursor.CC.Width; i++ {
-		pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x, Y: y + i}, Color: clr, Symbol: symbol})
+		pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x, Y: y + i}, Color: clr, Symbol: symbol})
 	}
 }
 
@@ -180,7 +176,7 @@ func drawESquare(x int, y int, clr color.Color, symbol string) {
 			if j > 0 && j < cursor.CC.Width-1 && i > 0 && i < cursor.CC.Height-1 {
 				continue
 			}
-			pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x + j, Y: y + i}, Color: clr, Symbol: symbol})
+			pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x + j, Y: y + i}, Color: clr, Symbol: symbol})
 		}
 	}
 }
@@ -188,7 +184,7 @@ func drawESquare(x int, y int, clr color.Color, symbol string) {
 func drawFSquare(x int, y int, clr color.Color, symbol string) {
 	for i := 0; i < cursor.CC.Height; i++ {
 		for j := 0; j < cursor.CC.Width; j++ {
-			pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: x + j, Y: y + i}, Color: clr, Symbol: symbol})
+			pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x + j, Y: y + i}, Color: clr, Symbol: symbol})
 		}
 	}
 }
@@ -199,7 +195,7 @@ func drawECircle(X int, Y int, clr color.Color, symbol string) {
 	for y := -R * k; y <= R*k; y++ {
 		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
 		ky := int(math.Round(float64(y) / float64(k)))
-		pixel.Pixels.Add(
+		pixel.AddPixels(
 			pixel.Pixel{Coord: coord.Coord{X: X + x, Y: Y + ky}, Color: clr, Symbol: symbol},
 			pixel.Pixel{Coord: coord.Coord{X: X - x, Y: Y + ky}, Color: clr, Symbol: symbol},
 		)
@@ -213,7 +209,7 @@ func drawFCircle(X int, Y int, clr color.Color, symbol string) {
 		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
 		ky := int(math.Round(float64(y) / float64(k)))
 		for i := -x; i <= x; i++ {
-			pixel.Pixels.Add(pixel.Pixel{Coord: coord.Coord{X: X + i, Y: Y + ky}, Color: clr, Symbol: symbol})
+			pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: X + i, Y: Y + ky}, Color: clr, Symbol: symbol})
 		}
 	}
 }
@@ -252,7 +248,7 @@ func drawContinuousLine(X int, Y int, clr color.Color) {
 				line,
 			),
 		}
-		pixel.Pixels.Add(p)
+		pixel.AddPixels(p)
 
 		var px int
 		var py int
@@ -270,7 +266,7 @@ func drawContinuousLine(X int, Y int, clr color.Color) {
 		r := menu.GetRoute[y][x]
 		pr = menu.GetRoute[py][px]
 
-		pixel.Pixels.Add(
+		pixel.AddPixels(
 			pixel.Pixel{
 				Coord: coord.Coord{
 					X: pixel.StorePixel[1].Coord.X,
