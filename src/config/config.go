@@ -3,7 +3,6 @@ package config
 import (
 	"github.com/spf13/viper"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -64,7 +63,7 @@ func InitConfig() {
 }
 
 func createConfigFIle(path string) error {
-	sourceFile, err := os.Open(configFileName + "123")
+	sourceFile, err := os.Open(configFileName)
 	if err != nil {
 		return createConfigFileFromGithub(path)
 	}
@@ -96,7 +95,7 @@ func createConfigFileFromGithub(path string) error {
 	}
 	defer resp.Body.Close()
 
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
