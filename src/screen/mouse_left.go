@@ -112,6 +112,7 @@ func draw(X int, Y int) {
 	case cursor.FCircle:
 		drawFCircle(X, Y, clr, cursor.CC.Symbol)
 	case cursor.Fill:
+		menu.Type = menu.None
 		changedSymbols := make(map[string]coord.Coord)
 		key := fmt.Sprintf("%d-%d", Y, X)
 		changedSymbols[key] = coord.Coord{X: X, Y: Y}

@@ -21,7 +21,6 @@ type Config struct {
 	DefaultColor        map[string]int         `mapstructure:"default_color"`
 	Pointer             string                 `mapstructure:"pointer"`
 	PointerColor        map[string]int         `mapstructure:"pointer_color"`
-	FillCursor          string                 `mapstructure:"fill_cursor"`
 	Symbols             map[int]map[int]string `mapstructure:"symbols"`
 	ShowFolder          bool                   `mapstructure:"show_folder"`
 	ShowHiddenFolder    bool                   `mapstructure:"show_hidden_folder"`
@@ -71,7 +70,7 @@ func createConfigFIle(path string) error {
 
 	err = os.Mkdir(path, 0755)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	destinationFile, err := os.Create(path + configFileName)
@@ -91,28 +90,29 @@ func createConfigFIle(path string) error {
 func createConfigFileFromGithub(path string) error {
 	resp, err := http.Get(githubConfigFile)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer resp.Body.Close()
 
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	err = os.Mkdir(path, 0755)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	destinationFile, err := os.Create(path + configFileName)
 	if err != nil {
 		return err
 	}
+	defer destinationFile.Close()
 
 	_, err = destinationFile.Write(data)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	return nil

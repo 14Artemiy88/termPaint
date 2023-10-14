@@ -1,9 +1,12 @@
 package cursor
 
 import (
+	"fmt"
 	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/coord"
 	"github.com/14Artemiy88/termPaint/src/pixel"
+	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"math"
 )
@@ -59,7 +62,10 @@ func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 		clr = color.Color{R: config.Cfg.PointerColor["r"], G: config.Cfg.PointerColor["g"], B: config.Cfg.PointerColor["b"]}
 		utils.SetByKeys(1, c.Y, config.Cfg.Pointer, clr, screen)
 	case Fill:
-		//utils.SetByKeys(c.X-1, c.Y, config.Cfg.FillCursor, clr, screen)
+		changedSymbols := make(map[string]coord.Coord)
+		key := fmt.Sprintf("%d-%d", c.Y, c.X)
+		changedSymbols[key] = coord.Coord{X: c.X, Y: c.Y}
+		drawFillCursor(c, clr, screen[c.Y][c.X], changedSymbols, size.Size.Width, screen)
 	case Dot,
 		ContinuousLine,
 		SmoothContinuousLine,
@@ -117,4 +123,42 @@ func (c *Cursor) DrawCursor(screen [][]string) [][]string {
 	}
 
 	return screen
+}
+
+func drawFillCursor(
+	c *Cursor,
+	clr color.Color,
+	changedSymbol string,
+	changedSymbols map[string]coord.Coord,
+	N int,
+	screen [][]string,
+) {
+	var key string
+	symbols := make(map[string]coord.Coord)
+	for _, p := range changedSymbols {
+		if utils.Isset(screen, p.Y+1, p.X) && screen[p.Y+1][p.X] == changedSymbol {
+			key = fmt.Sprintf("%d-%d", p.Y+1, p.X)
+			symbols[key] = coord.Coord{Y: p.Y + 1, X: p.X}
+		}
+		if utils.Isset(screen, p.Y-1, p.X) && screen[p.Y-1][p.X] == changedSymbol {
+			key = fmt.Sprintf("%d-%d", p.Y-1, p.X)
+			symbols[key] = coord.Coord{Y: p.Y - 1, X: p.X}
+		}
+		if utils.Isset(screen, p.Y, p.X+1) && screen[p.Y][p.X+1] == changedSymbol {
+			key = fmt.Sprintf("%d-%d", p.Y+1, p.X+1)
+			symbols[key] = coord.Coord{Y: p.Y, X: p.X + 1}
+		}
+		if utils.Isset(screen, p.Y, p.X-1) && screen[p.Y][p.X-1] == changedSymbol {
+			key = fmt.Sprintf("%d-%d", p.Y, p.X-1)
+			symbols[key] = coord.Coord{Y: p.Y, X: p.X - 1}
+		}
+	}
+
+	if len(symbols) > 0 && N > 0 {
+		for _, p := range symbols {
+			utils.SetByKeys(p.X, p.Y, c.Symbol, clr, screen)
+		}
+		N--
+		drawFillCursor(c, clr, changedSymbol, symbols, N, screen)
+	}
 }
