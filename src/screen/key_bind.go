@@ -74,7 +74,14 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 		if menu.Type == menu.SymbolColor && menu.Input.Lock {
 			if _, err := strconv.Atoi(string(msg.Runes)); err == nil {
 				menu.Input.Value += string(msg.Runes)
-				cursor.CC.Color[menu.Input.Color] = color.SetColor(menu.Input.Value)
+				switch menu.Input.Color {
+				case "r":
+					cursor.CC.Color.R = color.SetColor(menu.Input.Value)
+				case "g":
+					cursor.CC.Color.G = color.SetColor(menu.Input.Value)
+				case "b":
+					cursor.CC.Color.B = color.SetColor(menu.Input.Value)
+				}
 			} else {
 				message.SetMessage(err.Error())
 			}

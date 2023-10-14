@@ -18,7 +18,7 @@ type Cursor struct {
 	Width  int
 	Height int
 	Symbol string
-	Color  map[string]int
+	Color  color.Color
 	Store  Store
 }
 
@@ -54,7 +54,7 @@ func (c *Cursor) SetCursor(cursor string) {
 }
 
 func (c *Cursor) DrawCursor(screen [][]string) [][]string {
-	clr := color.Color{R: c.Color["r"], G: c.Color["g"], B: c.Color["b"]}
+	clr := c.Color
 	switch c.Brush {
 	case Empty:
 	case Pointer:

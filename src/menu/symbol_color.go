@@ -62,22 +62,24 @@ func drawColorMenu(screen [][]string) [][]string {
 	utils.DrawString(1, 15, title, color.Yellow, screen)
 	utils.DrawString(len(title)+2, 15, str, color.Gray, screen)
 	for y, line := range Colors {
-		utils.DrawString(colorX+2, y, strconv.Itoa(cursor.CC.Color[line]), color.White, screen)
 		switch line {
 		case "r":
-			utils.SetByKeys(colorX, y, utils.FgRgb(cursor.CC.Color[line], 0, 0, "█"), color.White, screen)
+			utils.DrawString(colorX+2, y, strconv.Itoa(cursor.CC.Color.R), color.White, screen)
+			utils.SetByKeys(colorX, y, utils.FgRgb(color.Color{R: cursor.CC.Color.R}, "█"), color.White, screen)
 		case "g":
-			utils.SetByKeys(colorX, y, utils.FgRgb(0, cursor.CC.Color[line], 0, "█"), color.White, screen)
+			utils.DrawString(colorX+2, y, strconv.Itoa(cursor.CC.Color.G), color.White, screen)
+			utils.SetByKeys(colorX, y, utils.FgRgb(color.Color{G: cursor.CC.Color.G}, "█"), color.White, screen)
 		case "b":
-			utils.SetByKeys(colorX, y, utils.FgRgb(0, 0, cursor.CC.Color[line], "█"), color.White, screen)
+			utils.DrawString(colorX+2, y, strconv.Itoa(cursor.CC.Color.B), color.White, screen)
+			utils.SetByKeys(colorX, y, utils.FgRgb(color.Color{B: cursor.CC.Color.B}, "█"), color.White, screen)
 		}
 	}
-	utils.SetByKeys(3, 23, "█", color.Color{R: cursor.CC.Color["r"], G: cursor.CC.Color["g"], B: cursor.CC.Color["b"]}, screen)
-	utils.SetByKeys(4, 23, "█", color.Color{R: cursor.CC.Color["r"], G: cursor.CC.Color["g"], B: cursor.CC.Color["b"]}, screen)
-	utils.SetByKeys(5, 23, "█", color.Color{R: cursor.CC.Color["r"], G: cursor.CC.Color["g"], B: cursor.CC.Color["b"]}, screen)
-	utils.SetByKeys(3, 24, "█", color.Color{R: cursor.CC.Color["r"], G: cursor.CC.Color["g"], B: cursor.CC.Color["b"]}, screen)
-	utils.SetByKeys(4, 24, "█", color.Color{R: cursor.CC.Color["r"], G: cursor.CC.Color["g"], B: cursor.CC.Color["b"]}, screen)
-	utils.SetByKeys(5, 24, "█", color.Color{R: cursor.CC.Color["r"], G: cursor.CC.Color["g"], B: cursor.CC.Color["b"]}, screen)
+	utils.SetByKeys(3, 23, "█", cursor.CC.Color, screen)
+	utils.SetByKeys(4, 23, "█", cursor.CC.Color, screen)
+	utils.SetByKeys(5, 23, "█", cursor.CC.Color, screen)
+	utils.SetByKeys(3, 24, "█", cursor.CC.Color, screen)
+	utils.SetByKeys(4, 24, "█", cursor.CC.Color, screen)
+	utils.SetByKeys(5, 24, "█", cursor.CC.Color, screen)
 
 	return screen
 }

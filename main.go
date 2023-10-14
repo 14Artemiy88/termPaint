@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
@@ -18,7 +19,11 @@ func main() {
 	s := &screen.Screen{}
 	cursor.CC = cursor.Cursor{
 		Symbol: config.Cfg.DefaultCursor,
-		Color:  config.Cfg.DefaultColor,
+		Color: color.Color{
+			R: config.Cfg.DefaultColor["r"],
+			G: config.Cfg.DefaultColor["g"],
+			B: config.Cfg.DefaultColor["b"],
+		},
 		Brush:  cursor.Dot,
 		Width:  4,
 		Height: 4,

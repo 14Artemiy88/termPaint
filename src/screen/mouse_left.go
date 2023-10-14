@@ -60,7 +60,14 @@ func selectSymbol(X int, Y int) {
 
 func selectColor(Y int) {
 	if c, ok := menu.Colors[Y]; ok {
-		cursor.CC.Color[c] = color.MinMaxColor(cursor.CC.Color[c])
+		switch c {
+		case "r":
+			cursor.CC.Color.R = color.MinMaxColor(cursor.CC.Color.R)
+		case "g":
+			cursor.CC.Color.G = color.MinMaxColor(cursor.CC.Color.G)
+		case "b":
+			cursor.CC.Color.B = color.MinMaxColor(cursor.CC.Color.B)
+		}
 	}
 }
 
@@ -90,11 +97,7 @@ func selectFile(Y int, s *Screen) {
 }
 
 func draw(X int, Y int) {
-	clr := color.Color{
-		R: cursor.CC.Color["r"],
-		G: cursor.CC.Color["g"],
-		B: cursor.CC.Color["b"],
-	}
+	clr := cursor.CC.Color
 
 	switch cursor.CC.Brush {
 	case cursor.Dot:
@@ -243,9 +246,7 @@ func drawContinuousLine(X int, Y int, clr color.Color) {
 			},
 			Color: clr,
 			Symbol: utils.FgRgb(
-				cursor.CC.Color["r"],
-				cursor.CC.Color["g"],
-				cursor.CC.Color["b"],
+				cursor.CC.Color,
 				line,
 			),
 		}
@@ -274,9 +275,7 @@ func drawContinuousLine(X int, Y int, clr color.Color) {
 					Y: pixel.StorePixel[1].Coord.Y,
 				},
 				Symbol: utils.FgRgb(
-					cursor.CC.Color["r"],
-					cursor.CC.Color["g"],
-					cursor.CC.Color["b"],
+					cursor.CC.Color,
 					menu.DrawLine[cursor.CC.Store.Brush][pr][r],
 				),
 			},

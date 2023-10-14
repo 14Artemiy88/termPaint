@@ -26,7 +26,14 @@ func MouseBind(msg tea.MouseMsg, s *Screen) {
 
 	case tea.MouseWheelDown:
 		if c, ok := menu.Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {
-			cursor.CC.Color[c] = color.Decrease(cursor.CC.Color[c])
+			switch c {
+			case "r":
+				cursor.CC.Color.R = color.Decrease(cursor.CC.Color.R)
+			case "g":
+				cursor.CC.Color.G = color.Decrease(cursor.CC.Color.G)
+			case "b":
+				cursor.CC.Color.B = color.Decrease(cursor.CC.Color.B)
+			}
 		}
 		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != config.Cfg.Pointer {
 			if msg.Ctrl {
@@ -44,7 +51,14 @@ func MouseBind(msg tea.MouseMsg, s *Screen) {
 
 	case tea.MouseWheelUp:
 		if c, ok := menu.Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {
-			cursor.CC.Color[c] = color.Increase(cursor.CC.Color[c])
+			switch c {
+			case "r":
+				cursor.CC.Color.R = color.Increase(cursor.CC.Color.R)
+			case "g":
+				cursor.CC.Color.G = color.Increase(cursor.CC.Color.G)
+			case "b":
+				cursor.CC.Color.B = color.Increase(cursor.CC.Color.B)
+			}
 		}
 		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != config.Cfg.Pointer {
 			if msg.Ctrl {
