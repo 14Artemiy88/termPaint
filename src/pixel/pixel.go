@@ -13,10 +13,8 @@ type Pixel struct {
 	Color  color.Color
 	Symbol string
 }
-type pixels map[string]Pixel
 
-var Pixels pixels
-
+var Pixels map[string]Pixel
 var StorePixel [2]Pixel
 
 func AddPixels(pixels ...Pixel) {

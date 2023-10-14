@@ -62,23 +62,27 @@ func InitConfig() {
 }
 
 func createConfigFIle(path string) error {
-	sourceFile, err := os.Open(configFileName)
-	if err != nil {
-		return createConfigFileFromGithub(path)
-	}
-	defer sourceFile.Close()
-
-	err = os.Mkdir(path, 0755)
+	// create dir
+	err := os.Mkdir(path, 0755)
 	if err != nil {
 		return err
 	}
 
+	// create file
 	destinationFile, err := os.Create(path + configFileName)
 	if err != nil {
 		return err
 	}
 	defer destinationFile.Close()
 
+	// read file
+	sourceFile, err := os.Open(configFileName)
+	if err != nil {
+		return createConfigFileFromGithub(destinationFile)
+	}
+	defer sourceFile.Close()
+
+	// copy file
 	_, err = io.Copy(destinationFile, sourceFile)
 	if err != nil {
 		return err
@@ -87,29 +91,21 @@ func createConfigFIle(path string) error {
 	return nil
 }
 
-func createConfigFileFromGithub(path string) error {
+func createConfigFileFromGithub(destinationFile *os.File) error {
+	// get file by link
 	resp, err := http.Get(githubConfigFile)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
 
+	// read file
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return err
 	}
 
-	err = os.Mkdir(path, 0755)
-	if err != nil {
-		return err
-	}
-
-	destinationFile, err := os.Create(path + configFileName)
-	if err != nil {
-		return err
-	}
-	defer destinationFile.Close()
-
+	// write file
 	_, err = destinationFile.Write(data)
 	if err != nil {
 		return err

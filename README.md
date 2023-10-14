@@ -23,7 +23,6 @@ Drawing in the terminal
 ```agsl
 go 1.20
 ```
-https://www.nerdfonts.com/
 
 ## Installation
 
