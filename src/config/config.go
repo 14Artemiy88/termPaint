@@ -9,7 +9,7 @@ import (
 )
 
 const configFileName = "config.yaml"
-const configPath = "/.config/termPaint/"
+const configPath = "/termPaint/"
 const githubConfigFile = "https://raw.githubusercontent.com/14Artemiy88/termPaint/main/config.yaml"
 
 var Cfg Config
@@ -36,7 +36,7 @@ type Config struct {
 }
 
 func InitConfig() {
-	homeDir, err := os.UserHomeDir()
+	homeDir, err := os.UserConfigDir()
 	if err != nil {
 		log.Println("Cannot determine the user's home dir:", err)
 	}
@@ -45,8 +45,8 @@ func InitConfig() {
 	} else {
 		viper.SetConfigFile(homeDir + configPath + configFileName)
 	}
-	if err := viper.ReadInConfig(); err != nil {
-		err := createConfigFIle(homeDir + configPath)
+	if err = viper.ReadInConfig(); err != nil {
+		err = createConfigFIle(homeDir + configPath)
 		if err != nil {
 			log.Fatalf("Error creating Cfg file, %s", err)
 		}
