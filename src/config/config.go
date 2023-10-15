@@ -63,7 +63,7 @@ func InitConfig() {
 
 func createConfigFIle(path string) error {
 	// create dir
-	err := os.Mkdir(path, 0755)
+	err := os.MkdirAll(path, 0755)
 	if err != nil {
 		return err
 	}
