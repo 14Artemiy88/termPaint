@@ -25,6 +25,7 @@ go 1.20
 ```
 
 ## Installation
+### Go
 
 ```bash
 go install github.com/14Artemiy88/termPaint@latest
@@ -33,8 +34,16 @@ Make sure the Go executables directory ($GOPATH/bin) is added to your PATH envir
 ```bash
 export PATH=$PATH:$(go env GOPATH)/bin
 ```
-
-## Usage
+#### Usage
 ```bash
 termPaint
+```
+
+### Snap
+```bash
+sudo snap install --beta termpaint
+```
+#### Usage
+```bash
+termpaint
 ```
