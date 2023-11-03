@@ -15,7 +15,6 @@ import (
 const fileX = 3
 
 var (
-	Dir           string
 	FilePath      string
 	FileList      map[int]string
 	FileListWidth int
@@ -29,11 +28,11 @@ const DefBlinkTime = 50
 
 var BlinkTime = DefBlinkTime
 
-func fileMenu(screen [][]string, path string) [][]string {
-	files, err := os.ReadDir(path)
+func fileMenu(s Screen, screen [][]string) [][]string {
+	files, err := os.ReadDir(s.GetDirectory())
 	if err != nil {
 		message.SetMessage(err.Error())
-		Dir = config.Cfg.ImageSaveDirectory
+		s.SetDirectory(config.Cfg.ImageSaveDirectory)
 	}
 
 	var width int

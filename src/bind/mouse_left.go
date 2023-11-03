@@ -73,24 +73,25 @@ func selectColor(Y int) {
 
 func selectFile(Y int, s Screen) {
 	if filePath, ok := menu.FileList[Y]; ok {
-		info, err := os.Stat(menu.Dir + filePath)
+		dir := s.GetDirectory()
+		info, err := os.Stat(dir + filePath)
 		if err != nil {
 			message.SetMessage(err.Error())
 		}
 		if info.IsDir() {
-			menu.Dir += filePath
+			s.SetDirectory(dir + filePath)
 		} else {
 			menu.Type = menu.None
-			ext := filepath.Ext(menu.Dir + filePath)
+			ext := filepath.Ext(dir + filePath)
 			if ext == ".txt" {
-				content, err := os.ReadFile(menu.Dir + filePath)
+				content, err := os.ReadFile(dir + filePath)
 				if err != nil {
 					message.SetMessage(err.Error())
 				}
 				s.LoadImage(string(content))
 			}
 			if ext == ".jpg" || ext == ".png" {
-				s.LoadFromImage(menu.Dir + filePath)
+				s.LoadFromImage(dir + filePath)
 			}
 		}
 	}

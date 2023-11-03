@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
-	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/screen"
@@ -16,9 +15,11 @@ func main() {
 	config.InitConfig()
 	pixel.Pixels = map[string]pixel.Pixel{}
 	cursor.CC = cursor.NewCursor()
-	menu.Dir = config.Cfg.ImageSaveDirectory
+
 	p := tea.NewProgram(
-		&screen.Screen{},
+		&screen.Screen{
+			Directory: config.Cfg.ImageSaveDirectory,
+		},
 		tea.WithAltScreen(),
 		tea.WithMouseAllMotion(),
 	)

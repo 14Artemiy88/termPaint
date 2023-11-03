@@ -1,6 +1,8 @@
 package bind
 
-import tea "github.com/charmbracelet/bubbletea"
+import (
+	tea "github.com/charmbracelet/bubbletea"
+)
 
 type Screen interface {
 	SetSave(bool)
@@ -13,4 +15,6 @@ type Screen interface {
 	LoadFromImage(path string)
 	GetPixel(y int, x int) string
 	GetPixels() [][]string
+	GetDirectory() string
+	SetDirectory(string)
 }

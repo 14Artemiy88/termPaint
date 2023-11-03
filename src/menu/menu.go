@@ -20,12 +20,13 @@ const (
 
 var Type MenuType
 
-func DrawMenu(screen [][]string) {
+func DrawMenu(s Screen) [][]string {
+	screen := s.GetPixels()
 	switch Type {
 	case SymbolColor:
 		drawSymbolColorMenu(screen)
 	case File:
-		fileMenu(screen, Dir)
+		fileMenu(s, screen)
 	case Help:
 		drawHelpMenu(screen)
 	case Shape:
@@ -36,6 +37,8 @@ func DrawMenu(screen [][]string) {
 		drawConfigMenu(screen)
 	case None:
 	}
+
+	return screen
 }
 
 func ClearMenu(screen [][]string, width int) [][]string {

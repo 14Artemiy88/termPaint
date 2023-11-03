@@ -18,6 +18,7 @@ import (
 type Screen struct {
 	ShowInputSave bool
 	Save          bool
+	Directory     string
 }
 
 func (s *Screen) Init() tea.Cmd {
@@ -76,7 +77,7 @@ func (s *Screen) View() string {
 
 	drawClearScreen()
 	drawScreen()
-	menu.DrawMenu(Pixels)
+	menu.DrawMenu(s)
 	showMsg()
 	s.showCursor()
 	s.showSaveInput()
@@ -104,6 +105,14 @@ func (s *Screen) SetShowInputSave(showInputSave bool) {
 
 func (s *Screen) IsShowInputSave() bool {
 	return s.ShowInputSave
+}
+
+func (s *Screen) GetDirectory() string {
+	return s.Directory
+}
+
+func (s *Screen) SetDirectory(directory string) {
+	s.Directory = directory
 }
 
 func (s *Screen) showCursor() {
