@@ -52,6 +52,24 @@ type Screen interface {
 	GetPixels() [][]string
 }
 
+func NewCursor() Cursor {
+	return Cursor{
+		Symbol: config.Cfg.DefaultCursor,
+		Color: color.Color{
+			R: config.Cfg.DefaultColor["r"],
+			G: config.Cfg.DefaultColor["g"],
+			B: config.Cfg.DefaultColor["b"],
+		},
+		Brush:  Dot,
+		Width:  4,
+		Height: 4,
+		Store: Store{
+			Symbol: config.Cfg.DefaultCursor,
+			Brush:  Dot,
+		},
+	}
+}
+
 func (c *Cursor) SetCursor(cursor string) {
 	c.Symbol = cursor
 	c.Store.Symbol = cursor
