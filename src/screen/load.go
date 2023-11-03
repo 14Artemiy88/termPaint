@@ -18,7 +18,7 @@ import (
 	"strings"
 )
 
-func (s *Screen) loadFromImage(path string) {
+func (s *Screen) LoadFromImage(path string) {
 	file, err := os.Open(path)
 	if err != nil {
 		message.SetMessage(err.Error())

@@ -1,4 +1,4 @@
-package screen
+package bind
 
 import (
 	"github.com/14Artemiy88/termPaint/src/color"
@@ -10,7 +10,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func MouseBind(msg tea.MouseMsg, s *Screen) {
+func MouseBind(msg tea.MouseMsg, s Screen) {
 	switch msg.Type {
 	case tea.MouseMotion:
 		mouseMotion(msg)

@@ -8,6 +8,10 @@ import (
 
 const Reset = "\u001B[0m"
 
+type Screen interface {
+	GetPixels() [][]string
+}
+
 func FgRgb(c color.Color, symbol string) string {
 	return fmt.Sprintf("\033[38;2;%d;%d;%dm%s", c.R, c.G, c.B, symbol)
 }

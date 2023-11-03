@@ -1,4 +1,4 @@
-package screen
+package bind
 
 import "C"
 import (
@@ -17,7 +17,7 @@ import (
 	"path/filepath"
 )
 
-func mouseLeft(X int, Y int, s *Screen) {
+func mouseLeft(X int, Y int, s Screen) {
 	if menu.Type == menu.SymbolColor && X < menu.SymbolColorWidth {
 		selectColor(Y)
 		selectSymbol(X, Y)
@@ -28,7 +28,7 @@ func mouseLeft(X int, Y int, s *Screen) {
 	} else if menu.Type == menu.Line && X < menu.LineWidth {
 		selectLine(Y)
 	} else {
-		draw(X, Y)
+		draw(X, Y, s)
 	}
 }
 
@@ -71,7 +71,7 @@ func selectColor(Y int) {
 	}
 }
 
-func selectFile(Y int, s *Screen) {
+func selectFile(Y int, s Screen) {
 	if filePath, ok := menu.FileList[Y]; ok {
 		info, err := os.Stat(menu.Dir + filePath)
 		if err != nil {
@@ -90,13 +90,13 @@ func selectFile(Y int, s *Screen) {
 				s.LoadImage(string(content))
 			}
 			if ext == ".jpg" || ext == ".png" {
-				s.loadFromImage(menu.Dir + filePath)
+				s.LoadFromImage(menu.Dir + filePath)
 			}
 		}
 	}
 }
 
-func draw(X int, Y int) {
+func draw(X int, Y int, s Screen) {
 	clr := cursor.CC.Color
 
 	switch cursor.CC.Brush {
@@ -119,7 +119,7 @@ func draw(X int, Y int) {
 		changedSymbols := make(map[string]coord.Coord)
 		key := fmt.Sprintf("%d-%d", Y, X)
 		changedSymbols[key] = coord.Coord{X: X, Y: Y}
-		drawFill(clr, Pixels[Y][X], changedSymbols, size.Size.Width)
+		drawFill(s, clr, s.GetPixel(Y, X), changedSymbols, size.Size.Width)
 	case cursor.ContinuousLine, cursor.SmoothContinuousLine, cursor.FatContinuousLine, cursor.DoubleContinuousLine:
 		drawContinuousLine(X, Y, clr)
 	case cursor.Empty:
@@ -127,23 +127,24 @@ func draw(X int, Y int) {
 	}
 }
 
-func drawFill(clr color.Color, changedSymbol string, changedSymbols map[string]coord.Coord, N int) {
+func drawFill(s Screen, clr color.Color, changedSymbol string, changedSymbols map[string]coord.Coord, N int) {
 	var key string
 	symbols := make(map[string]coord.Coord)
+	pixels := s.GetPixels()
 	for _, p := range changedSymbols {
-		if utils.Isset(Pixels, p.Y+1, p.X) && Pixels[p.Y+1][p.X] == changedSymbol {
+		if utils.Isset(pixels, p.Y+1, p.X) && s.GetPixel(p.Y+1, p.X) == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y+1, p.X)
 			symbols[key] = coord.Coord{Y: p.Y + 1, X: p.X}
 		}
-		if utils.Isset(Pixels, p.Y-1, p.X) && Pixels[p.Y-1][p.X] == changedSymbol {
+		if utils.Isset(pixels, p.Y-1, p.X) && s.GetPixel(p.Y-1, p.X) == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y-1, p.X)
 			symbols[key] = coord.Coord{Y: p.Y - 1, X: p.X}
 		}
-		if utils.Isset(Pixels, p.Y, p.X+1) && Pixels[p.Y][p.X+1] == changedSymbol {
+		if utils.Isset(pixels, p.Y, p.X+1) && s.GetPixel(p.Y, p.X+1) == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y+1, p.X+1)
 			symbols[key] = coord.Coord{Y: p.Y, X: p.X + 1}
 		}
-		if utils.Isset(Pixels, p.Y, p.X-1) && Pixels[p.Y][p.X-1] == changedSymbol {
+		if utils.Isset(pixels, p.Y, p.X-1) && s.GetPixel(p.Y, p.X-1) == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y, p.X-1)
 			symbols[key] = coord.Coord{Y: p.Y, X: p.X - 1}
 		}
@@ -154,7 +155,7 @@ func drawFill(clr color.Color, changedSymbol string, changedSymbols map[string]c
 			pixel.AddPixels(pixel.Pixel{Coord: p, Color: clr, Symbol: cursor.CC.Symbol})
 		}
 		N--
-		drawFill(clr, changedSymbol, symbols, N)
+		drawFill(nil, clr, changedSymbol, symbols, N)
 	}
 }
 

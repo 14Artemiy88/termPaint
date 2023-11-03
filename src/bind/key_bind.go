@@ -1,4 +1,4 @@
-package screen
+package bind
 
 import (
 	"github.com/14Artemiy88/termPaint/src/color"
@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
+func KeyBind(msg tea.KeyMsg, s Screen) (tea.Model, tea.Cmd) {
 	switch msg.Type {
 	case tea.KeyCtrlC, tea.KeyEsc:
 		return s, tea.Quit
@@ -49,8 +49,8 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 
 	// save
 	case tea.KeyCtrlS:
-		s.Save = true
-		s.ShowInputSave = true
+		s.SetSave(true)
+		s.SetShowInputSave(true)
 		menu.Type = menu.None
 		message.Msg = []message.Message{}
 
@@ -64,7 +64,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 		menu.Input.Value = menu.Input.Value[:len(menu.Input.Value)-1]
 
 	case tea.KeyEnter:
-		s.ShowInputSave = false
+		s.SetShowInputSave(false)
 
 	case tea.KeySpace:
 		cursor.CC.SetCursor(msg.String())
@@ -85,7 +85,7 @@ func KeyBind(msg tea.KeyMsg, s *Screen) (tea.Model, tea.Cmd) {
 			} else {
 				message.SetMessage(err.Error())
 			}
-		} else if s.ShowInputSave {
+		} else if s.IsShowInputSave() {
 			menu.Input.Value += string(msg.Runes)
 		} else {
 			cursor.CC.SetCursor(string(msg.Runes))

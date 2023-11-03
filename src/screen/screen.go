@@ -2,6 +2,7 @@ package screen
 
 import (
 	"fmt"
+	"github.com/14Artemiy88/termPaint/src/bind"
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
@@ -53,10 +54,10 @@ func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return s, tick
 
 	case tea.KeyMsg:
-		return KeyBind(msg, s)
+		return bind.KeyBind(msg, s)
 
 	case tea.MouseMsg:
-		MouseBind(msg, s)
+		bind.MouseBind(msg, s)
 
 	case tea.WindowSizeMsg:
 		cursor.CC.X = msg.Width / 2
@@ -85,9 +86,29 @@ func (s *Screen) View() string {
 	return screen(screenString)
 }
 
+func (s *Screen) SetSave(save bool) {
+	s.Save = save
+}
+
+func (s *Screen) GetPixels() [][]string {
+	return Pixels
+}
+
+func (s *Screen) GetPixel(y int, x int) string {
+	return Pixels[y][x]
+}
+
+func (s *Screen) SetShowInputSave(showInputSave bool) {
+	s.ShowInputSave = showInputSave
+}
+
+func (s *Screen) IsShowInputSave() bool {
+	return s.ShowInputSave
+}
+
 func (s *Screen) showCursor() {
 	if !s.Save {
-		cursor.CC.DrawCursor(Pixels)
+		cursor.CC.DrawCursor(s)
 	}
 }
 

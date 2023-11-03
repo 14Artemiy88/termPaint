@@ -1,4 +1,4 @@
-package screen
+package bind
 
 import (
 	"github.com/14Artemiy88/termPaint/src/config"

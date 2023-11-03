@@ -48,13 +48,18 @@ const (
 	Fill
 )
 
+type Screen interface {
+	GetPixels() [][]string
+}
+
 func (c *Cursor) SetCursor(cursor string) {
 	c.Symbol = cursor
 	c.Store.Symbol = cursor
 }
 
-func (c *Cursor) DrawCursor(screen [][]string) [][]string {
+func (c *Cursor) DrawCursor(s Screen) [][]string {
 	clr := c.Color
+	screen := s.GetPixels()
 	switch c.Brush {
 	case Empty:
 	case Pointer:
