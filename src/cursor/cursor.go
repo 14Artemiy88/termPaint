@@ -2,9 +2,7 @@ package cursor
 
 import (
 	"fmt"
-	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
-	"github.com/14Artemiy88/termPaint/src/coord"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
@@ -18,7 +16,7 @@ type Cursor struct {
 	Width  int
 	Height int
 	Symbol string
-	Color  color.Color
+	Color  pixel.Color
 	Store  Store
 }
 
@@ -55,7 +53,7 @@ type Screen interface {
 func NewCursor() Cursor {
 	return Cursor{
 		Symbol: config.Cfg.DefaultCursor,
-		Color: color.Color{
+		Color: pixel.Color{
 			R: config.Cfg.DefaultColor["r"],
 			G: config.Cfg.DefaultColor["g"],
 			B: config.Cfg.DefaultColor["b"],
@@ -82,12 +80,12 @@ func (c *Cursor) DrawCursor(s Screen) [][]string {
 	case Empty:
 	case Pointer:
 		c.X = 1
-		clr = color.Color{R: config.Cfg.PointerColor["r"], G: config.Cfg.PointerColor["g"], B: config.Cfg.PointerColor["b"]}
+		clr = pixel.Color{R: config.Cfg.PointerColor["r"], G: config.Cfg.PointerColor["g"], B: config.Cfg.PointerColor["b"]}
 		utils.SetByKeys(1, c.Y, config.Cfg.Pointer, clr, screen)
 	case Fill:
-		changedSymbols := make(map[string]coord.Coord)
+		changedSymbols := make(map[string]pixel.Coord)
 		key := fmt.Sprintf("%d-%d", c.Y, c.X)
-		changedSymbols[key] = coord.Coord{X: c.X, Y: c.Y}
+		changedSymbols[key] = pixel.Coord{X: c.X, Y: c.Y}
 		drawFillCursor(c, clr, screen[c.Y][c.X], changedSymbols, size.Size.Width, screen)
 	case Dot,
 		ContinuousLine,
@@ -150,30 +148,30 @@ func (c *Cursor) DrawCursor(s Screen) [][]string {
 
 func drawFillCursor(
 	c *Cursor,
-	clr color.Color,
+	clr pixel.Color,
 	changedSymbol string,
-	changedSymbols map[string]coord.Coord,
+	changedSymbols map[string]pixel.Coord,
 	N int,
 	screen [][]string,
 ) {
 	var key string
-	symbols := make(map[string]coord.Coord)
+	symbols := make(map[string]pixel.Coord)
 	for _, p := range changedSymbols {
 		if utils.Isset(screen, p.Y+1, p.X) && screen[p.Y+1][p.X] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y+1, p.X)
-			symbols[key] = coord.Coord{Y: p.Y + 1, X: p.X}
+			symbols[key] = pixel.Coord{Y: p.Y + 1, X: p.X}
 		}
 		if utils.Isset(screen, p.Y-1, p.X) && screen[p.Y-1][p.X] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y-1, p.X)
-			symbols[key] = coord.Coord{Y: p.Y - 1, X: p.X}
+			symbols[key] = pixel.Coord{Y: p.Y - 1, X: p.X}
 		}
 		if utils.Isset(screen, p.Y, p.X+1) && screen[p.Y][p.X+1] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y+1, p.X+1)
-			symbols[key] = coord.Coord{Y: p.Y, X: p.X + 1}
+			symbols[key] = pixel.Coord{Y: p.Y, X: p.X + 1}
 		}
 		if utils.Isset(screen, p.Y, p.X-1) && screen[p.Y][p.X-1] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y, p.X-1)
-			symbols[key] = coord.Coord{Y: p.Y, X: p.X - 1}
+			symbols[key] = pixel.Coord{Y: p.Y, X: p.X - 1}
 		}
 	}
 

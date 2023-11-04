@@ -1,8 +1,8 @@
 package message
 
 import (
-	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"strings"
 )
@@ -26,7 +26,7 @@ func SetMessage(text string) {
 func DrawMsg(messages []Message, width int, screen [][]string) [][]string {
 	clearMessage(screen, width+5, len(messages)+2)
 	for k, m := range messages {
-		utils.DrawString(1, 1+k, m.text, color.White, screen)
+		utils.DrawString(1, 1+k, m.text, pixel.White, screen)
 	}
 	return screen
 }
@@ -34,11 +34,11 @@ func DrawMsg(messages []Message, width int, screen [][]string) [][]string {
 func clearMessage(screen [][]string, width int, height int) [][]string {
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
-			utils.SetByKeys(x, y, " ", color.White, screen)
+			utils.SetByKeys(x, y, " ", pixel.White, screen)
 		}
-		utils.SetByKeys(width, y, "│", color.White, screen)
+		utils.SetByKeys(width, y, "│", pixel.White, screen)
 	}
-	utils.DrawString(0, height, strings.Repeat("─", width)+"┘", color.White, screen)
+	utils.DrawString(0, height, strings.Repeat("─", width)+"┘", pixel.White, screen)
 
 	return screen
 }

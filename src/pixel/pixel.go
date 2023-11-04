@@ -2,15 +2,13 @@ package pixel
 
 import (
 	"fmt"
-	"github.com/14Artemiy88/termPaint/src/color"
-	"github.com/14Artemiy88/termPaint/src/coord"
 )
 
 const Ratio = .4583333333333333
 
 type Pixel struct {
-	Coord  coord.Coord
-	Color  color.Color
+	Coord  Coord
+	Color  Color
 	Symbol string
 }
 

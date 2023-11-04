@@ -1,8 +1,8 @@
 package menu
 
 import (
-	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/cursor"
+	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"strconv"
 	"strings"
@@ -29,24 +29,24 @@ type ShapeStruct struct {
 func drawShapeMenu(screen [][]string) [][]string {
 	ClearMenu(screen, ShapeWidth)
 	str := strings.Repeat("─", ShapeWidth-len("Shape")-2) + "┐"
-	utils.DrawString(1, 1, "Shape", color.Yellow, screen)
-	utils.DrawString(len("Shape")+2, 1, str, color.Gray, screen)
+	utils.DrawString(1, 1, "Shape", pixel.Yellow, screen)
+	utils.DrawString(len("Shape")+2, 1, str, pixel.Gray, screen)
 
 	for y, sh := range ShapeList {
-		utils.DrawString(3, y, sh.ShapeSymbol, color.White, screen)
+		utils.DrawString(3, y, sh.ShapeSymbol, pixel.White, screen)
 	}
 	switch cursor.CC.Store.Brush {
 	case cursor.GLine, cursor.VLine:
-		utils.DrawString(1, 19, "Length: "+strconv.Itoa(cursor.CC.Width), color.Green, screen)
-		utils.DrawString(len("Length:")+2, 19, strconv.Itoa(cursor.CC.Width), color.White, screen)
+		utils.DrawString(1, 19, "Length: "+strconv.Itoa(cursor.CC.Width), pixel.Green, screen)
+		utils.DrawString(len("Length:")+2, 19, strconv.Itoa(cursor.CC.Width), pixel.White, screen)
 	case cursor.ESquare, cursor.FSquare:
-		utils.DrawString(1, 19, "Width: "+strconv.Itoa(cursor.CC.Width), color.Green, screen)
-		utils.DrawString(1, 20, "Height: "+strconv.Itoa(cursor.CC.Height), color.Green, screen)
-		utils.DrawString(len("Width:")+2, 19, strconv.Itoa(cursor.CC.Width), color.White, screen)
-		utils.DrawString(len("Height:")+2, 20, strconv.Itoa(cursor.CC.Height), color.White, screen)
+		utils.DrawString(1, 19, "Width: "+strconv.Itoa(cursor.CC.Width), pixel.Green, screen)
+		utils.DrawString(1, 20, "Height: "+strconv.Itoa(cursor.CC.Height), pixel.Green, screen)
+		utils.DrawString(len("Width:")+2, 19, strconv.Itoa(cursor.CC.Width), pixel.White, screen)
+		utils.DrawString(len("Height:")+2, 20, strconv.Itoa(cursor.CC.Height), pixel.White, screen)
 	case cursor.ECircle, cursor.FCircle:
-		utils.DrawString(1, 19, "Radius: ", color.Green, screen)
-		utils.DrawString(len("Radius:")+2, 19, strconv.Itoa(cursor.CC.Width), color.White, screen)
+		utils.DrawString(1, 19, "Radius: ", pixel.Green, screen)
+		utils.DrawString(len("Radius:")+2, 19, strconv.Itoa(cursor.CC.Width), pixel.White, screen)
 	case cursor.Empty:
 	case cursor.Pointer:
 	case cursor.Dot:

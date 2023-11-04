@@ -2,9 +2,9 @@ package menu
 
 import (
 	"fmt"
-	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/message"
+	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"os"
 	"path/filepath"
@@ -56,16 +56,16 @@ func fileMenu(s Screen, screen [][]string) [][]string {
 	ClearMenu(screen, FileListWidth)
 	title := "FilePath"
 	str := strings.Repeat("─", FileListWidth-len(title)-2) + "┐"
-	utils.DrawString(1, 1, title, color.Yellow, screen)
-	utils.DrawString(len(title)+2, 1, str, color.Gray, screen)
+	utils.DrawString(1, 1, title, pixel.Yellow, screen)
+	utils.DrawString(len(title)+2, 1, str, pixel.Gray, screen)
 
 	Y := 3
 	if config.Cfg.ShowFolder {
 		FileList = make(map[int]string, len(fileList)+len(dirList)+1)
 		FileList[2] = "../"
-		utils.DrawString(fileX, 2, "..", color.White, screen)
+		utils.DrawString(fileX, 2, "..", pixel.White, screen)
 		for _, dirName := range dirList {
-			utils.DrawString(fileX, Y, fmt.Sprintf("\uE5FF  %v", dirName), color.Cian, screen)
+			utils.DrawString(fileX, Y, fmt.Sprintf("\uE5FF  %v", dirName), pixel.Cian, screen)
 			FileList[Y] = dirName + "/"
 			Y++
 		}
@@ -80,7 +80,7 @@ func fileMenu(s Screen, screen [][]string) [][]string {
 	for y, fileName := range fileList {
 		ext := filepath.Ext(fileName)
 		icon := extIcon[ext]
-		utils.DrawString(fileX, Y+y, fmt.Sprintf("%s  %s", icon, fileName), color.White, screen)
+		utils.DrawString(fileX, Y+y, fmt.Sprintf("%s  %s", icon, fileName), pixel.White, screen)
 		FileList[Y+y] = fileName
 	}
 
@@ -121,7 +121,7 @@ func DrawSaveInput(screen [][]string) [][]string {
 		width = fileNameLen + 2
 	}
 	clearSaveInput(screen, width, 3)
-	utils.DrawString(1, 1, Input.Value+BlinkCursor+".txt", color.White, screen)
+	utils.DrawString(1, 1, Input.Value+BlinkCursor+".txt", pixel.White, screen)
 
 	return screen
 }
@@ -129,11 +129,11 @@ func DrawSaveInput(screen [][]string) [][]string {
 func clearSaveInput(screen [][]string, width int, height int) [][]string {
 	for y := -1; y < height; y++ {
 		for x := -1; x < width; x++ {
-			utils.SetByKeys(x, y, " ", color.White, screen)
+			utils.SetByKeys(x, y, " ", pixel.White, screen)
 		}
-		utils.SetByKeys(width, y, "│", color.White, screen)
+		utils.SetByKeys(width, y, "│", pixel.White, screen)
 	}
-	utils.DrawString(0, height, strings.Repeat("─", width)+"┘", color.White, screen)
+	utils.DrawString(0, height, strings.Repeat("─", width)+"┘", pixel.White, screen)
 
 	return screen
 }

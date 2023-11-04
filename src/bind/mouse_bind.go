@@ -1,9 +1,7 @@
 package bind
 
 import (
-	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
-	"github.com/14Artemiy88/termPaint/src/coord"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/pixel"
@@ -19,7 +17,7 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 		mouseLeft(msg.X, msg.Y, s)
 
 	case tea.MouseRight:
-		pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: msg.X, Y: msg.Y}, Symbol: " "})
+		pixel.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: msg.X, Y: msg.Y}, Symbol: " "})
 
 	case tea.MouseMiddle:
 		pixel.Pixels = map[string]pixel.Pixel{}
@@ -28,11 +26,11 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 		if c, ok := menu.Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {
 			switch c {
 			case "r":
-				cursor.CC.Color.R = color.Decrease(cursor.CC.Color.R)
+				cursor.CC.Color.R = pixel.Decrease(cursor.CC.Color.R)
 			case "g":
-				cursor.CC.Color.G = color.Decrease(cursor.CC.Color.G)
+				cursor.CC.Color.G = pixel.Decrease(cursor.CC.Color.G)
 			case "b":
-				cursor.CC.Color.B = color.Decrease(cursor.CC.Color.B)
+				cursor.CC.Color.B = pixel.Decrease(cursor.CC.Color.B)
 			}
 		}
 		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != config.Cfg.Pointer {
@@ -53,11 +51,11 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 		if c, ok := menu.Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {
 			switch c {
 			case "r":
-				cursor.CC.Color.R = color.Increase(cursor.CC.Color.R)
+				cursor.CC.Color.R = pixel.Increase(cursor.CC.Color.R)
 			case "g":
-				cursor.CC.Color.G = color.Increase(cursor.CC.Color.G)
+				cursor.CC.Color.G = pixel.Increase(cursor.CC.Color.G)
 			case "b":
-				cursor.CC.Color.B = color.Increase(cursor.CC.Color.B)
+				cursor.CC.Color.B = pixel.Increase(cursor.CC.Color.B)
 			}
 		}
 		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != config.Cfg.Pointer {

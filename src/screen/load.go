@@ -2,8 +2,6 @@ package screen
 
 import (
 	"fmt"
-	"github.com/14Artemiy88/termPaint/src/color"
-	"github.com/14Artemiy88/termPaint/src/coord"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
@@ -54,8 +52,8 @@ func (s *Screen) LoadFromImage(path string) {
 		for j := bounds.Min.X; j < bounds.Max.X; j += ratio {
 			clr := img.At(j, i)
 			r, g, b, _ := clr.RGBA()
-			symbol := utils.FgRgb(color.Color{R: int(r / 257), G: int(g / 257), B: int(b / 257)}, cursor.CC.Symbol)
-			pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Symbol: symbol})
+			symbol := utils.FgRgb(pixel.Color{R: int(r / 257), G: int(g / 257), B: int(b / 257)}, cursor.CC.Symbol)
+			pixel.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y}, Symbol: symbol})
 			x++
 		}
 		fmt.Print("\n")
@@ -95,7 +93,7 @@ func loadWhite(lines []string, rows int, errors map[string]string) map[string]st
 				}
 				maxX++
 			}
-			pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: color.White, Symbol: symbol})
+			pixel.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y}, Color: pixel.White, Symbol: symbol})
 		}
 	}
 
@@ -103,7 +101,7 @@ func loadWhite(lines []string, rows int, errors map[string]string) map[string]st
 }
 
 func loadColored(lines []string, rows int, errors map[string]string) map[string]string {
-	clr := color.Color{}
+	clr := pixel.Color{}
 	var symbol string
 	var err error
 	for y := 0; y < rows; y++ {
@@ -113,7 +111,7 @@ func loadColored(lines []string, rows int, errors map[string]string) map[string]
 		for _, part := range symbolWithColorCode {
 			if len(strings.TrimSpace(part)) == 0 {
 				for ; x < len(part); x++ {
-					pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: " "})
+					pixel.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y}, Color: clr, Symbol: " "})
 				}
 				continue
 			}
@@ -139,13 +137,13 @@ func loadColored(lines []string, rows int, errors map[string]string) map[string]
 			trimSymbol := strings.TrimSpace(symbol)
 			if symbol != trimSymbol {
 				leTrimSymbol := len(trimSymbol)
-				pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: trimSymbol})
+				pixel.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y}, Color: clr, Symbol: trimSymbol})
 				for j := 0; j < lenSymbol-leTrimSymbol; j++ {
 					x++
-					pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: " "})
+					pixel.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y}, Color: clr, Symbol: " "})
 				}
 			} else {
-				pixel.AddPixels(pixel.Pixel{Coord: coord.Coord{X: x, Y: y}, Color: clr, Symbol: symbol})
+				pixel.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y}, Color: clr, Symbol: symbol})
 			}
 			x++
 		}

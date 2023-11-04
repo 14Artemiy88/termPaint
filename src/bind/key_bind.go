@@ -1,10 +1,10 @@
 package bind
 
 import (
-	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/message"
+	"github.com/14Artemiy88/termPaint/src/pixel"
 	tea "github.com/charmbracelet/bubbletea"
 	"os"
 	"strconv"
@@ -76,11 +76,11 @@ func KeyBind(msg tea.KeyMsg, s Screen) (tea.Model, tea.Cmd) {
 				menu.Input.Value += string(msg.Runes)
 				switch menu.Input.Color {
 				case "r":
-					cursor.CC.Color.R = color.SetColor(menu.Input.Value)
+					cursor.CC.Color.R = pixel.SetColor(menu.Input.Value)
 				case "g":
-					cursor.CC.Color.G = color.SetColor(menu.Input.Value)
+					cursor.CC.Color.G = pixel.SetColor(menu.Input.Value)
 				case "b":
-					cursor.CC.Color.B = color.SetColor(menu.Input.Value)
+					cursor.CC.Color.B = pixel.SetColor(menu.Input.Value)
 				}
 			} else {
 				message.SetMessage(err.Error())

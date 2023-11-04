@@ -2,8 +2,8 @@ package menu
 
 import (
 	"fmt"
-	"github.com/14Artemiy88/termPaint/src/color"
 	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"reflect"
@@ -38,20 +38,20 @@ func drawConfigMenu(screen [][]string) [][]string {
 	title := "Config"
 	lenTitle := len(title)
 	str := strings.Repeat("─", ConfigWidth-lenTitle-2) + "┐"
-	utils.DrawString(1, 1, title, color.Yellow, screen)
-	utils.DrawString(lenTitle+2, 1, str, color.Gray, screen)
+	utils.DrawString(1, 1, title, pixel.Yellow, screen)
+	utils.DrawString(lenTitle+2, 1, str, pixel.Gray, screen)
 
 	h := 3
 	for i := 0; i < v.NumField(); i++ {
 		if utils.InArray(typeOfConfig.Field(i).Name, availableFields) {
 			field := v.Field(i).Interface()
-			utils.DrawString(firstLvlX, h, typeOfConfig.Field(i).Name, color.White, screen)
-			clr := color.White
+			utils.DrawString(firstLvlX, h, typeOfConfig.Field(i).Name, pixel.White, screen)
+			clr := pixel.White
 			switch field {
 			case true:
-				clr = color.Green
+				clr = pixel.Green
 			case false:
-				clr = color.Red
+				clr = pixel.Red
 			}
 			switch reflect.TypeOf(field).String() {
 			case "string", "int", "bool":
@@ -77,11 +77,11 @@ func drawConfigMenu(screen [][]string) [][]string {
 					field = v.Field(i).Interface()
 					switch field {
 					case true:
-						clr = color.Green
+						clr = pixel.Green
 					case false:
-						clr = color.Red
+						clr = pixel.Red
 					}
-					utils.DrawString(secondLvlX, h, typeOfConfig.Field(i).Name, color.White, screen)
+					utils.DrawString(secondLvlX, h, typeOfConfig.Field(i).Name, pixel.White, screen)
 					utils.DrawString(valueX, h, fmt.Sprintf("%v", v.Field(i).Interface()), clr, screen)
 					h++
 					if h >= size.Size.Height-6 {
@@ -98,11 +98,11 @@ func drawConfigMenu(screen [][]string) [][]string {
 	title = "Note"
 	lenTitle = len(title)
 	str = strings.Repeat("─", ConfigWidth-lenTitle-2) + "┤"
-	utils.DrawString(1, size.Size.Height-4, title, color.Yellow, screen)
-	utils.DrawString(lenTitle+2, size.Size.Height-4, str, color.Gray, screen)
-	utils.DrawString(firstLvlX, size.Size.Height-2, "All configuration parameters are", color.White, screen)
-	utils.DrawString(firstLvlX, size.Size.Height-1, "stored in", color.White, screen)
-	utils.DrawString(len("stored in")+4, size.Size.Height-1, "~/.config/termPaint", color.Green, screen)
+	utils.DrawString(1, size.Size.Height-4, title, pixel.Yellow, screen)
+	utils.DrawString(lenTitle+2, size.Size.Height-4, str, pixel.Gray, screen)
+	utils.DrawString(firstLvlX, size.Size.Height-2, "All configuration parameters are", pixel.White, screen)
+	utils.DrawString(firstLvlX, size.Size.Height-1, "stored in", pixel.White, screen)
+	utils.DrawString(len("stored in")+4, size.Size.Height-1, "~/.config/termPaint", pixel.Green, screen)
 
 	return screen
 }
