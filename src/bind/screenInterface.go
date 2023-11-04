@@ -17,4 +17,6 @@ type Screen interface {
 	GetPixels() [][]string
 	GetDirectory() string
 	SetDirectory(string)
+	GetWidth() int
+	GetHeight() int
 }

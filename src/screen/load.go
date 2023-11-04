@@ -5,7 +5,6 @@ import (
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
-	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"image"
 	_ "image/jpeg"
@@ -35,13 +34,13 @@ func (s *Screen) LoadFromImage(path string) {
 
 	bounds := img.Bounds()
 	ratio := 1
-	if size.Size.Height > size.Size.Width {
-		if bounds.Max.X > size.Size.Width {
-			ratio = int(math.Ceil(float64(bounds.Max.X) / float64(size.Size.Width)))
+	if Size.Height > Size.Width {
+		if bounds.Max.X > Size.Width {
+			ratio = int(math.Ceil(float64(bounds.Max.X) / float64(Size.Width)))
 		}
 	} else {
-		if bounds.Max.Y > size.Size.Height {
-			ratio = int(math.Ceil(float64(bounds.Max.Y)/float64(size.Size.Height)) / 2)
+		if bounds.Max.Y > Size.Height {
+			ratio = int(math.Ceil(float64(bounds.Max.Y)/float64(Size.Height)) / 2)
 		}
 	}
 
@@ -66,8 +65,8 @@ func (s *Screen) LoadImage(screenString string) {
 	lines := strings.Split(screenString, "\n")
 	rows := len(lines)
 	errors := make(map[string]string, 2)
-	if rows > size.Size.Height {
-		errors["rows"] = fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, size.Size.Height)
+	if rows > Size.Height {
+		errors["rows"] = fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, Size.Height)
 	}
 	if strings.Contains(screenString, "\u001B") {
 		loadColored(lines, rows, errors)
@@ -86,10 +85,10 @@ func loadWhite(lines []string, rows int, errors map[string]string) map[string]st
 		line := strings.Split(lines[y], "")
 		var maxX int
 		for x, symbol := range line {
-			if x >= size.Size.Width-1 {
+			if x >= Size.Width-1 {
 				if maxX == 0 {
 					maxX = x
-					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, size.Size.Width)
+					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, Size.Width)
 				}
 				maxX++
 			}

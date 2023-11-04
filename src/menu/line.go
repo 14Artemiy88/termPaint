@@ -119,14 +119,13 @@ var GetRoute = map[int]map[int]Route{
 	},
 }
 
-func drawLineMenu(screen [][]string) [][]string {
-	ClearMenu(screen, ShapeWidth)
+func drawLineMenu(s Screen) {
+	screen := s.GetPixels()
+	ClearMenu(s, screen, ShapeWidth)
 	str := "Line " + strings.Repeat("─", LineWidth-len("Line")) + "┐"
 	utils.DrawString(1, 1, str, pixel.White, screen)
 
 	for y, line := range LineList {
 		utils.DrawString(3, y, line.LineMenu, pixel.White, screen)
 	}
-
-	return screen
 }

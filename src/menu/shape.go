@@ -26,8 +26,9 @@ type ShapeStruct struct {
 	ShapeSymbol string
 }
 
-func drawShapeMenu(screen [][]string) [][]string {
-	ClearMenu(screen, ShapeWidth)
+func drawShapeMenu(s Screen) {
+	screen := s.GetPixels()
+	ClearMenu(s, screen, ShapeWidth)
 	str := strings.Repeat("─", ShapeWidth-len("Shape")-2) + "┐"
 	utils.DrawString(1, 1, "Shape", pixel.Yellow, screen)
 	utils.DrawString(len("Shape")+2, 1, str, pixel.Gray, screen)
@@ -56,6 +57,4 @@ func drawShapeMenu(screen [][]string) [][]string {
 	case cursor.DoubleContinuousLine:
 	case cursor.Fill:
 	}
-
-	return screen
 }

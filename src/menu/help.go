@@ -68,13 +68,12 @@ var menu = []menuItem{
 
 const HelpWidth = 40
 
-func drawHelpMenu(screen [][]string) [][]string {
-	ClearMenu(screen, HelpWidth)
+func drawHelpMenu(s Screen) {
+	screen := s.GetPixels()
+	ClearMenu(s, screen, HelpWidth)
 	for _, mi := range menu {
 		mi.DrawMenuItem(screen)
 	}
-
-	return screen
 }
 
 func (m menuItem) DrawMenuItem(screen [][]string) [][]string {

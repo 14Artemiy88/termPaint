@@ -8,7 +8,6 @@ import (
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
-	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"math"
 	"os"
@@ -118,7 +117,7 @@ func draw(X int, Y int, s Screen) {
 		changedSymbols := make(map[string]pixel.Coord)
 		key := fmt.Sprintf("%d-%d", Y, X)
 		changedSymbols[key] = pixel.Coord{X: X, Y: Y}
-		drawFill(s, clr, s.GetPixel(Y, X), changedSymbols, size.Size.Width)
+		drawFill(s, clr, s.GetPixel(Y, X), changedSymbols, s.GetWidth())
 	case cursor.ContinuousLine, cursor.SmoothContinuousLine, cursor.FatContinuousLine, cursor.DoubleContinuousLine:
 		drawContinuousLine(X, Y, clr)
 	case cursor.Empty:

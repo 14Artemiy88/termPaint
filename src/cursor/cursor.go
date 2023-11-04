@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/pixel"
-	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"math"
 )
@@ -48,6 +47,7 @@ const (
 
 type Screen interface {
 	GetPixels() [][]string
+	GetWidth() int
 }
 
 func NewCursor() Cursor {
@@ -86,7 +86,7 @@ func (c *Cursor) DrawCursor(s Screen) [][]string {
 		changedSymbols := make(map[string]pixel.Coord)
 		key := fmt.Sprintf("%d-%d", c.Y, c.X)
 		changedSymbols[key] = pixel.Coord{X: c.X, Y: c.Y}
-		drawFillCursor(c, clr, screen[c.Y][c.X], changedSymbols, size.Size.Width, screen)
+		drawFillCursor(c, clr, screen[c.Y][c.X], changedSymbols, s.GetWidth(), screen)
 	case Dot,
 		ContinuousLine,
 		SmoothContinuousLine,

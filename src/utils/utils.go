@@ -16,13 +16,11 @@ func FgRgb(c pixel.Color, symbol string) string {
 	return fmt.Sprintf("\033[38;2;%d;%d;%dm%s", c.R, c.G, c.B, symbol)
 }
 
-func DrawString(X int, Y int, val string, color pixel.Color, screen [][]string) [][]string {
+func DrawString(X int, Y int, val string, color pixel.Color, screen [][]string) {
 	str := strings.Split(val, "")
 	for k, symbol := range str {
 		SetByKeys(X+k, Y, symbol, color, screen)
 	}
-
-	return screen
 }
 
 func Isset(arr [][]string, first int, second int) bool {

@@ -1,4 +1,4 @@
-package size
+package screen
 
 type size struct {
 	Width  int

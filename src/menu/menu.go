@@ -2,7 +2,6 @@ package menu
 
 import (
 	"github.com/14Artemiy88/termPaint/src/pixel"
-	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
 )
 
@@ -20,29 +19,26 @@ const (
 
 var Type MenuType
 
-func DrawMenu(s Screen) [][]string {
-	screen := s.GetPixels()
+func DrawMenu(s Screen) {
 	switch Type {
 	case SymbolColor:
-		drawSymbolColorMenu(screen)
+		drawSymbolColorMenu(s)
 	case File:
-		fileMenu(s, screen)
+		fileMenu(s)
 	case Help:
-		drawHelpMenu(screen)
+		drawHelpMenu(s)
 	case Shape:
-		drawShapeMenu(screen)
+		drawShapeMenu(s)
 	case Line:
-		drawLineMenu(screen)
+		drawLineMenu(s)
 	case Config:
-		drawConfigMenu(screen)
+		drawConfigMenu(s)
 	case None:
 	}
-
-	return screen
 }
 
-func ClearMenu(screen [][]string, width int) [][]string {
-	for y := 0; y < size.Size.Height; y++ {
+func ClearMenu(s Screen, screen [][]string, width int) [][]string {
+	for y := 0; y < s.GetHeight(); y++ {
 		for x := 0; x < width; x++ {
 			utils.SetByKeys(x, y, " ", pixel.White, screen)
 		}

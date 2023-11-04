@@ -4,11 +4,10 @@ import (
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
-	"github.com/14Artemiy88/termPaint/src/size"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func mouseMotion(msg tea.MouseMsg) {
+func mouseMotion(msg tea.MouseMsg, s Screen) {
 	var xMin int
 	switch menu.Type {
 	case menu.SymbolColor:
@@ -45,10 +44,10 @@ func mouseMotion(msg tea.MouseMsg) {
 		cursor.CC.Brush = cursor.CC.Store.Brush
 	}
 
-	if msg.X >= xMin && msg.X < size.Size.Width {
+	if msg.X >= xMin && msg.X < s.GetWidth() {
 		cursor.CC.X = msg.X
 	}
-	if msg.Y >= 0 && msg.Y < size.Size.Height {
+	if msg.Y >= 0 && msg.Y < s.GetHeight() {
 		cursor.CC.Y = msg.Y
 	}
 }

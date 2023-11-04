@@ -8,7 +8,6 @@ import (
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
-	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	tea "github.com/charmbracelet/bubbletea"
 	"strings"
@@ -16,6 +15,7 @@ import (
 )
 
 type Screen struct {
+	size          size
 	ShowInputSave bool
 	Save          bool
 	Directory     string
@@ -63,15 +63,15 @@ func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		cursor.CC.X = msg.Width / 2
 		cursor.CC.Y = msg.Height / 2
-		size.Size.Width = msg.Width
-		size.Size.Height = msg.Height
+		Size.Width = msg.Width
+		Size.Height = msg.Height
 	}
 
 	return s, nil
 }
 
 func (s *Screen) View() string {
-	if size.Size.Height == 0 {
+	if Size.Height == 0 {
 		return ""
 	}
 
@@ -113,6 +113,14 @@ func (s *Screen) GetDirectory() string {
 
 func (s *Screen) SetDirectory(directory string) {
 	s.Directory = directory
+}
+
+func (s *Screen) GetWidth() int {
+	return Size.Width
+}
+
+func (s *Screen) GetHeight() int {
+	return Size.Height
 }
 
 func (s *Screen) showCursor() {
@@ -173,10 +181,10 @@ func drawScreen() {
 }
 
 func drawClearScreen() {
-	Pixels = make([][]string, size.Size.Height)
-	for i := 0; i < size.Size.Height; i++ {
+	Pixels = make([][]string, Size.Height)
+	for i := 0; i < Size.Height; i++ {
 		if len(Pixels) > i {
-			Pixels[i] = strings.Split(strings.Repeat(" ", size.Size.Width), "")
+			Pixels[i] = strings.Split(strings.Repeat(" ", Size.Width), "")
 		}
 	}
 }

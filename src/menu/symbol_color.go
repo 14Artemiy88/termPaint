@@ -4,7 +4,6 @@ import (
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/pixel"
-	"github.com/14Artemiy88/termPaint/src/size"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"strconv"
 	"strings"
@@ -28,18 +27,18 @@ var Colors = map[int]string{
 
 const colorX = 3
 
-func drawSymbolColorMenu(screen [][]string) [][]string {
-	ClearMenu(screen, SymbolColorWidth)
+func drawSymbolColorMenu(s Screen) {
+	screen := s.GetPixels()
+	ClearMenu(s, screen, SymbolColorWidth)
 	drawSymbolMenu(screen)
 	drawColorMenu(screen)
 	title := "Help"
 	str := strings.Repeat("─", SymbolColorWidth-len(title)-2) + "┤"
-	utils.DrawString(1, size.Size.Height-3, title, pixel.Yellow, screen)
-	utils.DrawString(len(title)+2, size.Size.Height-3, str, pixel.Gray, screen)
-	utils.DrawString(2, size.Size.Height-1, "Press", pixel.White, screen)
-	utils.DrawString(len("Press")+3, size.Size.Height-1, "Ctrl+H", pixel.Green, screen)
-
-	return screen
+	height := s.GetHeight()
+	utils.DrawString(1, height-3, title, pixel.Yellow, screen)
+	utils.DrawString(len(title)+2, height-3, str, pixel.Gray, screen)
+	utils.DrawString(2, height-1, "Press", pixel.White, screen)
+	utils.DrawString(len("Press")+3, height-1, "Ctrl+H", pixel.Green, screen)
 }
 
 func drawSymbolMenu(screen [][]string) [][]string {

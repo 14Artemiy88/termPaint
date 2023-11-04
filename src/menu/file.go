@@ -28,7 +28,8 @@ const DefBlinkTime = 50
 
 var BlinkTime = DefBlinkTime
 
-func fileMenu(s Screen, screen [][]string) [][]string {
+func fileMenu(s Screen) {
+	screen := s.GetPixels()
 	files, err := os.ReadDir(s.GetDirectory())
 	if err != nil {
 		message.SetMessage(err.Error())
@@ -53,7 +54,7 @@ func fileMenu(s Screen, screen [][]string) [][]string {
 		}
 	}
 	FileListWidth = width + 10
-	ClearMenu(screen, FileListWidth)
+	ClearMenu(s, screen, FileListWidth)
 	title := "FilePath"
 	str := strings.Repeat("─", FileListWidth-len(title)-2) + "┐"
 	utils.DrawString(1, 1, title, pixel.Yellow, screen)
@@ -83,8 +84,6 @@ func fileMenu(s Screen, screen [][]string) [][]string {
 		utils.DrawString(fileX, Y+y, fmt.Sprintf("%s  %s", icon, fileName), pixel.White, screen)
 		FileList[Y+y] = fileName
 	}
-
-	return screen
 }
 
 func SaveImage(image string) {
