@@ -63,19 +63,19 @@ func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		cursor.CC.X = msg.Width / 2
 		cursor.CC.Y = msg.Height / 2
-		Size.Width = msg.Width
-		Size.Height = msg.Height
+		s.size.Width = msg.Width
+		s.size.Height = msg.Height
 	}
 
 	return s, nil
 }
 
 func (s *Screen) View() string {
-	if Size.Height == 0 {
+	if s.size.Height == 0 {
 		return ""
 	}
 
-	drawClearScreen()
+	s.drawClearScreen()
 	drawScreen()
 	menu.DrawMenu(s)
 	showMsg()
@@ -116,11 +116,11 @@ func (s *Screen) SetDirectory(directory string) {
 }
 
 func (s *Screen) GetWidth() int {
-	return Size.Width
+	return s.size.Width
 }
 
 func (s *Screen) GetHeight() int {
-	return Size.Height
+	return s.size.Height
 }
 
 func (s *Screen) showCursor() {
@@ -180,11 +180,11 @@ func drawScreen() {
 	}
 }
 
-func drawClearScreen() {
-	Pixels = make([][]string, Size.Height)
-	for i := 0; i < Size.Height; i++ {
+func (s *Screen) drawClearScreen() {
+	Pixels = make([][]string, s.size.Height)
+	for i := 0; i < s.size.Height; i++ {
 		if len(Pixels) > i {
-			Pixels[i] = strings.Split(strings.Repeat(" ", Size.Width), "")
+			Pixels[i] = strings.Split(strings.Repeat(" ", s.size.Width), "")
 		}
 	}
 }

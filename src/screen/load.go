@@ -34,13 +34,13 @@ func (s *Screen) LoadFromImage(path string) {
 
 	bounds := img.Bounds()
 	ratio := 1
-	if Size.Height > Size.Width {
-		if bounds.Max.X > Size.Width {
-			ratio = int(math.Ceil(float64(bounds.Max.X) / float64(Size.Width)))
+	if s.size.Height > s.size.Width {
+		if bounds.Max.X > s.size.Width {
+			ratio = int(math.Ceil(float64(bounds.Max.X) / float64(s.size.Width)))
 		}
 	} else {
-		if bounds.Max.Y > Size.Height {
-			ratio = int(math.Ceil(float64(bounds.Max.Y)/float64(Size.Height)) / 2)
+		if bounds.Max.Y > s.size.Height {
+			ratio = int(math.Ceil(float64(bounds.Max.Y)/float64(s.size.Height)) / 2)
 		}
 	}
 
@@ -65,13 +65,13 @@ func (s *Screen) LoadImage(screenString string) {
 	lines := strings.Split(screenString, "\n")
 	rows := len(lines)
 	errors := make(map[string]string, 2)
-	if rows > Size.Height {
-		errors["rows"] = fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, Size.Height)
+	if rows > s.size.Height {
+		errors["rows"] = fmt.Sprintf("Image rows more then terminal rows (%d > %d)", rows, s.size.Height)
 	}
 	if strings.Contains(screenString, "\u001B") {
 		loadColored(lines, rows, errors)
 	} else {
-		loadWhite(lines, rows, errors)
+		s.loadWhite(lines, rows, errors)
 	}
 	if len(errors) > 0 {
 		for _, i := range errors {
@@ -80,15 +80,15 @@ func (s *Screen) LoadImage(screenString string) {
 	}
 }
 
-func loadWhite(lines []string, rows int, errors map[string]string) map[string]string {
+func (s *Screen) loadWhite(lines []string, rows int, errors map[string]string) map[string]string {
 	for y := 0; y < rows; y++ {
 		line := strings.Split(lines[y], "")
 		var maxX int
 		for x, symbol := range line {
-			if x >= Size.Width-1 {
+			if x >= s.size.Width-1 {
 				if maxX == 0 {
 					maxX = x
-					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, Size.Width)
+					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, s.size.Width)
 				}
 				maxX++
 			}
