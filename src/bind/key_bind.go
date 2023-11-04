@@ -74,13 +74,17 @@ func KeyBind(msg tea.KeyMsg, s Screen) (tea.Model, tea.Cmd) {
 		if menu.Type == menu.SymbolColor && menu.Input.Lock {
 			if _, err := strconv.Atoi(string(msg.Runes)); err == nil {
 				menu.Input.Value += string(msg.Runes)
+				color, err := strconv.Atoi(menu.Input.Value)
+				if err != nil {
+					message.SetMessage(err.Error())
+				}
 				switch menu.Input.Color {
 				case "r":
-					cursor.CC.Color.R = pixel.SetColor(menu.Input.Value)
+					cursor.CC.Color.R = pixel.SetColor(color)
 				case "g":
-					cursor.CC.Color.G = pixel.SetColor(menu.Input.Value)
+					cursor.CC.Color.G = pixel.SetColor(color)
 				case "b":
-					cursor.CC.Color.B = pixel.SetColor(menu.Input.Value)
+					cursor.CC.Color.B = pixel.SetColor(color)
 				}
 			} else {
 				message.SetMessage(err.Error())
