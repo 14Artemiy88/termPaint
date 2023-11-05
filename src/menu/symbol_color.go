@@ -1,7 +1,6 @@
 package menu
 
 import (
-	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
@@ -30,7 +29,7 @@ const colorX = 3
 func drawSymbolColorMenu(s Screen) {
 	screen := s.GetPixels()
 	ClearMenu(s, screen, SymbolColorWidth)
-	drawSymbolMenu(screen)
+	drawSymbolMenu(s, screen)
 	drawColorMenu(screen)
 	title := "Help"
 	str := strings.Repeat("─", SymbolColorWidth-len(title)-2) + "┤"
@@ -41,12 +40,12 @@ func drawSymbolColorMenu(s Screen) {
 	utils.DrawString(len("Press")+3, height-1, "Ctrl+H", pixel.Green, screen)
 }
 
-func drawSymbolMenu(screen [][]string) [][]string {
+func drawSymbolMenu(s Screen, screen [][]string) [][]string {
 	title := "Symbol"
 	str := strings.Repeat("─", SymbolColorWidth-len(title)-2) + "┐"
 	utils.DrawString(1, 1, title, pixel.Yellow, screen)
 	utils.DrawString(len(title)+2, 1, str, pixel.Gray, screen)
-	for y, line := range config.Cfg.Symbols {
+	for y, line := range s.GetConfig().Symbols {
 		for x, symbol := range line {
 			utils.SetByKeys(x, y, symbol, pixel.White, screen)
 		}

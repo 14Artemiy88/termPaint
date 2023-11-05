@@ -2,7 +2,6 @@ package bind
 
 import "C"
 import (
-	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/draw"
 	"github.com/14Artemiy88/termPaint/src/menu"
@@ -15,23 +14,23 @@ import (
 func mouseLeft(X int, Y int, s Screen) {
 	if menu.Type == menu.SymbolColor && X < menu.SymbolColorWidth {
 		selectColor(Y)
-		selectSymbol(X, Y)
+		selectSymbol(s, X, Y)
 	} else if menu.Type == menu.File && X < menu.FileListWidth {
 		selectFile(Y, s)
 	} else if menu.Type == menu.Shape && X < menu.ShapeWidth {
 		selectShape(Y)
 	} else if menu.Type == menu.Line && X < menu.LineWidth {
-		selectLine(Y)
+		selectLine(s, Y)
 	} else {
 		draw.Draw(s, X, Y)
 	}
 }
 
-func selectLine(Y int) {
+func selectLine(s Screen, Y int) {
 	if line, ok := menu.LineList[Y]; ok {
 		cursor.CC.Store.Brush = line.LineType
 		if line.LineType == cursor.Dot {
-			cursor.CC.SetCursor(config.Cfg.DefaultCursor)
+			cursor.CC.SetCursor(s.GetConfig().DefaultCursor)
 		} else {
 			cursor.CC.SetCursor(line.Cursor)
 		}
@@ -44,10 +43,10 @@ func selectShape(Y int) {
 	}
 }
 
-func selectSymbol(X int, Y int) {
-	if symbol, ok := config.Cfg.Symbols[Y][X]; ok {
+func selectSymbol(s Screen, X int, Y int) {
+	if symbol, ok := s.GetConfig().Symbols[Y][X]; ok {
 		cursor.CC.SetCursor(symbol)
-		if config.Cfg.Notifications.SetSymbol {
+		if s.GetConfig().Notifications.SetSymbol {
 			message.SetMessage("Set " + symbol)
 		}
 	}

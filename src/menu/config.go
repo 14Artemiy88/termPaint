@@ -2,7 +2,6 @@ package menu
 
 import (
 	"fmt"
-	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"reflect"
@@ -33,7 +32,7 @@ var availableFields = []string{
 func drawConfigMenu(s Screen) {
 	screen := s.GetPixels()
 	ClearMenu(s, screen, ConfigWidth)
-	v := reflect.ValueOf(config.Cfg)
+	v := reflect.ValueOf(*s.GetConfig())
 	typeOfConfig := v.Type()
 	title := "Config"
 	lenTitle := len(title)

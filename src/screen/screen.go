@@ -19,9 +19,17 @@ type Screen struct {
 	Height        int
 	ShowInputSave bool
 	Save          bool
-	Directory     string
 	SavedPixels   [][]string
 	UnsavedPixels map[string]pixel.Pixel
+	Config
+}
+
+type Config interface {
+	GetNotificationTime() int
+	GetImageSaveDirectory() string
+	SetImageSaveDirectory(directory string)
+	WithBackground() bool
+	GetBackgroundColor() map[string]int
 }
 
 func (s *Screen) Init() tea.Cmd {
@@ -75,7 +83,7 @@ func (s *Screen) View() string {
 	screenString := s.setScreenString()
 	s.save(screenString)
 
-	return screen(screenString)
+	return s.screen(screenString)
 }
 
 func (s *Screen) SetSave(save bool) {
@@ -99,11 +107,11 @@ func (s *Screen) IsShowInputSave() bool {
 }
 
 func (s *Screen) GetDirectory() string {
-	return s.Directory
+	return s.Config.GetImageSaveDirectory()
 }
 
 func (s *Screen) SetDirectory(directory string) {
-	s.Directory = directory
+	s.Config.SetImageSaveDirectory(directory)
 }
 
 func (s *Screen) GetWidth() int {
@@ -125,6 +133,14 @@ func (s *Screen) ClearUnsavedPixels() {
 	s.UnsavedPixels = map[string]pixel.Pixel{}
 }
 
+func (s *Screen) SetConfig(c config.Config) {
+	s.Config = &c
+}
+
+func (s *Screen) GetConfig() *config.Config {
+	return s.Config.(*config.Config)
+}
+
 func (s *Screen) showCursor() {
 	if !s.Save {
 		cursor.CC.DrawCursor(s)
@@ -134,7 +150,7 @@ func (s *Screen) showCursor() {
 func (s *Screen) save(screenString string) {
 	if s.Save && !s.ShowInputSave {
 		s.Save = false
-		menu.SaveImage(screenString)
+		menu.SaveImage(s.Config.GetImageSaveDirectory(), screenString)
 	}
 }
 
@@ -162,13 +178,13 @@ func (s *Screen) setScreenString() string {
 	return screenString
 }
 
-func screen(screenString string) string {
-	if config.Cfg.Background {
+func (s *Screen) screen(screenString string) string {
+	if s.Config.WithBackground() {
 		screenString = fmt.Sprintf(
 			"\033[48;2;%d;%d;%dm%s",
-			config.Cfg.BackgroundColor["r"],
-			config.Cfg.BackgroundColor["g"],
-			config.Cfg.BackgroundColor["b"],
+			s.Config.GetBackgroundColor()["r"],
+			s.Config.GetBackgroundColor()["g"],
+			s.Config.GetBackgroundColor()["b"],
 			screenString,
 		)
 	}

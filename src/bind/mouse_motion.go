@@ -1,7 +1,6 @@
 package bind
 
 import (
-	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
 	tea "github.com/charmbracelet/bubbletea"
@@ -29,7 +28,7 @@ func mouseMotion(msg tea.MouseMsg, s Screen) {
 	if msg.X <= xMin {
 		switch menu.Type {
 		case menu.SymbolColor:
-			onMenu(msg)
+			onMenu(s, msg)
 		case menu.File:
 			onFile(msg)
 		case menu.Shape:
@@ -76,9 +75,9 @@ func onFile(msg tea.MouseMsg) {
 	}
 }
 
-func onMenu(msg tea.MouseMsg) {
+func onMenu(s Screen, msg tea.MouseMsg) {
 	cursor.CC.Brush = cursor.Empty
-	_, okSymbol := config.Cfg.Symbols[msg.Y][msg.X]
+	_, okSymbol := s.GetConfig().Symbols[msg.Y][msg.X]
 	c, okColor := menu.Colors[msg.Y]
 	if okColor && msg.X < menu.SymbolColorWidth {
 		menu.Input.Lock = true

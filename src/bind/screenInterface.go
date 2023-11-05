@@ -1,6 +1,7 @@
 package bind
 
 import (
+	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -22,4 +23,5 @@ type Screen interface {
 	GetHeight() int
 	ClearUnsavedPixels()
 	AddPixels(pixels ...pixel.Pixel)
+	GetConfig() *config.Config
 }

@@ -12,8 +12,6 @@ const configFileName = "config.yaml"
 const configPath = "/termPaint/"
 const githubConfigFile = "https://raw.githubusercontent.com/14Artemiy88/termPaint/main/config.yaml"
 
-var Cfg Config
-
 type Config struct {
 	Background          bool                   `mapstructure:"background"`
 	BackgroundColor     map[string]int         `mapstructure:"background_color"`
@@ -35,7 +33,31 @@ type Config struct {
 	} `mapstructure:"notifications"`
 }
 
-func InitConfig() {
+type Screen interface {
+	SetConfig(Config)
+}
+
+func (c *Config) WithBackground() bool {
+	return c.Background
+}
+
+func (c *Config) GetBackgroundColor() map[string]int {
+	return c.BackgroundColor
+}
+
+func (c Config) GetNotificationTime() int {
+	return c.NotificationTime
+}
+
+func (c *Config) GetImageSaveDirectory() string {
+	return c.ImageSaveDirectory
+}
+
+func (c *Config) SetImageSaveDirectory(directory string) {
+	c.ImageSaveDirectory = directory
+}
+
+func InitConfig(s Screen) {
 	homeDir, err := os.UserConfigDir()
 	if err != nil {
 		log.Println("Cannot determine the user's home dir:", err)
@@ -55,7 +77,9 @@ func InitConfig() {
 			log.Fatalf("Error reading Cfg file, %s", err)
 		}
 	}
+	var Cfg Config
 	err = viper.Unmarshal(&Cfg)
+	s.SetConfig(Cfg)
 	if err != nil {
 		log.Fatalf("unable to decode into struct, %v", err)
 	}

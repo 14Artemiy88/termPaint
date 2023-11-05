@@ -1,7 +1,6 @@
 package bind
 
 import (
-	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/pixel"
@@ -33,7 +32,7 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 				cursor.CC.Color.B = pixel.Decrease(cursor.CC.Color.B)
 			}
 		}
-		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != config.Cfg.Pointer {
+		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != s.GetConfig().Pointer {
 			if msg.Ctrl {
 				if cursor.CC.Store.Brush == cursor.ESquare || cursor.CC.Store.Brush == cursor.FSquare {
 					if cursor.CC.Height > 1 {
@@ -58,7 +57,7 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 				cursor.CC.Color.B = pixel.Increase(cursor.CC.Color.B)
 			}
 		}
-		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != config.Cfg.Pointer {
+		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != s.GetConfig().Pointer {
 			if msg.Ctrl {
 				if cursor.CC.Store.Brush == cursor.ESquare || cursor.CC.Store.Brush == cursor.FSquare {
 					cursor.CC.Height++

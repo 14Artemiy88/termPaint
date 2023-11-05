@@ -2,7 +2,6 @@ package menu
 
 import (
 	"fmt"
-	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
@@ -25,7 +24,7 @@ func fileMenu(s Screen) {
 	files, err := os.ReadDir(s.GetDirectory())
 	if err != nil {
 		message.SetMessage(err.Error())
-		s.SetDirectory(config.Cfg.ImageSaveDirectory)
+		s.SetDirectory(s.GetConfig().ImageSaveDirectory)
 	}
 
 	var width int
@@ -36,7 +35,7 @@ func fileMenu(s Screen) {
 		if len(fileName) > width {
 			width = len(fileName)
 		}
-		if file.IsDir() && (config.Cfg.ShowHiddenFolder || string(fileName[0]) != ".") {
+		if file.IsDir() && (s.GetConfig().ShowHiddenFolder || string(fileName[0]) != ".") {
 			dirList = append(dirList, fileName)
 			continue
 		}
@@ -53,7 +52,7 @@ func fileMenu(s Screen) {
 	utils.DrawString(len(title)+2, 1, str, pixel.Gray, screen)
 
 	Y := 3
-	if config.Cfg.ShowFolder {
+	if s.GetConfig().ShowFolder {
 		FileList = make(map[int]string, len(fileList)+len(dirList)+1)
 		FileList[2] = "../"
 		utils.DrawString(fileX, 2, "..", pixel.White, screen)
@@ -78,8 +77,8 @@ func fileMenu(s Screen) {
 	}
 }
 
-func SaveImage(image string) {
-	fileName := config.Cfg.ImageSaveDirectory + time.Now().Format(config.Cfg.ImageSaveNameFormat)
+func SaveImage(imageSaveDirectory string, image string) {
+	fileName := imageSaveDirectory + time.Now().Format(imageSaveDirectory)
 	if len(Input.Value) > 0 {
 		fileName = Input.Value + ".txt"
 	}

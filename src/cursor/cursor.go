@@ -48,21 +48,22 @@ const (
 type Screen interface {
 	GetPixels() [][]string
 	GetWidth() int
+	GetConfig() *config.Config
 }
 
-func NewCursor() Cursor {
+func NewCursor(s Screen) Cursor {
 	return Cursor{
-		Symbol: config.Cfg.DefaultCursor,
+		Symbol: s.GetConfig().DefaultCursor,
 		Color: pixel.Color{
-			R: config.Cfg.DefaultColor["r"],
-			G: config.Cfg.DefaultColor["g"],
-			B: config.Cfg.DefaultColor["b"],
+			R: s.GetConfig().DefaultColor["r"],
+			G: s.GetConfig().DefaultColor["g"],
+			B: s.GetConfig().DefaultColor["b"],
 		},
 		Brush:  Dot,
 		Width:  4,
 		Height: 4,
 		Store: Store{
-			Symbol: config.Cfg.DefaultCursor,
+			Symbol: s.GetConfig().DefaultCursor,
 			Brush:  Dot,
 		},
 	}
@@ -80,8 +81,8 @@ func (c *Cursor) DrawCursor(s Screen) [][]string {
 	case Empty:
 	case Pointer:
 		c.X = 1
-		clr = pixel.Color{R: config.Cfg.PointerColor["r"], G: config.Cfg.PointerColor["g"], B: config.Cfg.PointerColor["b"]}
-		utils.SetByKeys(1, c.Y, config.Cfg.Pointer, clr, screen)
+		clr = pixel.Color{R: s.GetConfig().PointerColor["r"], G: s.GetConfig().PointerColor["g"], B: s.GetConfig().PointerColor["b"]}
+		utils.SetByKeys(1, c.Y, s.GetConfig().Pointer, clr, screen)
 	case Fill:
 		changedSymbols := make(map[string]pixel.Coord)
 		key := fmt.Sprintf("%d-%d", c.Y, c.X)

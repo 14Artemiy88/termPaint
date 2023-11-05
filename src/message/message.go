@@ -1,7 +1,6 @@
 package message
 
 import (
-	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"strings"
@@ -15,8 +14,13 @@ type Message struct {
 var Msg []Message
 var MsgWidth int
 
+type Config interface {
+	GetNotificationTime() int
+}
+
 func SetMessage(text string) {
-	Msg = append(Msg, Message{text: text, LiveTime: config.Cfg.NotificationTime})
+	time := 200
+	Msg = append(Msg, Message{text: text, LiveTime: time})
 	textLen := len(text)
 	if textLen > MsgWidth {
 		MsgWidth = textLen
