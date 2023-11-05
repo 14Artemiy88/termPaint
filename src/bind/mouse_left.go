@@ -2,14 +2,12 @@ package bind
 
 import "C"
 import (
-	"fmt"
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
+	"github.com/14Artemiy88/termPaint/src/draw"
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
-	"github.com/14Artemiy88/termPaint/src/utils"
-	"math"
 	"os"
 	"path/filepath"
 )
@@ -25,7 +23,7 @@ func mouseLeft(X int, Y int, s Screen) {
 	} else if menu.Type == menu.Line && X < menu.LineWidth {
 		selectLine(Y)
 	} else {
-		draw(X, Y, s)
+		draw.Draw(s, X, Y)
 	}
 }
 
@@ -91,195 +89,5 @@ func selectFile(Y int, s Screen) {
 				s.LoadFromImage(dir + filePath)
 			}
 		}
-	}
-}
-
-func draw(X int, Y int, s Screen) {
-	clr := cursor.CC.Color
-
-	switch cursor.CC.Brush {
-	case cursor.Dot:
-		drawDot(s, pixel.Pixel{Coord: pixel.Coord{X: X, Y: Y}, Color: clr, Symbol: cursor.CC.Symbol})
-	case cursor.GLine:
-		drawGLine(s, X, Y, clr, cursor.CC.Symbol)
-	case cursor.VLine:
-		drawVLine(s, X, Y, clr, cursor.CC.Symbol)
-	case cursor.ESquare:
-		drawESquare(s, X, Y, clr, cursor.CC.Symbol)
-	case cursor.FSquare:
-		drawFSquare(s, X, Y, clr, cursor.CC.Symbol)
-	case cursor.ECircle:
-		drawECircle(s, X, Y, clr, cursor.CC.Symbol)
-	case cursor.FCircle:
-		drawFCircle(s, X, Y, clr, cursor.CC.Symbol)
-	case cursor.Fill:
-		menu.Type = menu.None
-		changedSymbols := make(map[string]pixel.Coord)
-		key := fmt.Sprintf("%d-%d", Y, X)
-		changedSymbols[key] = pixel.Coord{X: X, Y: Y}
-		drawFill(s, clr, s.GetPixel(Y, X), changedSymbols, s.GetWidth())
-	case cursor.ContinuousLine, cursor.SmoothContinuousLine, cursor.FatContinuousLine, cursor.DoubleContinuousLine:
-		drawContinuousLine(s, X, Y, clr)
-	case cursor.Empty:
-	case cursor.Pointer:
-	}
-}
-
-func drawFill(s Screen, clr pixel.Color, changedSymbol string, changedSymbols map[string]pixel.Coord, N int) {
-	var key string
-	symbols := make(map[string]pixel.Coord)
-	pixels := s.GetPixels()
-	for _, p := range changedSymbols {
-		if utils.Isset(pixels, p.Y+1, p.X) && s.GetPixel(p.Y+1, p.X) == changedSymbol {
-			key = fmt.Sprintf("%d-%d", p.Y+1, p.X)
-			symbols[key] = pixel.Coord{Y: p.Y + 1, X: p.X}
-		}
-		if utils.Isset(pixels, p.Y-1, p.X) && s.GetPixel(p.Y-1, p.X) == changedSymbol {
-			key = fmt.Sprintf("%d-%d", p.Y-1, p.X)
-			symbols[key] = pixel.Coord{Y: p.Y - 1, X: p.X}
-		}
-		if utils.Isset(pixels, p.Y, p.X+1) && s.GetPixel(p.Y, p.X+1) == changedSymbol {
-			key = fmt.Sprintf("%d-%d", p.Y+1, p.X+1)
-			symbols[key] = pixel.Coord{Y: p.Y, X: p.X + 1}
-		}
-		if utils.Isset(pixels, p.Y, p.X-1) && s.GetPixel(p.Y, p.X-1) == changedSymbol {
-			key = fmt.Sprintf("%d-%d", p.Y, p.X-1)
-			symbols[key] = pixel.Coord{Y: p.Y, X: p.X - 1}
-		}
-	}
-
-	if len(symbols) > 0 && N > 0 {
-		for _, p := range symbols {
-			s.AddPixels(pixel.Pixel{Coord: p, Color: clr, Symbol: cursor.CC.Symbol})
-		}
-		N--
-		drawFill(nil, clr, changedSymbol, symbols, N)
-	}
-}
-
-func drawDot(s Screen, p pixel.Pixel) {
-	s.AddPixels(p)
-}
-
-func drawGLine(s Screen, x int, y int, clr pixel.Color, symbol string) {
-	for i := 0; i < cursor.CC.Width; i++ {
-		s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x + i, Y: y}, Color: clr, Symbol: symbol})
-	}
-}
-
-func drawVLine(s Screen, x int, y int, clr pixel.Color, symbol string) {
-	for i := 0; i < cursor.CC.Width; i++ {
-		s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y + i}, Color: clr, Symbol: symbol})
-	}
-}
-
-func drawESquare(s Screen, x int, y int, clr pixel.Color, symbol string) {
-	for i := 0; i < cursor.CC.Height; i++ {
-		for j := 0; j < cursor.CC.Width; j++ {
-			if j > 0 && j < cursor.CC.Width-1 && i > 0 && i < cursor.CC.Height-1 {
-				continue
-			}
-			s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x + j, Y: y + i}, Color: clr, Symbol: symbol})
-		}
-	}
-}
-
-func drawFSquare(s Screen, x int, y int, clr pixel.Color, symbol string) {
-	for i := 0; i < cursor.CC.Height; i++ {
-		for j := 0; j < cursor.CC.Width; j++ {
-			s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x + j, Y: y + i}, Color: clr, Symbol: symbol})
-		}
-	}
-}
-
-func drawECircle(s Screen, X int, Y int, clr pixel.Color, symbol string) {
-	R := cursor.CC.Width / 2
-	k := 5
-	for y := -R * k; y <= R*k; y++ {
-		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
-		ky := int(math.Round(float64(y) / float64(k)))
-		s.AddPixels(
-			pixel.Pixel{Coord: pixel.Coord{X: X + x, Y: Y + ky}, Color: clr, Symbol: symbol},
-			pixel.Pixel{Coord: pixel.Coord{X: X - x, Y: Y + ky}, Color: clr, Symbol: symbol},
-		)
-	}
-}
-
-func drawFCircle(s Screen, X int, Y int, clr pixel.Color, symbol string) {
-	R := cursor.CC.Width / 2
-	k := 5
-	for y := -R * k; y <= R*k; y++ {
-		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
-		ky := int(math.Round(float64(y) / float64(k)))
-		for i := -x; i <= x; i++ {
-			s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: X + i, Y: Y + ky}, Color: clr, Symbol: symbol})
-		}
-	}
-}
-
-func drawContinuousLine(s Screen, X int, Y int, clr pixel.Color) {
-	x := X - pixel.StorePixel[1].Coord.X // -1 0 1
-	y := Y - pixel.StorePixel[1].Coord.Y // -1 0 1
-	if x != 0 || y != 0 {
-		line := cursor.CC.Store.Symbol
-		if pixel.StorePixel[1].Symbol != "" {
-			if x < -1 || x > 1 || y < -1 || y > 1 {
-				pixel.StorePixel = [2]pixel.Pixel{}
-				x = 0
-				y = 0
-			}
-			if x == 0 {
-				line = menu.GVLine[line]["v"]
-				cursor.CC.SetCursor(line)
-			}
-			if y == 0 {
-				line = menu.GVLine[line]["g"]
-				cursor.CC.SetCursor(line)
-			}
-		}
-
-		p := pixel.Pixel{
-			Coord: pixel.Coord{
-				X: X,
-				Y: Y,
-			},
-			Color: clr,
-			Symbol: utils.FgRgb(
-				cursor.CC.Color,
-				line,
-			),
-		}
-		s.AddPixels(p)
-
-		var px int
-		var py int
-		var pr menu.Route
-		if pixel.StorePixel[0].Symbol != "" {
-			px = X - pixel.StorePixel[0].Coord.X
-			py = Y - pixel.StorePixel[0].Coord.Y
-			if px > 1 || px < -1 {
-				px = 0
-			}
-			if py > 1 || py < -1 {
-				py = 0
-			}
-		}
-		r := menu.GetRoute[y][x]
-		pr = menu.GetRoute[py][px]
-
-		s.AddPixels(
-			pixel.Pixel{
-				Coord: pixel.Coord{
-					X: pixel.StorePixel[1].Coord.X,
-					Y: pixel.StorePixel[1].Coord.Y,
-				},
-				Symbol: utils.FgRgb(
-					cursor.CC.Color,
-					menu.DrawLine[cursor.CC.Store.Brush][pr][r],
-				),
-			},
-		)
-
-		pixel.StorePixel = [2]pixel.Pixel{pixel.StorePixel[1], p}
 	}
 }
