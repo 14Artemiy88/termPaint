@@ -35,6 +35,6 @@ func fill(s Screen, clr pixel.Color, changedSymbol string, changedSymbols map[st
 			s.AddPixels(pixel.Pixel{Coord: p, Color: clr, Symbol: cursor.CC.Symbol})
 		}
 		N--
-		fill(nil, clr, changedSymbol, symbols, N)
+		fill(s, clr, changedSymbol, symbols, N)
 	}
 }
