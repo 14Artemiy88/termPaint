@@ -20,6 +20,8 @@ type Screen struct {
 	ShowInputSave bool
 	Save          bool
 	Directory     string
+	SavedPixels   [][]string
+	UnsavedPixels map[string]pixel.Pixel
 }
 
 func (s *Screen) Init() tea.Cmd {
@@ -30,8 +32,6 @@ var blink = map[bool]string{
 	true:  "|",
 	false: " ",
 }
-
-var Pixels [][]string
 
 func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
@@ -77,12 +77,12 @@ func (s *Screen) View() string {
 	}
 
 	s.drawClearScreen()
-	drawScreen()
+	s.drawScreen()
 	menu.DrawMenu(s)
-	showMsg()
+	s.showMsg()
 	s.showCursor()
 	s.showSaveInput()
-	screenString := setScreenString()
+	screenString := s.setScreenString()
 	s.save(screenString)
 
 	return screen(screenString)
@@ -93,11 +93,11 @@ func (s *Screen) SetSave(save bool) {
 }
 
 func (s *Screen) GetPixels() [][]string {
-	return Pixels
+	return s.SavedPixels
 }
 
 func (s *Screen) GetPixel(y int, x int) string {
-	return Pixels[y][x]
+	return s.SavedPixels[y][x]
 }
 
 func (s *Screen) SetShowInputSave(showInputSave bool) {
@@ -124,6 +124,17 @@ func (s *Screen) GetHeight() int {
 	return s.Height
 }
 
+func (s *Screen) AddPixels(pixels ...pixel.Pixel) {
+	for _, p := range pixels {
+		key := fmt.Sprintf("%d-%d", p.Coord.Y, p.Coord.X)
+		s.UnsavedPixels[key] = p
+	}
+}
+
+func (s *Screen) ClearUnsavedPixels() {
+	s.UnsavedPixels = map[string]pixel.Pixel{}
+}
+
 func (s *Screen) showCursor() {
 	if !s.Save {
 		cursor.CC.DrawCursor(s)
@@ -139,21 +150,21 @@ func (s *Screen) save(screenString string) {
 
 func (s *Screen) showSaveInput() {
 	if s.ShowInputSave {
-		menu.DrawSaveInput(Pixels)
+		menu.DrawSaveInput(s.SavedPixels)
 	}
 }
 
-func showMsg() {
+func (s *Screen) showMsg() {
 	if len(message.Msg) > 0 {
-		message.DrawMsg(message.Msg, message.MsgWidth, Pixels)
+		message.DrawMsg(message.Msg, message.MsgWidth, s.SavedPixels)
 	}
 }
 
-func setScreenString() string {
+func (s *Screen) setScreenString() string {
 	var screenString string
-	for i, line := range Pixels {
+	for i, line := range s.SavedPixels {
 		screenString += strings.Join(line, "")
-		if i < len(Pixels)-1 {
+		if i < len(s.SavedPixels)-1 {
 			screenString += "\n"
 		}
 	}
@@ -175,17 +186,17 @@ func screen(screenString string) string {
 	return screenString
 }
 
-func drawScreen() {
-	for _, p := range pixel.Pixels {
-		utils.SetByKeys(p.Coord.X, p.Coord.Y, p.Symbol, p.Color, Pixels)
+func (s *Screen) drawScreen() {
+	for _, p := range s.UnsavedPixels {
+		utils.SetByKeys(p.Coord.X, p.Coord.Y, p.Symbol, p.Color, s.SavedPixels)
 	}
 }
 
 func (s *Screen) drawClearScreen() {
-	Pixels = make([][]string, s.Height)
+	s.SavedPixels = make([][]string, s.Height)
 	for i := 0; i < s.Height; i++ {
-		if len(Pixels) > i {
-			Pixels[i] = strings.Split(strings.Repeat(" ", s.Width), "")
+		if len(s.SavedPixels) > i {
+			s.SavedPixels[i] = strings.Split(strings.Repeat(" ", s.Width), "")
 		}
 	}
 }

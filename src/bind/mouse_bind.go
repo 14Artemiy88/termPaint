@@ -17,10 +17,10 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 		mouseLeft(msg.X, msg.Y, s)
 
 	case tea.MouseRight:
-		pixel.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: msg.X, Y: msg.Y}, Symbol: " "})
+		s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: msg.X, Y: msg.Y}, Symbol: " "})
 
 	case tea.MouseMiddle:
-		pixel.Pixels = map[string]pixel.Pixel{}
+		s.ClearUnsavedPixels()
 
 	case tea.MouseWheelDown:
 		if c, ok := menu.Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {

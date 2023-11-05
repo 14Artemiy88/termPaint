@@ -13,12 +13,12 @@ import (
 
 func main() {
 	config.InitConfig()
-	pixel.Pixels = map[string]pixel.Pixel{}
 	cursor.CC = cursor.NewCursor()
 
 	p := tea.NewProgram(
 		&screen.Screen{
-			Directory: config.Cfg.ImageSaveDirectory,
+			Directory:     config.Cfg.ImageSaveDirectory,
+			UnsavedPixels: map[string]pixel.Pixel{},
 		},
 		tea.WithAltScreen(),
 		tea.WithMouseAllMotion(),

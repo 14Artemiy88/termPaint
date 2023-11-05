@@ -1,6 +1,7 @@
 package bind
 
 import (
+	"github.com/14Artemiy88/termPaint/src/pixel"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -19,4 +20,6 @@ type Screen interface {
 	SetDirectory(string)
 	GetWidth() int
 	GetHeight() int
+	ClearUnsavedPixels()
+	AddPixels(pixels ...pixel.Pixel)
 }

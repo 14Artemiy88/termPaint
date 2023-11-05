@@ -99,19 +99,19 @@ func draw(X int, Y int, s Screen) {
 
 	switch cursor.CC.Brush {
 	case cursor.Dot:
-		drawDot(pixel.Pixel{Coord: pixel.Coord{X: X, Y: Y}, Color: clr, Symbol: cursor.CC.Symbol})
+		drawDot(s, pixel.Pixel{Coord: pixel.Coord{X: X, Y: Y}, Color: clr, Symbol: cursor.CC.Symbol})
 	case cursor.GLine:
-		drawGLine(X, Y, clr, cursor.CC.Symbol)
+		drawGLine(s, X, Y, clr, cursor.CC.Symbol)
 	case cursor.VLine:
-		drawVLine(X, Y, clr, cursor.CC.Symbol)
+		drawVLine(s, X, Y, clr, cursor.CC.Symbol)
 	case cursor.ESquare:
-		drawESquare(X, Y, clr, cursor.CC.Symbol)
+		drawESquare(s, X, Y, clr, cursor.CC.Symbol)
 	case cursor.FSquare:
-		drawFSquare(X, Y, clr, cursor.CC.Symbol)
+		drawFSquare(s, X, Y, clr, cursor.CC.Symbol)
 	case cursor.ECircle:
-		drawECircle(X, Y, clr, cursor.CC.Symbol)
+		drawECircle(s, X, Y, clr, cursor.CC.Symbol)
 	case cursor.FCircle:
-		drawFCircle(X, Y, clr, cursor.CC.Symbol)
+		drawFCircle(s, X, Y, clr, cursor.CC.Symbol)
 	case cursor.Fill:
 		menu.Type = menu.None
 		changedSymbols := make(map[string]pixel.Coord)
@@ -119,7 +119,7 @@ func draw(X int, Y int, s Screen) {
 		changedSymbols[key] = pixel.Coord{X: X, Y: Y}
 		drawFill(s, clr, s.GetPixel(Y, X), changedSymbols, s.GetWidth())
 	case cursor.ContinuousLine, cursor.SmoothContinuousLine, cursor.FatContinuousLine, cursor.DoubleContinuousLine:
-		drawContinuousLine(X, Y, clr)
+		drawContinuousLine(s, X, Y, clr)
 	case cursor.Empty:
 	case cursor.Pointer:
 	}
@@ -150,74 +150,74 @@ func drawFill(s Screen, clr pixel.Color, changedSymbol string, changedSymbols ma
 
 	if len(symbols) > 0 && N > 0 {
 		for _, p := range symbols {
-			pixel.AddPixels(pixel.Pixel{Coord: p, Color: clr, Symbol: cursor.CC.Symbol})
+			s.AddPixels(pixel.Pixel{Coord: p, Color: clr, Symbol: cursor.CC.Symbol})
 		}
 		N--
 		drawFill(nil, clr, changedSymbol, symbols, N)
 	}
 }
 
-func drawDot(p pixel.Pixel) {
-	pixel.AddPixels(p)
+func drawDot(s Screen, p pixel.Pixel) {
+	s.AddPixels(p)
 }
 
-func drawGLine(x int, y int, clr pixel.Color, symbol string) {
+func drawGLine(s Screen, x int, y int, clr pixel.Color, symbol string) {
 	for i := 0; i < cursor.CC.Width; i++ {
-		pixel.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x + i, Y: y}, Color: clr, Symbol: symbol})
+		s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x + i, Y: y}, Color: clr, Symbol: symbol})
 	}
 }
 
-func drawVLine(x int, y int, clr pixel.Color, symbol string) {
+func drawVLine(s Screen, x int, y int, clr pixel.Color, symbol string) {
 	for i := 0; i < cursor.CC.Width; i++ {
-		pixel.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y + i}, Color: clr, Symbol: symbol})
+		s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y + i}, Color: clr, Symbol: symbol})
 	}
 }
 
-func drawESquare(x int, y int, clr pixel.Color, symbol string) {
+func drawESquare(s Screen, x int, y int, clr pixel.Color, symbol string) {
 	for i := 0; i < cursor.CC.Height; i++ {
 		for j := 0; j < cursor.CC.Width; j++ {
 			if j > 0 && j < cursor.CC.Width-1 && i > 0 && i < cursor.CC.Height-1 {
 				continue
 			}
-			pixel.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x + j, Y: y + i}, Color: clr, Symbol: symbol})
+			s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x + j, Y: y + i}, Color: clr, Symbol: symbol})
 		}
 	}
 }
 
-func drawFSquare(x int, y int, clr pixel.Color, symbol string) {
+func drawFSquare(s Screen, x int, y int, clr pixel.Color, symbol string) {
 	for i := 0; i < cursor.CC.Height; i++ {
 		for j := 0; j < cursor.CC.Width; j++ {
-			pixel.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x + j, Y: y + i}, Color: clr, Symbol: symbol})
+			s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x + j, Y: y + i}, Color: clr, Symbol: symbol})
 		}
 	}
 }
 
-func drawECircle(X int, Y int, clr pixel.Color, symbol string) {
+func drawECircle(s Screen, X int, Y int, clr pixel.Color, symbol string) {
 	R := cursor.CC.Width / 2
 	k := 5
 	for y := -R * k; y <= R*k; y++ {
 		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
 		ky := int(math.Round(float64(y) / float64(k)))
-		pixel.AddPixels(
+		s.AddPixels(
 			pixel.Pixel{Coord: pixel.Coord{X: X + x, Y: Y + ky}, Color: clr, Symbol: symbol},
 			pixel.Pixel{Coord: pixel.Coord{X: X - x, Y: Y + ky}, Color: clr, Symbol: symbol},
 		)
 	}
 }
 
-func drawFCircle(X int, Y int, clr pixel.Color, symbol string) {
+func drawFCircle(s Screen, X int, Y int, clr pixel.Color, symbol string) {
 	R := cursor.CC.Width / 2
 	k := 5
 	for y := -R * k; y <= R*k; y++ {
 		x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
 		ky := int(math.Round(float64(y) / float64(k)))
 		for i := -x; i <= x; i++ {
-			pixel.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: X + i, Y: Y + ky}, Color: clr, Symbol: symbol})
+			s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: X + i, Y: Y + ky}, Color: clr, Symbol: symbol})
 		}
 	}
 }
 
-func drawContinuousLine(X int, Y int, clr pixel.Color) {
+func drawContinuousLine(s Screen, X int, Y int, clr pixel.Color) {
 	x := X - pixel.StorePixel[1].Coord.X // -1 0 1
 	y := Y - pixel.StorePixel[1].Coord.Y // -1 0 1
 	if x != 0 || y != 0 {
@@ -249,7 +249,7 @@ func drawContinuousLine(X int, Y int, clr pixel.Color) {
 				line,
 			),
 		}
-		pixel.AddPixels(p)
+		s.AddPixels(p)
 
 		var px int
 		var py int
@@ -267,7 +267,7 @@ func drawContinuousLine(X int, Y int, clr pixel.Color) {
 		r := menu.GetRoute[y][x]
 		pr = menu.GetRoute[py][px]
 
-		pixel.AddPixels(
+		s.AddPixels(
 			pixel.Pixel{
 				Coord: pixel.Coord{
 					X: pixel.StorePixel[1].Coord.X,
