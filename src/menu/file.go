@@ -20,14 +20,6 @@ var (
 	FileListWidth int
 )
 
-var BlinkCursor string
-
-var BlinkPhase bool
-
-const DefBlinkTime = 50
-
-var BlinkTime = DefBlinkTime
-
 func fileMenu(s Screen) {
 	screen := s.GetPixels()
 	files, err := os.ReadDir(s.GetDirectory())
