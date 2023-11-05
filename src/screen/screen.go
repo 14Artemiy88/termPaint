@@ -15,7 +15,8 @@ import (
 )
 
 type Screen struct {
-	size          size
+	Width         int
+	Height        int
 	ShowInputSave bool
 	Save          bool
 	Directory     string
@@ -63,15 +64,15 @@ func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		cursor.CC.X = msg.Width / 2
 		cursor.CC.Y = msg.Height / 2
-		s.size.Width = msg.Width
-		s.size.Height = msg.Height
+		s.Width = msg.Width
+		s.Height = msg.Height
 	}
 
 	return s, nil
 }
 
 func (s *Screen) View() string {
-	if s.size.Height == 0 {
+	if s.Height == 0 {
 		return ""
 	}
 
@@ -116,11 +117,11 @@ func (s *Screen) SetDirectory(directory string) {
 }
 
 func (s *Screen) GetWidth() int {
-	return s.size.Width
+	return s.Width
 }
 
 func (s *Screen) GetHeight() int {
-	return s.size.Height
+	return s.Height
 }
 
 func (s *Screen) showCursor() {
@@ -181,10 +182,10 @@ func drawScreen() {
 }
 
 func (s *Screen) drawClearScreen() {
-	Pixels = make([][]string, s.size.Height)
-	for i := 0; i < s.size.Height; i++ {
+	Pixels = make([][]string, s.Height)
+	for i := 0; i < s.Height; i++ {
 		if len(Pixels) > i {
-			Pixels[i] = strings.Split(strings.Repeat(" ", s.size.Width), "")
+			Pixels[i] = strings.Split(strings.Repeat(" ", s.Width), "")
 		}
 	}
 }
