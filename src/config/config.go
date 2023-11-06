@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/spf13/viper"
 	"io"
 	"log"
@@ -45,7 +46,7 @@ func (c *Config) GetBackgroundColor() map[string]int {
 	return c.BackgroundColor
 }
 
-func (c Config) GetNotificationTime() int {
+func (c *Config) GetNotificationTime() int {
 	return c.NotificationTime
 }
 
@@ -55,6 +56,18 @@ func (c *Config) GetImageSaveDirectory() string {
 
 func (c *Config) SetImageSaveDirectory(directory string) {
 	c.ImageSaveDirectory = directory
+}
+
+func (c *Config) GetColor() pixel.Color {
+	return pixel.Color{
+		R: c.DefaultColor["r"],
+		G: c.DefaultColor["g"],
+		B: c.DefaultColor["b"],
+	}
+}
+
+func (c *Config) GetDefaultCursor() string {
+	return c.DefaultCursor
 }
 
 func InitConfig(s Screen) {

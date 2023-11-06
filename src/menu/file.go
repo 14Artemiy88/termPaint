@@ -2,7 +2,6 @@ package menu
 
 import (
 	"fmt"
-	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"os"
@@ -19,11 +18,15 @@ var (
 	FileListWidth int
 )
 
+type Message interface {
+	SetMessage(string)
+}
+
 func fileMenu(s Screen) {
 	screen := s.GetPixels()
 	files, err := os.ReadDir(s.GetDirectory())
 	if err != nil {
-		message.SetMessage(err.Error())
+		s.GetMessage().SetMessage(err.Error())
 		s.SetDirectory(s.GetConfig().ImageSaveDirectory)
 	}
 
@@ -77,19 +80,20 @@ func fileMenu(s Screen) {
 	}
 }
 
-func SaveImage(imageSaveDirectory string, image string) {
+func SaveImage(m Message, imageSaveDirectory string, image string) {
 	fileName := imageSaveDirectory + time.Now().Format(imageSaveDirectory)
 	if len(Input.Value) > 0 {
 		fileName = Input.Value + ".txt"
 	}
+
 	f, err := os.Create(fileName)
 	if err != nil {
-		message.SetMessage(err.Error())
+		m.SetMessage(err.Error())
 	}
 	defer func(f *os.File) {
 		err := f.Close()
 		if err != nil {
-			message.SetMessage(err.Error())
+			m.SetMessage(err.Error())
 		}
 	}(f)
 	lines := strings.Split(image, "\n")
@@ -99,9 +103,9 @@ func SaveImage(imageSaveDirectory string, image string) {
 	}
 	_, err = f.WriteString(newImage)
 	if err != nil {
-		message.SetMessage(err.Error())
+		m.SetMessage(err.Error())
 	}
-	message.SetMessage("Saved as " + f.Name())
+	m.SetMessage("Saved as " + f.Name())
 }
 
 func DrawSaveInput(screen [][]string) [][]string {

@@ -21,6 +21,8 @@ type Screen struct {
 	Save          bool
 	SavedPixels   [][]string
 	UnsavedPixels map[string]pixel.Pixel
+	Message       message.Message
+
 	Config
 }
 
@@ -141,6 +143,10 @@ func (s *Screen) GetConfig() *config.Config {
 	return s.Config.(*config.Config)
 }
 
+func (s *Screen) GetMessage() message.Message {
+	return s.Message
+}
+
 func (s *Screen) showCursor() {
 	if !s.Save {
 		cursor.CC.DrawCursor(s)
@@ -150,7 +156,7 @@ func (s *Screen) showCursor() {
 func (s *Screen) save(screenString string) {
 	if s.Save && !s.ShowInputSave {
 		s.Save = false
-		menu.SaveImage(s.Config.GetImageSaveDirectory(), screenString)
+		menu.SaveImage(s.Message, s.Config.GetImageSaveDirectory(), screenString)
 	}
 }
 

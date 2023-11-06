@@ -3,7 +3,6 @@ package screen
 import (
 	"fmt"
 	"github.com/14Artemiy88/termPaint/src/cursor"
-	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"image"
@@ -18,18 +17,18 @@ import (
 func (s *Screen) LoadFromImage(path string) {
 	file, err := os.Open(path)
 	if err != nil {
-		message.SetMessage(err.Error())
+		s.Message.SetMessage(err.Error())
 	}
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-			message.SetMessage(err.Error())
+			s.Message.SetMessage(err.Error())
 		}
 	}(file)
 
 	img, _, err := image.Decode(file)
 	if err != nil {
-		message.SetMessage(err.Error())
+		s.Message.SetMessage(err.Error())
 	}
 
 	bounds := img.Bounds()
@@ -75,7 +74,7 @@ func (s *Screen) LoadImage(screenString string) {
 	}
 	if len(errors) > 0 {
 		for _, i := range errors {
-			message.SetMessage(i)
+			s.Message.SetMessage(i)
 		}
 	}
 }
@@ -120,16 +119,16 @@ func (s *Screen) loadColored(lines []string, rows int, errors map[string]string)
 			}
 			clr.R, err = strconv.Atoi(colors[0])
 			if err != nil {
-				message.SetMessage(err.Error())
+				s.Message.SetMessage(err.Error())
 			}
 			clr.G, err = strconv.Atoi(colors[1])
 			if err != nil {
-				message.SetMessage(err.Error())
+				s.Message.SetMessage(err.Error())
 			}
 			colorNsymbol := strings.Split(colors[2], "m")
 			clr.B, err = strconv.Atoi(colorNsymbol[0])
 			if err != nil {
-				message.SetMessage(err.Error())
+				s.Message.SetMessage(err.Error())
 			}
 			symbol = colorNsymbol[1]
 			lenSymbol := len(symbol)

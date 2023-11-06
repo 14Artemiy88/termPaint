@@ -18,9 +18,8 @@ type Config interface {
 	GetNotificationTime() int
 }
 
-func SetMessage(text string) {
-	time := 200
-	Msg = append(Msg, Message{text: text, LiveTime: time})
+func (m Message) SetMessage(text string) {
+	Msg = append(Msg, Message{text: text, LiveTime: m.LiveTime})
 	textLen := len(text)
 	if textLen > MsgWidth {
 		MsgWidth = textLen

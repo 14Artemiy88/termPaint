@@ -1,6 +1,9 @@
 package menu
 
-import "github.com/14Artemiy88/termPaint/src/config"
+import (
+	"github.com/14Artemiy88/termPaint/src/config"
+	"github.com/14Artemiy88/termPaint/src/message"
+)
 
 type Screen interface {
 	GetPixels() [][]string
@@ -9,4 +12,5 @@ type Screen interface {
 	GetHeight() int
 	GetWidth() int
 	GetConfig() *config.Config
+	GetMessage() message.Message
 }

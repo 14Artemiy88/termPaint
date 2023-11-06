@@ -12,12 +12,15 @@ import (
 )
 
 func main() {
-
 	s := &screen.Screen{
 		UnsavedPixels: map[string]pixel.Pixel{},
 	}
+
 	config.InitConfig(s)
-	cursor.CC = cursor.NewCursor(s)
+	s.Message = message.Message{
+		LiveTime: s.Config.GetNotificationTime(),
+	}
+	cursor.CC = cursor.NewCursor(s.GetConfig())
 
 	p := tea.NewProgram(
 		s,
@@ -28,9 +31,9 @@ func main() {
 	if _, err := os.Stat(s.Config.GetImageSaveDirectory()); os.IsNotExist(err) {
 		errDir := os.MkdirAll(s.Config.GetImageSaveDirectory(), 0755)
 		if errDir != nil {
-			message.SetMessage(err.Error())
+			s.Message.SetMessage(err.Error())
 		}
-		message.SetMessage("Directory " + s.Config.GetImageSaveDirectory() + " successfully created.")
+		s.Message.SetMessage("Directory " + s.Config.GetImageSaveDirectory() + " successfully created.")
 	}
 
 	if _, err := p.Run(); err != nil {

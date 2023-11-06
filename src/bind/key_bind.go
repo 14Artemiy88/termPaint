@@ -76,7 +76,7 @@ func KeyBind(msg tea.KeyMsg, s Screen) (tea.Model, tea.Cmd) {
 				menu.Input.Value += string(msg.Runes)
 				color, err := strconv.Atoi(menu.Input.Value)
 				if err != nil {
-					message.SetMessage(err.Error())
+					s.GetMessage().SetMessage(err.Error())
 				}
 				switch menu.Input.Color {
 				case "r":
@@ -87,7 +87,7 @@ func KeyBind(msg tea.KeyMsg, s Screen) (tea.Model, tea.Cmd) {
 					cursor.CC.Color.B = pixel.SetColor(color)
 				}
 			} else {
-				message.SetMessage(err.Error())
+				s.GetMessage().SetMessage(err.Error())
 			}
 		} else if s.IsShowInputSave() {
 			menu.Input.Value += string(msg.Runes)

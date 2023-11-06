@@ -5,7 +5,6 @@ import (
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/draw"
 	"github.com/14Artemiy88/termPaint/src/menu"
-	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"os"
 	"path/filepath"
@@ -47,7 +46,7 @@ func selectSymbol(s Screen, X int, Y int) {
 	if symbol, ok := s.GetConfig().Symbols[Y][X]; ok {
 		cursor.CC.SetCursor(symbol)
 		if s.GetConfig().Notifications.SetSymbol {
-			message.SetMessage("Set " + symbol)
+			s.GetMessage().SetMessage("Set " + symbol)
 		}
 	}
 }
@@ -70,7 +69,7 @@ func selectFile(Y int, s Screen) {
 		dir := s.GetDirectory()
 		info, err := os.Stat(dir + filePath)
 		if err != nil {
-			message.SetMessage(err.Error())
+			s.GetMessage().SetMessage(err.Error())
 		}
 		if info.IsDir() {
 			s.SetDirectory(dir + filePath)
@@ -80,7 +79,7 @@ func selectFile(Y int, s Screen) {
 			if ext == ".txt" {
 				content, err := os.ReadFile(dir + filePath)
 				if err != nil {
-					message.SetMessage(err.Error())
+					s.GetMessage().SetMessage(err.Error())
 				}
 				s.LoadImage(string(content))
 			}

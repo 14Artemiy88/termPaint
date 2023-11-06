@@ -51,19 +51,21 @@ type Screen interface {
 	GetConfig() *config.Config
 }
 
-func NewCursor(s Screen) Cursor {
+type Config interface {
+	GetColor() pixel.Color
+	GetDefaultCursor() string
+}
+
+func NewCursor(cfg *config.Config) Cursor {
+	defaultCursor := cfg.GetDefaultCursor()
 	return Cursor{
-		Symbol: s.GetConfig().DefaultCursor,
-		Color: pixel.Color{
-			R: s.GetConfig().DefaultColor["r"],
-			G: s.GetConfig().DefaultColor["g"],
-			B: s.GetConfig().DefaultColor["b"],
-		},
+		Symbol: defaultCursor,
+		Color:  cfg.GetColor(),
 		Brush:  Dot,
 		Width:  4,
 		Height: 4,
 		Store: Store{
-			Symbol: s.GetConfig().DefaultCursor,
+			Symbol: defaultCursor,
 			Brush:  Dot,
 		},
 	}
