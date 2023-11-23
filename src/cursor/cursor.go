@@ -86,6 +86,10 @@ func (c *Cursor) DrawCursor(s Screen) [][]string {
 		clr = pixel.Color{R: s.GetConfig().PointerColor["r"], G: s.GetConfig().PointerColor["g"], B: s.GetConfig().PointerColor["b"]}
 		utils.SetByKeys(1, c.Y, s.GetConfig().Pointer, clr, screen)
 	case Fill:
+		// ToDo: вынести в конфиг 3 опции:
+		// 1. показывать вообще нет заливку при этом курсоре заранее
+		// 2, показывать заливку по нажатию клавиши Shift
+		// 3. переключать на Dot после заливки
 		changedSymbols := make(map[string]pixel.Coord)
 		key := fmt.Sprintf("%d-%d", c.Y, c.X)
 		changedSymbols[key] = pixel.Coord{X: c.X, Y: c.Y}

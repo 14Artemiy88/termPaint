@@ -21,8 +21,8 @@ type Screen struct {
 	Save          bool
 	SavedPixels   [][]string
 	UnsavedPixels map[string]pixel.Pixel
-	Message       message.Message
 
+	Message
 	Config
 }
 
@@ -32,6 +32,10 @@ type Config interface {
 	SetImageSaveDirectory(directory string)
 	WithBackground() bool
 	GetBackgroundColor() map[string]int
+}
+
+type Message interface {
+	SetMessage(string)
 }
 
 func (s *Screen) Init() tea.Cmd {
@@ -144,7 +148,7 @@ func (s *Screen) GetConfig() *config.Config {
 }
 
 func (s *Screen) GetMessage() message.Message {
-	return s.Message
+	return s.Message.(message.Message)
 }
 
 func (s *Screen) showCursor() {

@@ -2,8 +2,9 @@ package utils
 
 import (
 	"fmt"
-	"github.com/14Artemiy88/termPaint/src/pixel"
 	"strings"
+
+	"github.com/14Artemiy88/termPaint/src/pixel"
 )
 
 const Reset = "\u001B[0m"

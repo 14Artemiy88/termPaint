@@ -23,8 +23,8 @@ var menu = []menuItem{
 			{"key": "Tab     ", "text": "Menu"},
 			{"key": "Ctrl+S  ", "text": "Save in txt file"},
 			{"key": "Ctrl+O  ", "text": "Load Image"},
-			{"key": "Enter   ", "text": "Show this help menu"},
-			{"key": "Any char", "text": "Set this Symbol"},
+			{"key": "Ctrl+H  ", "text": "Show this help menu"},
+			{"key": "Any char", "text": "Set as a Symbol"},
 		},
 	},
 	{
