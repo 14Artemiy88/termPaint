@@ -3,7 +3,7 @@ module github.com/14Artemiy88/termPaint
 go 1.20
 
 require (
-	github.com/charmbracelet/bubbletea v0.24.2
+	github.com/charmbracelet/bubbletea v0.25.0
 	github.com/spf13/viper v1.17.0
 )
 
