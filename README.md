@@ -25,6 +25,12 @@ go 1.20
 ```
 
 ## Installation
+
+### Docker
+```bash
+docker run -ti artemiy88/termpaint
+```
+
 ### Go
 
 ```bash
