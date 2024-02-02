@@ -8,24 +8,20 @@ import (
 )
 
 func MouseBind(msg tea.MouseMsg, s Screen) {
-	switch msg.Action {
-	case tea.MouseActionMotion:
+	switch msg.Type {
+	case tea.MouseMotion:
 		mouseMotion(msg, s)
-	case tea.MouseActionPress:
-	case tea.MouseActionRelease:
-	}
 
-	switch msg.Button {
-	case tea.MouseButtonLeft:
+	case tea.MouseLeft:
 		mouseLeft(msg.X, msg.Y, s)
 
-	case tea.MouseButtonRight:
+	case tea.MouseRight:
 		s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: msg.X, Y: msg.Y}, Symbol: " "})
 
-	case tea.MouseButtonMiddle:
+	case tea.MouseMiddle:
 		s.ClearUnsavedPixels()
 
-	case tea.MouseButtonWheelDown:
+	case tea.MouseWheelDown:
 		if c, ok := menu.Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {
 			switch c {
 			case "r":
@@ -50,7 +46,7 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 			}
 		}
 
-	case tea.MouseButtonWheelUp:
+	case tea.MouseWheelUp:
 		if c, ok := menu.Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {
 			switch c {
 			case "r":
@@ -70,12 +66,7 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 				cursor.CC.Width++
 			}
 		}
-	case tea.MouseButtonNone:
-	case tea.MouseButtonWheelLeft:
-	case tea.MouseButtonWheelRight:
-	case tea.MouseButtonBackward:
-	case tea.MouseButtonForward:
-	case tea.MouseButton10:
-	case tea.MouseButton11:
+	case tea.MouseUnknown:
+	case tea.MouseRelease:
 	}
 }
