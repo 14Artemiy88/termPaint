@@ -14,6 +14,26 @@ Drawing in the terminal
 
 ![2023-07-09_12-02.png](screenshots/2023-07-09_12-02.png)
 
+## Usage
+use `--help` key for more information
+```bash
+Drawing in the terminal
+
+KEYS
+      ESC, Ctrl+C         Exit
+      Tab, F2             Menu
+      Ctrl+S              Save in txt file
+      Ctrl+O, F3          Load Image
+      Ctrl-H, F1          Help menu
+      Any char            Set as a Symbol
+      F3                  SHape menu
+
+MOUSE
+      Left                Draw
+      Right               Erase
+      Middle              Clear Screen
+```
+
 ## Menus
 
 ![menu.png](screenshots/menu.png)   ![helpMenu.png](screenshots/helpMenu.png)   ![file.png](screenshots/file.png)
