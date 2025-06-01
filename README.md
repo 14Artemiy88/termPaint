@@ -46,12 +46,16 @@ go 1.20
 
 ## Installation
 
-### Docker
+<details>
+  <summary><b>Docker</b></summary>
+
 ```bash
 docker run -ti artemiy88/termpaint
 ```
+</details>
 
-### Go
+<details>
+  <summary><b>Go</b></summary>
 
 ```bash
 go install github.com/14Artemiy88/termPaint@latest
@@ -64,8 +68,11 @@ export PATH=$PATH:$(go env GOPATH)/bin
 ```bash
 termPaint
 ```
+</details>
 
-### Snap
+<details>
+  <summary><b>Snap</b></summary>
+
 ```bash
 sudo snap install --beta termpaint
 ```
@@ -73,3 +80,6 @@ sudo snap install --beta termpaint
 ```bash
 termpaint
 ```
+</details>
+
+
