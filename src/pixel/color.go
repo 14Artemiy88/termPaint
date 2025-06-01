@@ -1,12 +1,17 @@
 package pixel
 
-var (
-	White  = Color{R: 255, G: 255, B: 255}
-	Green  = Color{R: 2, G: 186, B: 31}
-	Yellow = Color{R: 190, G: 175, B: 0}
-	Gray   = Color{R: 150, G: 150, B: 150}
-	Cian   = Color{R: 0, G: 200, B: 200}
-	Red    = Color{R: 250, G: 0, B: 0}
+const (
+	minColor = 0
+	maxColor = 255
+
+	color2   = 2
+	color31  = 31
+	color150 = 150
+	color175 = 175
+	color186 = 186
+	color190 = 190
+	color200 = 200
+	color250 = 250
 )
 
 type Color struct {
@@ -15,17 +20,35 @@ type Color struct {
 	B int
 }
 
+func GetConstColor(color string) Color {
+	switch color {
+	case "white":
+		return Color{R: maxColor, G: maxColor, B: maxColor}
+	case "green":
+		return Color{R: color2, G: color186, B: color31}
+	case "yellow":
+		return Color{R: color190, G: color175, B: minColor}
+	case "gray":
+		return Color{R: color150, G: color150, B: color150}
+	case "cian":
+		return Color{R: minColor, G: color200, B: color200}
+	case "red":
+		return Color{R: color250, G: minColor, B: minColor}
+	default:
+		return Color{R: maxColor, G: maxColor, B: maxColor}
+	}
+}
+
 func SetColor(color int) int {
-	c := color
-	if c < 255 {
-		return c
+	if color < maxColor {
+		return color
 	}
 
-	return 255
+	return maxColor
 }
 
 func Decrease(color int) int {
-	if color > 0 {
+	if color > minColor {
 		color--
 	}
 
@@ -33,7 +56,7 @@ func Decrease(color int) int {
 }
 
 func Increase(color int) int {
-	if color < 255 {
+	if color < maxColor {
 		color++
 	}
 
@@ -41,9 +64,9 @@ func Increase(color int) int {
 }
 
 func MinMaxColor(color int) int {
-	if color > 0 {
-		return 0
+	if color > minColor {
+		return minColor
 	}
 
-	return 255
+	return maxColor
 }

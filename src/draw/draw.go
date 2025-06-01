@@ -8,31 +8,29 @@ import (
 )
 
 func Draw(s Screen, X int, Y int) {
-	clr := cursor.CC.Color
-
 	switch cursor.CC.Brush {
 	case cursor.Dot:
-		dot(s, pixel.Pixel{Coord: pixel.Coord{X: X, Y: Y}, Color: clr, Symbol: cursor.CC.Symbol})
+		dot(s, pixel.Pixel{Coord: pixel.Coord{X: X, Y: Y}, Color: cursor.CC.Color, Symbol: cursor.CC.Symbol})
 	case cursor.GLine:
-		gLine(s, X, Y, clr, cursor.CC.Symbol)
+		gLine(s, X, Y)
 	case cursor.VLine:
-		vLine(s, X, Y, clr, cursor.CC.Symbol)
+		vLine(s, X, Y)
 	case cursor.ESquare:
-		eSquare(s, X, Y, clr, cursor.CC.Symbol)
+		eSquare(s, X, Y)
 	case cursor.FSquare:
-		fSquare(s, X, Y, clr, cursor.CC.Symbol)
+		fSquare(s, X, Y)
 	case cursor.ECircle:
-		eCircle(s, X, Y, clr, cursor.CC.Symbol)
+		eCircle(s, X, Y)
 	case cursor.FCircle:
-		fCircle(s, X, Y, clr, cursor.CC.Symbol)
+		fCircle(s, X, Y)
 	case cursor.Fill:
 		menu.Type = menu.None
 		changedSymbols := make(map[string]pixel.Coord)
 		key := fmt.Sprintf("%d-%d", Y, X)
 		changedSymbols[key] = pixel.Coord{X: X, Y: Y}
-		fill(s, clr, s.GetPixel(Y, X), changedSymbols, s.GetWidth())
+		fill(s, s.GetPixel(Y, X), changedSymbols, s.GetWidth())
 	case cursor.ContinuousLine, cursor.SmoothContinuousLine, cursor.FatContinuousLine, cursor.DoubleContinuousLine:
-		continuousLine(s, X, Y, clr)
+		continuousLineNew(s, X, Y)
 	case cursor.Empty:
 	case cursor.Pointer:
 	}

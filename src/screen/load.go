@@ -80,6 +80,7 @@ func (s *Screen) LoadImage(screenString string) {
 }
 
 func (s *Screen) loadWhite(lines []string, rows int, errors map[string]string) map[string]string {
+	white := pixel.GetConstColor("white")
 	for y := 0; y < rows; y++ {
 		line := strings.Split(lines[y], "")
 		var maxX int
@@ -91,7 +92,7 @@ func (s *Screen) loadWhite(lines []string, rows int, errors map[string]string) m
 				}
 				maxX++
 			}
-			s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y}, Color: pixel.White, Symbol: symbol})
+			s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y}, Color: white, Symbol: symbol})
 		}
 	}
 

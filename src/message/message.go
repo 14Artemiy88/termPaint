@@ -28,20 +28,22 @@ func (m Message) SetMessage(text string) {
 
 func DrawMsg(messages []Message, width int, screen [][]string) [][]string {
 	clearMessage(screen, width+5, len(messages)+2)
+	white := pixel.GetConstColor("white")
 	for k, m := range messages {
-		utils.DrawString(1, 1+k, m.text, pixel.White, screen)
+		utils.DrawString(1, 1+k, m.text, white, screen)
 	}
 	return screen
 }
 
 func clearMessage(screen [][]string, width int, height int) [][]string {
+	white := pixel.GetConstColor("white")
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
-			utils.SetByKeys(x, y, " ", pixel.White, screen)
+			utils.SetByKeys(x, y, " ", white, screen)
 		}
-		utils.SetByKeys(width, y, "│", pixel.White, screen)
+		utils.SetByKeys(width, y, "│", white, screen)
 	}
-	utils.DrawString(0, height, strings.Repeat("─", width)+"┘", pixel.White, screen)
+	utils.DrawString(0, height, strings.Repeat("─", width)+"┘", white, screen)
 
 	return screen
 }

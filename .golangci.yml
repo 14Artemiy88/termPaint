@@ -1,0 +1,90 @@
+run:
+  # timeout for analysis, e.g. 30s, 5m, default is 1m
+  timeout: 30m
+
+  modules-download-mode: readonly
+
+  go: '1.23'
+
+  skip-dirs:
+    - ../../..
+
+
+output:
+  # colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions
+  # default is "colored-line-number"
+  formats: code-climate
+
+linters:
+  enable-all: true
+  disable:
+    - nolintlint
+    - exhaustruct
+    - gofumpt
+    - testpackage
+    - depguard
+    - tagliatelle
+    #   deprecated
+    - gomoddirectives
+
+linters-settings:
+  stylecheck:
+    # https://staticcheck.io/docs/options#checks
+    checks: [ "all", "-ST1000" ]
+  funlen:
+    lines: 100
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(orders)
+  gocyclo:
+    min-complexity: 10
+  varnamelen:
+    ignore-names:
+      - id
+    ignore-decls:
+      - ok bool
+  wrapcheck:
+    ignorePackageGlobs:
+      - google.golang.org/grpc/status
+      - github.com/pkg/errors
+      - golang.org/x/sync/errgroup
+  gosec:
+    excludes:
+      - G115
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - containedctx
+        - funlen
+        - goerr113
+        - varnamelen
+        - staticcheck
+        - maintidx
+        - dupl
+        - revive
+    - path: main\.go
+      linters:
+        - gochecknoglobals
+        - lll
+        - funlen
+    - path: domain/tasks/
+      linters:
+        - gosec
+    - path: helpers/
+      linters:
+        - gosec
+    - path: registry/
+      linters:
+        - funlen
+        - ireturn
+
+  exclude-dirs:
+    - domain/services
+    - infrastructure/handlers
+    - infrastructure/repositories
+    - infrastructure/servers

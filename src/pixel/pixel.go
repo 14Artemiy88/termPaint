@@ -7,5 +7,3 @@ type Pixel struct {
 	Color  Color
 	Symbol string
 }
-
-var StorePixel [2]Pixel

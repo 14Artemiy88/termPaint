@@ -30,6 +30,12 @@ var availableFields = []string{
 }
 
 func drawConfigMenu(s Screen) {
+	red := pixel.GetConstColor("red")
+	gray := pixel.GetConstColor("gray")
+	green := pixel.GetConstColor("green")
+	white := pixel.GetConstColor("white")
+	yellow := pixel.GetConstColor("yellow")
+
 	screen := s.GetPixels()
 	ClearMenu(s, screen, ConfigWidth)
 	v := reflect.ValueOf(*s.GetConfig())
@@ -37,21 +43,21 @@ func drawConfigMenu(s Screen) {
 	title := "Config"
 	lenTitle := len(title)
 	str := strings.Repeat("─", ConfigWidth-lenTitle-2) + "┐"
-	utils.DrawString(1, 1, title, pixel.Yellow, screen)
-	utils.DrawString(lenTitle+2, 1, str, pixel.Gray, screen)
+	utils.DrawString(1, 1, title, yellow, screen)
+	utils.DrawString(lenTitle+2, 1, str, gray, screen)
 
 	h := 3
 	height := s.GetHeight()
 	for i := 0; i < v.NumField(); i++ {
 		if utils.InArray(typeOfConfig.Field(i).Name, availableFields) {
 			field := v.Field(i).Interface()
-			utils.DrawString(firstLvlX, h, typeOfConfig.Field(i).Name, pixel.White, screen)
-			clr := pixel.White
+			utils.DrawString(firstLvlX, h, typeOfConfig.Field(i).Name, white, screen)
+			clr := white
 			switch field {
 			case true:
-				clr = pixel.Green
+				clr = green
 			case false:
-				clr = pixel.Red
+				clr = red
 			}
 			switch reflect.TypeOf(field).String() {
 			case "string", "int", "bool":
@@ -77,11 +83,11 @@ func drawConfigMenu(s Screen) {
 					field = v.Field(i).Interface()
 					switch field {
 					case true:
-						clr = pixel.Green
+						clr = green
 					case false:
-						clr = pixel.Red
+						clr = red
 					}
-					utils.DrawString(secondLvlX, h, typeOfConfig.Field(i).Name, pixel.White, screen)
+					utils.DrawString(secondLvlX, h, typeOfConfig.Field(i).Name, white, screen)
 					utils.DrawString(valueX, h, fmt.Sprintf("%v", v.Field(i).Interface()), clr, screen)
 					h++
 					if h >= height-6 {
@@ -98,9 +104,9 @@ func drawConfigMenu(s Screen) {
 	title = "Note"
 	lenTitle = len(title)
 	str = strings.Repeat("─", ConfigWidth-lenTitle-2) + "┤"
-	utils.DrawString(1, height-4, title, pixel.Yellow, screen)
-	utils.DrawString(lenTitle+2, height-4, str, pixel.Gray, screen)
-	utils.DrawString(firstLvlX, height-2, "All configuration parameters are", pixel.White, screen)
-	utils.DrawString(firstLvlX, height-1, "stored in", pixel.White, screen)
-	utils.DrawString(len("stored in")+4, height-1, "~/.config/termPaint", pixel.Green, screen)
+	utils.DrawString(1, height-4, title, yellow, screen)
+	utils.DrawString(lenTitle+2, height-4, str, gray, screen)
+	utils.DrawString(firstLvlX, height-2, "All configuration parameters are", white, screen)
+	utils.DrawString(firstLvlX, height-1, "stored in", white, screen)
+	utils.DrawString(len("stored in")+4, height-1, "~/.config/termPaint", green, screen)
 }

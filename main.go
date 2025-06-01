@@ -67,22 +67,26 @@ func version() {
 }
 
 func help() {
-	comma := utils.FgRgb(pixel.White, ",") + utils.FgRgb(pixel.Green, " ")
+	green := pixel.GetConstColor("green")
+	yellow := pixel.GetConstColor("yellow")
+	white := pixel.GetConstColor("white")
+
+	comma := utils.FgRgb(white, ",") + utils.FgRgb(green, " ")
 	fmt.Println("Drawing in the terminal")
 	fmt.Println()
-	fmt.Println(utils.FgRgb(pixel.Yellow, "KEYS"))
-	fmt.Println(utils.FgRgb(pixel.Green, "      ESC"+comma+"Ctrl+C         ") + utils.FgRgb(pixel.White, "Exit"))
-	fmt.Println(utils.FgRgb(pixel.Green, "      Tab"+comma+"F2             ") + utils.FgRgb(pixel.White, "Menu"))
-	fmt.Println(utils.FgRgb(pixel.Green, "      Ctrl+S              ") + utils.FgRgb(pixel.White, "Save in txt file"))
-	fmt.Println(utils.FgRgb(pixel.Green, "      Ctrl+O"+comma+"F3          ") + utils.FgRgb(pixel.White, "Load Image"))
-	fmt.Println(utils.FgRgb(pixel.Green, "      Ctrl-H"+comma+"F1          ") + utils.FgRgb(pixel.White, "Help menu"))
-	fmt.Println(utils.FgRgb(pixel.Green, "      Any char            ") + utils.FgRgb(pixel.White, "Set as a Symbol"))
-	fmt.Println(utils.FgRgb(pixel.Green, "      F3                  ") + utils.FgRgb(pixel.White, "SHape menu"))
+	fmt.Println(utils.FgRgb(yellow, "KEYS"))
+	fmt.Println(utils.FgRgb(green, "      ESC"+comma+"Ctrl+C         ") + utils.FgRgb(white, "Exit"))
+	fmt.Println(utils.FgRgb(green, "      Tab"+comma+"F2             ") + utils.FgRgb(white, "Menu"))
+	fmt.Println(utils.FgRgb(green, "      Ctrl+S              ") + utils.FgRgb(white, "Save in txt file"))
+	fmt.Println(utils.FgRgb(green, "      Ctrl+O"+comma+"F3          ") + utils.FgRgb(white, "Load Image"))
+	fmt.Println(utils.FgRgb(green, "      Ctrl-H"+comma+"F1          ") + utils.FgRgb(white, "Help menu"))
+	fmt.Println(utils.FgRgb(green, "      Any char            ") + utils.FgRgb(white, "Set as a Symbol"))
+	fmt.Println(utils.FgRgb(green, "      F3                  ") + utils.FgRgb(white, "SHape menu"))
 
 	fmt.Println()
 
-	fmt.Println(utils.FgRgb(pixel.Yellow, "MOUSE"))
-	fmt.Println(utils.FgRgb(pixel.Green, "      Left                ") + utils.FgRgb(pixel.White, "Draw"))
-	fmt.Println(utils.FgRgb(pixel.Green, "      Right               ") + utils.FgRgb(pixel.White, "Erase"))
-	fmt.Println(utils.FgRgb(pixel.Green, "      Middle              ") + utils.FgRgb(pixel.White, "Clear Screen"))
+	fmt.Println(utils.FgRgb(yellow, "MOUSE"))
+	fmt.Println(utils.FgRgb(green, "      Left                ") + utils.FgRgb(white, "Draw"))
+	fmt.Println(utils.FgRgb(green, "      Right               ") + utils.FgRgb(white, "Erase"))
+	fmt.Println(utils.FgRgb(green, "      Middle              ") + utils.FgRgb(white, "Clear Screen"))
 }

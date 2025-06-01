@@ -78,15 +78,18 @@ func drawHelpMenu(s Screen) {
 
 func (m menuItem) DrawMenuItem(screen [][]string) [][]string {
 	str := strings.Repeat("─", HelpWidth-2-len(m.title)) + m.end
-	utils.DrawString(1, m.Y, m.title, pixel.Yellow, screen)
-	utils.DrawString(len(m.title)+2, m.Y, str, pixel.Gray, screen)
+	utils.DrawString(1, m.Y, m.title, pixel.GetConstColor("yellow"), screen)
+	utils.DrawString(len(m.title)+2, m.Y, str, pixel.GetConstColor("gray"), screen)
+
+	green := pixel.GetConstColor("green")
+	white := pixel.GetConstColor("White")
 
 	for k, str := range m.item {
 		lenKey := len(str["key"])
 		if lenKey > 0 {
-			utils.DrawString(3, m.Y+2+k, str["key"], pixel.Green, screen)
+			utils.DrawString(3, m.Y+2+k, str["key"], green, screen)
 		}
-		utils.DrawString(16, m.Y+2+k, str["text"], pixel.White, screen)
+		utils.DrawString(16, m.Y+2+k, str["text"], white, screen)
 	}
 
 	return screen

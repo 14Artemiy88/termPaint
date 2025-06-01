@@ -23,6 +23,8 @@ type Message interface {
 }
 
 func fileMenu(s Screen) {
+	white := pixel.GetConstColor("white")
+
 	screen := s.GetPixels()
 	files, err := os.ReadDir(s.GetDirectory())
 	if err != nil {
@@ -51,16 +53,23 @@ func fileMenu(s Screen) {
 	ClearMenu(s, screen, FileListWidth)
 	title := "FilePath"
 	str := strings.Repeat("─", FileListWidth-len(title)-2) + "┐"
-	utils.DrawString(1, 1, title, pixel.Yellow, screen)
-	utils.DrawString(len(title)+2, 1, str, pixel.Gray, screen)
+	utils.DrawString(1, 1, title, pixel.GetConstColor("yellow"), screen)
+	utils.DrawString(len(title)+2, 1, str, pixel.GetConstColor("gray"), screen)
 
 	Y := 3
 	if s.GetConfig().ShowFolder {
+		cian := pixel.GetConstColor("cian")
 		FileList = make(map[int]string, len(fileList)+len(dirList)+1)
 		FileList[2] = "../"
-		utils.DrawString(fileX, 2, "..", pixel.White, screen)
+		utils.DrawString(fileX, 2, "..", white, screen)
 		for _, dirName := range dirList {
-			utils.DrawString(fileX, Y, fmt.Sprintf("\uE5FF  %v", dirName), pixel.Cian, screen)
+			utils.DrawString(
+				fileX,
+				Y,
+				fmt.Sprintf("\uE5FF  %v", dirName),
+				cian,
+				screen,
+			)
 			FileList[Y] = dirName + "/"
 			Y++
 		}
@@ -75,7 +84,7 @@ func fileMenu(s Screen) {
 	for y, fileName := range fileList {
 		ext := filepath.Ext(fileName)
 		icon := extIcon[ext]
-		utils.DrawString(fileX, Y+y, fmt.Sprintf("%s  %s", icon, fileName), pixel.White, screen)
+		utils.DrawString(fileX, Y+y, fmt.Sprintf("%s  %s", icon, fileName), white, screen)
 		FileList[Y+y] = fileName
 	}
 }
@@ -115,19 +124,21 @@ func DrawSaveInput(screen [][]string) [][]string {
 		width = fileNameLen + 2
 	}
 	clearSaveInput(screen, width, 3)
-	utils.DrawString(1, 1, Input.Value+BlinkCursor+".txt", pixel.White, screen)
+	utils.DrawString(1, 1, Input.Value+BlinkCursor+".txt", pixel.GetConstColor("white"), screen)
 
 	return screen
 }
 
 func clearSaveInput(screen [][]string, width int, height int) [][]string {
+	white := pixel.GetConstColor("white")
+
 	for y := -1; y < height; y++ {
 		for x := -1; x < width; x++ {
-			utils.SetByKeys(x, y, " ", pixel.White, screen)
+			utils.SetByKeys(x, y, " ", white, screen)
 		}
-		utils.SetByKeys(width, y, "│", pixel.White, screen)
+		utils.SetByKeys(width, y, "│", white, screen)
 	}
-	utils.DrawString(0, height, strings.Repeat("─", width)+"┘", pixel.White, screen)
+	utils.DrawString(0, height, strings.Repeat("─", width)+"┘", white, screen)
 
 	return screen
 }

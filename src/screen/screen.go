@@ -101,6 +101,10 @@ func (s *Screen) GetPixels() [][]string {
 }
 
 func (s *Screen) GetPixel(y int, x int) string {
+	if !utils.Isset(s.SavedPixels, y, x) {
+		return ""
+	}
+
 	return s.SavedPixels[y][x]
 }
 
@@ -190,11 +194,12 @@ func (s *Screen) setScreenString() string {
 
 func (s *Screen) screen(screenString string) string {
 	if s.Config.WithBackground() {
+		color := s.Config.GetBackgroundColor()
 		screenString = fmt.Sprintf(
 			"\033[48;2;%d;%d;%dm%s",
-			s.Config.GetBackgroundColor()["r"],
-			s.Config.GetBackgroundColor()["g"],
-			s.Config.GetBackgroundColor()["b"],
+			color["r"],
+			color["g"],
+			color["b"],
 			screenString,
 		)
 	}
