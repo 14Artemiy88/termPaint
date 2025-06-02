@@ -86,8 +86,13 @@ func (c *Cursor) DrawCursor(s Screen) [][]string {
 	case Empty:
 	case Pointer:
 		c.X = 1
-		clr = pixel.Color{R: s.GetConfig().PointerColor["r"], G: s.GetConfig().PointerColor["g"], B: s.GetConfig().PointerColor["b"]}
-		utils.SetByKeys(1, c.Y, s.GetConfig().Pointer, clr, screen)
+		cfg := s.GetConfig()
+		clr = pixel.Color{
+			R: cfg.PointerColor["r"],
+			G: cfg.PointerColor["g"],
+			B: cfg.PointerColor["b"],
+		}
+		utils.SetByKeys(1, c.Y, cfg.Pointer, clr, screen)
 	case Fill:
 		// ToDo: вынести в конфиг 3 опции:
 		// 1. показывать вообще нет заливку при этом курсоре заранее

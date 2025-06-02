@@ -1,11 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"os"
 	"os/exec"
-	"strings"
 
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
@@ -31,42 +31,49 @@ func main() {
 		}
 	}
 
-	s := &screen.Screen{
+	scr := &screen.Screen{
 		UnsavedPixels: map[string]pixel.Pixel{},
 	}
 
-	config.InitConfig(s)
-	s.Message = message.Message{
-		LiveTime: s.Config.GetNotificationTime(),
+	config.InitConfig(scr)
+	scr.Message = message.Message{
+		LiveTime: scr.Config.GetNotificationTime(),
 	}
-	cursor.CC = cursor.NewCursor(s.GetConfig())
+	cursor.CC = cursor.NewCursor(scr.GetConfig())
 
-	p := tea.NewProgram(
-		s,
+	program := tea.NewProgram(
+		scr,
 		tea.WithAltScreen(),
 		tea.WithMouseAllMotion(),
 	)
 
-	if _, err := os.Stat(s.Config.GetImageSaveDirectory()); os.IsNotExist(err) {
-		errDir := os.MkdirAll(s.Config.GetImageSaveDirectory(), 0755)
+	if _, err := os.Stat(scr.Config.GetImageSaveDirectory()); os.IsNotExist(err) {
+		errDir := os.MkdirAll(scr.Config.GetImageSaveDirectory(), 0755)
 		if errDir != nil {
-			s.Message.SetMessage(err.Error())
+			scr.Message.SetMessage(err.Error())
 		}
 
-		s.Message.SetMessage(
-			"Directory " + s.Config.GetImageSaveDirectory() + " successfully created.",
+		scr.Message.SetMessage(
+			"Directory " + scr.Config.GetImageSaveDirectory() + " successfully created.",
 		)
 	}
 
-	if _, err := p.Run(); err != nil {
+	if _, err := program.Run(); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func version() {
 	cmd := exec.Command("git", "describe", "--tags")
-	res, _ := cmd.CombinedOutput()
-	fmt.Println(string(res))
+
+	res, err := cmd.Output()
+	if err != nil {
+		// Выводим ошибку в stderr и выходим с кодом 1
+		fmt.Fprintln(os.Stderr, "Error getting version:", err)
+		os.Exit(1)
+	}
+
+	os.Stdout.Write(res)
 }
 
 func help() {
@@ -74,42 +81,51 @@ func help() {
 	yellow := pixel.GetConstColor("yellow")
 	white := pixel.GetConstColor("white")
 
-	// Функции для цветного текста
-	colorText := func(c pixel.Color, s string) string {
-		return utils.FgRgb(c, s)
+	// Создаем буфер для вывода
+	var buf bytes.Buffer
+
+	// Функция для безопасной записи с обработкой ошибок
+	write := func(s string) {
+		if _, err := buf.WriteString(s); err != nil {
+			log.Printf("Error writing help: %v", err)
+
+			return
+		}
 	}
-	greenText := func(s string) string { return colorText(green, s) }
-	yellowText := func(s string) string { return colorText(yellow, s) }
-	whiteText := func(s string) string { return colorText(white, s) }
+
+	// Функция для записи с цветом
+	writeColor := func(c pixel.Color, text string) {
+		write(utils.FgRgb(c, text))
+	}
 
 	// Предварительно рассчитываем повторяющиеся элементы
-	comma := whiteText(",") + greenText(" ")
-	keyPrefix := greenText("      ")
-	descPrefix := whiteText("")
+	comma := utils.FgRgb(white, ",") + utils.FgRgb(green, " ")
+	keyPrefix := utils.FgRgb(green, "      ")
+	descPrefix := utils.FgRgb(white, "")
 
-	// Используем strings.Builder для построения вывода
-	var b strings.Builder
-	b.WriteString("\n")
-	b.WriteString("Drawing in the terminal\n\n")
+	// Формируем вывод
+	write("\nDrawing in the terminal\n\n")
 
 	// Секция KEYS
-	b.WriteString(yellowText("KEYS\n"))
-	b.WriteString(keyPrefix + "ESC" + comma + "Ctrl+C         " + descPrefix + "Exit\n")
-	b.WriteString(keyPrefix + "Tab" + comma + "F2             " + descPrefix + "Menu\n")
-	b.WriteString(keyPrefix + "Ctrl+S              " + descPrefix + "Save in txt file\n")
-	b.WriteString(keyPrefix + "Ctrl+O" + comma + "F3          " + descPrefix + "Load Image\n")
-	b.WriteString(keyPrefix + "Ctrl-H" + comma + "F1          " + descPrefix + "Help menu\n")
-	b.WriteString(keyPrefix + "Any char            " + descPrefix + "Set as a Symbol\n")
-	b.WriteString(keyPrefix + "F3                  " + descPrefix + "Shape menu\n")
-	b.WriteString("\n")
+	writeColor(yellow, "KEYS")
+	write("\n")
+	write(keyPrefix + "ESC" + comma + "Ctrl+C         " + descPrefix + "Exit\n")
+	write(keyPrefix + "Tab" + comma + "F2             " + descPrefix + "Menu\n")
+	write(keyPrefix + "Ctrl+S              " + descPrefix + "Save in txt file\n")
+	write(keyPrefix + "Ctrl+O" + comma + "F3          " + descPrefix + "Load Image\n")
+	write(keyPrefix + "Ctrl-H" + comma + "F1          " + descPrefix + "Help menu\n")
+	write(keyPrefix + "Any char            " + descPrefix + "Set as a Symbol\n")
+	write(keyPrefix + "F3                  " + descPrefix + "Shape menu\n\n")
 
 	// Секция MOUSE
-	b.WriteString(yellowText("MOUSE\n"))
-	b.WriteString(keyPrefix + "Left                " + descPrefix + "Draw\n")
-	b.WriteString(keyPrefix + "Right               " + descPrefix + "Erase\n")
-	b.WriteString(keyPrefix + "Middle              " + descPrefix + "Clear Screen")
-	b.WriteString("\n")
+	writeColor(yellow, "MOUSE")
+	write("\n")
+	write(keyPrefix + "Left                " + descPrefix + "Draw\n")
+	write(keyPrefix + "Right               " + descPrefix + "Erase\n")
+	write(keyPrefix + "Middle              " + descPrefix + "Clear Screen\n\n")
 
-	// Выводим все одной операцией
-	fmt.Println(b.String())
+	// Выводим результат напрямую в stdout с проверкой ошибки
+	if _, err := os.Stdout.Write(buf.Bytes()); err != nil {
+		log.Printf("Error writing help: %v", err)
+	}
 }

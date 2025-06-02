@@ -57,6 +57,7 @@ func drawConfigMenu(s Screen) {
 			utils.DrawString(firstLvlX, h, typeOfConfig.Field(i).Name, white, screen)
 
 			clr := white
+
 			switch field {
 			case true:
 				clr = green
