@@ -2,10 +2,11 @@ package cursor
 
 import (
 	"fmt"
+	"math"
+
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
-	"math"
 )
 
 type Cursor struct {
@@ -58,6 +59,7 @@ type Config interface {
 
 func NewCursor(cfg *config.Config) Cursor {
 	defaultCursor := cfg.GetDefaultCursor()
+
 	return Cursor{
 		Symbol: defaultCursor,
 		Color:  cfg.GetColor(),
@@ -79,6 +81,7 @@ func (c *Cursor) SetCursor(cursor string) {
 func (c *Cursor) DrawCursor(s Screen) [][]string {
 	clr := c.Color
 	screen := s.GetPixels()
+
 	switch c.Brush {
 	case Empty:
 	case Pointer:
@@ -117,6 +120,7 @@ func (c *Cursor) DrawCursor(s Screen) [][]string {
 				if x > 0 && x < c.Width-1 && y > 0 && y < c.Height-1 {
 					continue
 				}
+
 				utils.SetByKeys(c.X+x, c.Y+y, c.Symbol, clr, screen)
 			}
 		}
@@ -131,6 +135,7 @@ func (c *Cursor) DrawCursor(s Screen) [][]string {
 	case ECircle:
 		R := c.Width / 2
 		k := 5
+
 		for y := -R * k; y <= R*k; y++ {
 			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
 			ky := int(math.Round(float64(y) / float64(k)))
@@ -141,9 +146,11 @@ func (c *Cursor) DrawCursor(s Screen) [][]string {
 	case FCircle:
 		R := c.Width / 2
 		k := 5
+
 		for y := -R * k; y <= R*k; y++ {
 			x := int(math.Sqrt(math.Pow(float64(R), 2)-math.Pow(float64(y)/float64(k), 2)) / pixel.Ratio)
 			ky := int(math.Round(float64(y) / float64(k)))
+
 			for i := -x; i <= x; i++ {
 				utils.SetByKeys(c.X+i, c.Y+ky, c.Symbol, clr, screen)
 			}
@@ -162,20 +169,25 @@ func drawFillCursor(
 	screen [][]string,
 ) {
 	var key string
+
 	symbols := make(map[string]pixel.Coord)
+
 	for _, p := range changedSymbols {
 		if utils.Isset(screen, p.Y+1, p.X) && screen[p.Y+1][p.X] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y+1, p.X)
 			symbols[key] = pixel.Coord{Y: p.Y + 1, X: p.X}
 		}
+
 		if utils.Isset(screen, p.Y-1, p.X) && screen[p.Y-1][p.X] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y-1, p.X)
 			symbols[key] = pixel.Coord{Y: p.Y - 1, X: p.X}
 		}
+
 		if utils.Isset(screen, p.Y, p.X+1) && screen[p.Y][p.X+1] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y+1, p.X+1)
 			symbols[key] = pixel.Coord{Y: p.Y, X: p.X + 1}
 		}
+
 		if utils.Isset(screen, p.Y, p.X-1) && screen[p.Y][p.X-1] == changedSymbol {
 			key = fmt.Sprintf("%d-%d", p.Y, p.X-1)
 			symbols[key] = pixel.Coord{Y: p.Y, X: p.X - 1}
@@ -186,6 +198,7 @@ func drawFillCursor(
 		for _, p := range symbols {
 			utils.SetByKeys(p.X, p.Y, c.Symbol, clr, screen)
 		}
+
 		N--
 		drawFillCursor(c, clr, changedSymbol, symbols, N, screen)
 	}

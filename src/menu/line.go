@@ -1,10 +1,11 @@
 package menu
 
 import (
+	"strings"
+
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
-	"strings"
 )
 
 const LineWidth = 10
@@ -46,6 +47,7 @@ func drawLineMenu(s Screen) {
 	white := pixel.GetConstColor("white")
 	screen := s.GetPixels()
 	ClearMenu(s, screen, ShapeWidth)
+
 	str := "Line " + strings.Repeat("─", LineWidth-len("Line")) + "┐"
 	utils.DrawString(1, 1, str, white, screen)
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/14Artemiy88/termPaint/src/utils"
 	"log"
 	"os"
 	"os/exec"
@@ -12,6 +11,7 @@ import (
 	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/screen"
+	"github.com/14Artemiy88/termPaint/src/utils"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -22,6 +22,7 @@ func main() {
 
 			return
 		}
+
 		if os.Args[1] == "-v" || os.Args[1] == "--version" {
 			version()
 
@@ -50,6 +51,7 @@ func main() {
 		if errDir != nil {
 			s.Message.SetMessage(err.Error())
 		}
+
 		s.Message.SetMessage(
 			"Directory " + s.Config.GetImageSaveDirectory() + " successfully created.",
 		)
@@ -72,6 +74,7 @@ func help() {
 	white := pixel.GetConstColor("white")
 
 	comma := utils.FgRgb(white, ",") + utils.FgRgb(green, " ")
+
 	fmt.Println("Drawing in the terminal")
 	fmt.Println()
 	fmt.Println(utils.FgRgb(yellow, "KEYS"))

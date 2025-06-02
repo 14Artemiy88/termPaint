@@ -1,12 +1,13 @@
 package config
 
 import (
-	"github.com/14Artemiy88/termPaint/src/pixel"
-	"github.com/spf13/viper"
 	"io"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/14Artemiy88/termPaint/src/pixel"
+	"github.com/spf13/viper"
 )
 
 const configFileName = "config.yaml"
@@ -75,24 +76,29 @@ func InitConfig(s Screen) {
 	if err != nil {
 		log.Println("Cannot determine the user's home dir:", err)
 	}
+
 	if os.Getenv("ENV") == "dev" {
 		viper.SetConfigFile(configFileName)
 	} else {
 		viper.SetConfigFile(homeDir + configPath + configFileName)
 	}
+
 	if err = viper.ReadInConfig(); err != nil {
 		err = createConfigFIle(homeDir + configPath)
 		if err != nil {
 			log.Fatalf("Error creating Cfg file, %s", err)
 		}
+
 		err = viper.ReadInConfig()
 		if err != nil {
 			log.Fatalf("Error reading Cfg file, %s", err)
 		}
 	}
+
 	var Cfg Config
 	err = viper.Unmarshal(&Cfg)
 	s.SetConfig(Cfg)
+
 	if err != nil {
 		log.Fatalf("unable to decode into struct, %v", err)
 	}

@@ -2,6 +2,7 @@ package draw
 
 import (
 	"fmt"
+
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/pixel"

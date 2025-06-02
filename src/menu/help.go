@@ -1,9 +1,10 @@
 package menu
 
 import (
+	"strings"
+
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
-	"strings"
 )
 
 type menuItem struct {
@@ -71,6 +72,7 @@ const HelpWidth = 40
 func drawHelpMenu(s Screen) {
 	screen := s.GetPixels()
 	ClearMenu(s, screen, HelpWidth)
+
 	for _, mi := range menu {
 		mi.DrawMenuItem(screen)
 	}
@@ -89,6 +91,7 @@ func (m menuItem) DrawMenuItem(screen [][]string) [][]string {
 		if lenKey > 0 {
 			utils.DrawString(3, m.Y+2+k, str["key"], green, screen)
 		}
+
 		utils.DrawString(16, m.Y+2+k, str["text"], white, screen)
 	}
 

@@ -45,6 +45,7 @@ func ClearMenu(s Screen, screen [][]string, width int) [][]string {
 		for x := 0; x < width; x++ {
 			utils.SetByKeys(x, y, " ", white, screen)
 		}
+
 		utils.SetByKeys(width, y, "│", gray, screen)
 	}
 

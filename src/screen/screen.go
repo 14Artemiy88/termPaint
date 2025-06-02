@@ -2,6 +2,9 @@ package screen
 
 import (
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/14Artemiy88/termPaint/src/bind"
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
@@ -10,8 +13,6 @@ import (
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	tea "github.com/charmbracelet/bubbletea"
-	"strings"
-	"time"
 )
 
 type Screen struct {
@@ -46,6 +47,7 @@ func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tickMsg:
 		var delCount int
+
 		for k, m := range message.Msg {
 			if m.LiveTime > 0 {
 				message.Msg[k].LiveTime--
@@ -53,6 +55,7 @@ func (s *Screen) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				delCount++
 			}
 		}
+
 		message.Msg = message.Msg[delCount:]
 
 		menu.Blink()
@@ -226,5 +229,6 @@ type tickMsg time.Time
 
 func tick() tea.Msg {
 	time.Sleep(time.Millisecond * 10)
+
 	return tickMsg{}
 }

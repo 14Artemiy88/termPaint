@@ -6,14 +6,11 @@ run:
 
   go: '1.23'
 
-  skip-dirs:
-    - ../../..
-
 
 output:
   # colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions
   # default is "colored-line-number"
-  formats: code-climate
+  formats: tab
 
 linters:
   enable-all: true
@@ -26,6 +23,7 @@ linters:
     - tagliatelle
     #   deprecated
     - gomoddirectives
+    - tenv
 
 linters-settings:
   stylecheck:
@@ -88,3 +86,4 @@ issues:
     - infrastructure/handlers
     - infrastructure/repositories
     - infrastructure/servers
+    - ../../..

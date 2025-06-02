@@ -32,6 +32,7 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 				cursor.CC.Color.B = pixel.Decrease(cursor.CC.Color.B)
 			}
 		}
+
 		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != s.GetConfig().Pointer {
 			if msg.Ctrl {
 				if cursor.CC.Store.Brush == cursor.ESquare || cursor.CC.Store.Brush == cursor.FSquare {
@@ -57,6 +58,7 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 				cursor.CC.Color.B = pixel.Increase(cursor.CC.Color.B)
 			}
 		}
+
 		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != s.GetConfig().Pointer {
 			if msg.Ctrl {
 				if cursor.CC.Store.Brush == cursor.ESquare || cursor.CC.Store.Brush == cursor.FSquare {

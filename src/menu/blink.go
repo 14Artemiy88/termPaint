@@ -14,6 +14,7 @@ const DefBlinkTime = 50
 
 func Blink() {
 	BlinkCursor = blink[BlinkPhase]
+
 	BlinkTime--
 	if BlinkTime == 0 {
 		BlinkPhase = !BlinkPhase

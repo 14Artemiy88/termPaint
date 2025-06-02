@@ -1,11 +1,12 @@
 package menu
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
-	"strconv"
-	"strings"
 )
 
 const ShapeWidth = 12
@@ -33,12 +34,14 @@ func drawShapeMenu(s Screen) {
 	screen := s.GetPixels()
 	ClearMenu(s, screen, ShapeWidth)
 	str := strings.Repeat("─", ShapeWidth-len("Shape")-2) + "┐"
+
 	utils.DrawString(1, 1, "Shape", pixel.GetConstColor("yellow"), screen)
 	utils.DrawString(len("Shape")+2, 1, str, pixel.GetConstColor("gray"), screen)
 
 	for y, sh := range ShapeList {
 		utils.DrawString(3, y, sh.ShapeSymbol, white, screen)
 	}
+
 	switch cursor.CC.Store.Brush {
 	case cursor.GLine, cursor.VLine:
 		utils.DrawString(1, 19, "Length: "+strconv.Itoa(cursor.CC.Width), green, screen)

@@ -1,11 +1,12 @@
 package menu
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
-	"strconv"
-	"strings"
 )
 
 const SymbolColorWidth = 15
@@ -31,6 +32,7 @@ func drawSymbolColorMenu(s Screen) {
 	ClearMenu(s, screen, SymbolColorWidth)
 	drawSymbolMenu(s, screen)
 	drawColorMenu(screen)
+
 	title := "Help"
 	str := strings.Repeat("─", SymbolColorWidth-len(title)-2) + "┤"
 	height := s.GetHeight()
@@ -46,6 +48,7 @@ func drawSymbolMenu(s Screen, screen [][]string) [][]string {
 	str := strings.Repeat("─", SymbolColorWidth-len(title)-2) + "┐"
 	utils.DrawString(1, 1, title, pixel.GetConstColor("yellow"), screen)
 	utils.DrawString(len(title)+2, 1, str, pixel.GetConstColor("gray"), screen)
+
 	for y, line := range s.GetConfig().Symbols {
 		for x, symbol := range line {
 			utils.SetByKeys(x, y, symbol, white, screen)
@@ -61,6 +64,7 @@ func drawColorMenu(screen [][]string) [][]string {
 	str := strings.Repeat("─", SymbolColorWidth-len(title)-2) + "┤"
 	utils.DrawString(1, 15, title, pixel.GetConstColor("yellow"), screen)
 	utils.DrawString(len(title)+2, 15, str, pixel.GetConstColor("gray"), screen)
+
 	for y, line := range Colors {
 		switch line {
 		case "r":
@@ -74,6 +78,7 @@ func drawColorMenu(screen [][]string) [][]string {
 			utils.SetByKeys(colorX, y, utils.FgRgb(pixel.Color{B: cursor.CC.Color.B}, "█"), white, screen)
 		}
 	}
+
 	utils.SetByKeys(3, 23, "█", cursor.CC.Color, screen)
 	utils.SetByKeys(4, 23, "█", cursor.CC.Color, screen)
 	utils.SetByKeys(5, 23, "█", cursor.CC.Color, screen)

@@ -1,13 +1,14 @@
 package bind
 
 import (
+	"os"
+	"strconv"
+
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/message"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	tea "github.com/charmbracelet/bubbletea"
-	"os"
-	"strconv"
 )
 
 func KeyBind(msg tea.KeyMsg, s Screen) (tea.Model, tea.Cmd) {
@@ -32,7 +33,7 @@ func KeyBind(msg tea.KeyMsg, s Screen) (tea.Model, tea.Cmd) {
 		switchMenu(menu.Shape)
 
 	// line
-	//case tea.KeyF5:
+	// case tea.KeyF5:
 	//	switchMenu(menu.Line)
 
 	// shape
@@ -45,12 +46,13 @@ func KeyBind(msg tea.KeyMsg, s Screen) (tea.Model, tea.Cmd) {
 		} else {
 			cursor.CC.Store.Brush = cursor.Fill
 		}
-		//cursor.CC.SetCursor(config.Cfg.FillCursor)
+		// cursor.CC.SetCursor(config.Cfg.FillCursor)
 
 	// save
 	case tea.KeyCtrlS:
 		s.SetSave(true)
 		s.SetShowInputSave(true)
+
 		menu.Type = menu.None
 		message.Msg = []message.Message{}
 
@@ -74,10 +76,12 @@ func KeyBind(msg tea.KeyMsg, s Screen) (tea.Model, tea.Cmd) {
 		if menu.Type == menu.SymbolColor && menu.Input.Lock {
 			if _, err := strconv.Atoi(string(msg.Runes)); err == nil {
 				menu.Input.Value += string(msg.Runes)
+
 				color, err := strconv.Atoi(menu.Input.Value)
 				if err != nil {
 					s.GetMessage().SetMessage(err.Error())
 				}
+
 				switch menu.Input.Color {
 				case "r":
 					cursor.CC.Color.R = pixel.SetColor(color)

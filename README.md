@@ -16,7 +16,7 @@ Drawing in the terminal
 
 ## Usage
 use `--help` key for more information
-```bash
+```
 Drawing in the terminal
 
 KEYS

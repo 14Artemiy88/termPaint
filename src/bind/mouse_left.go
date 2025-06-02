@@ -1,13 +1,15 @@
 package bind
 
 import "C"
+
 import (
+	"os"
+	"path/filepath"
+
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/draw"
 	"github.com/14Artemiy88/termPaint/src/menu"
 	"github.com/14Artemiy88/termPaint/src/pixel"
-	"os"
-	"path/filepath"
 )
 
 func mouseLeft(X int, Y int, s Screen) {

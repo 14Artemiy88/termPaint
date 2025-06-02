@@ -8,6 +8,7 @@ import (
 
 func mouseMotion(msg tea.MouseMsg, s Screen) {
 	var xMin int
+
 	switch menu.Type {
 	case menu.SymbolColor:
 		xMin = menu.SymbolColorWidth
@@ -46,6 +47,7 @@ func mouseMotion(msg tea.MouseMsg, s Screen) {
 	if msg.X >= xMin && msg.X < s.GetWidth() {
 		cursor.CC.X = msg.X
 	}
+
 	if msg.Y >= 0 && msg.Y < s.GetHeight() {
 		cursor.CC.Y = msg.Y
 	}
@@ -78,6 +80,7 @@ func onFile(msg tea.MouseMsg) {
 func onMenu(s Screen, msg tea.MouseMsg) {
 	cursor.CC.Brush = cursor.Empty
 	_, okSymbol := s.GetConfig().Symbols[msg.Y][msg.X]
+
 	c, okColor := menu.Colors[msg.Y]
 	if okColor && msg.X < menu.SymbolColorWidth {
 		menu.Input.Lock = true
@@ -87,6 +90,7 @@ func onMenu(s Screen, msg tea.MouseMsg) {
 		menu.Input.Lock = false
 		menu.Input.Value = ""
 	}
+
 	if !okSymbol && !okColor {
 		cursor.CC.X = menu.SymbolColorWidth + 1
 	}

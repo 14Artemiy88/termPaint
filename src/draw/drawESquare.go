@@ -11,6 +11,7 @@ func eSquare(s Screen, x int, y int) {
 			if j > 0 && j < cursor.CC.Width-1 && i > 0 && i < cursor.CC.Height-1 {
 				continue
 			}
+
 			s.AddPixels(
 				pixel.Pixel{
 					Coord:  pixel.Coord{X: x + j, Y: y + i},
