@@ -218,7 +218,7 @@ func (s *Screen) drawScreen() {
 
 func (s *Screen) drawClearScreen() {
 	s.SavedPixels = make([][]string, s.Height)
-	for i := range s.Height {
+	for i := 0; i < s.Height; i++ {
 		if len(s.SavedPixels) > i {
 			s.SavedPixels[i] = strings.Split(strings.Repeat(" ", s.Width), "")
 		}
