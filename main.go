@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/14Artemiy88/termPaint/src/config"
 	"github.com/14Artemiy88/termPaint/src/cursor"
@@ -73,23 +74,42 @@ func help() {
 	yellow := pixel.GetConstColor("yellow")
 	white := pixel.GetConstColor("white")
 
-	comma := utils.FgRgb(white, ",") + utils.FgRgb(green, " ")
+	// Функции для цветного текста
+	colorText := func(c pixel.Color, s string) string {
+		return utils.FgRgb(c, s)
+	}
+	greenText := func(s string) string { return colorText(green, s) }
+	yellowText := func(s string) string { return colorText(yellow, s) }
+	whiteText := func(s string) string { return colorText(white, s) }
 
-	fmt.Println("Drawing in the terminal")
-	fmt.Println()
-	fmt.Println(utils.FgRgb(yellow, "KEYS"))
-	fmt.Println(utils.FgRgb(green, "      ESC"+comma+"Ctrl+C         ") + utils.FgRgb(white, "Exit"))
-	fmt.Println(utils.FgRgb(green, "      Tab"+comma+"F2             ") + utils.FgRgb(white, "Menu"))
-	fmt.Println(utils.FgRgb(green, "      Ctrl+S              ") + utils.FgRgb(white, "Save in txt file"))
-	fmt.Println(utils.FgRgb(green, "      Ctrl+O"+comma+"F3          ") + utils.FgRgb(white, "Load Image"))
-	fmt.Println(utils.FgRgb(green, "      Ctrl-H"+comma+"F1          ") + utils.FgRgb(white, "Help menu"))
-	fmt.Println(utils.FgRgb(green, "      Any char            ") + utils.FgRgb(white, "Set as a Symbol"))
-	fmt.Println(utils.FgRgb(green, "      F3                  ") + utils.FgRgb(white, "SHape menu"))
+	// Предварительно рассчитываем повторяющиеся элементы
+	comma := whiteText(",") + greenText(" ")
+	keyPrefix := greenText("      ")
+	descPrefix := whiteText("")
 
-	fmt.Println()
+	// Используем strings.Builder для построения вывода
+	var b strings.Builder
+	b.WriteString("\n")
+	b.WriteString("Drawing in the terminal\n\n")
 
-	fmt.Println(utils.FgRgb(yellow, "MOUSE"))
-	fmt.Println(utils.FgRgb(green, "      Left                ") + utils.FgRgb(white, "Draw"))
-	fmt.Println(utils.FgRgb(green, "      Right               ") + utils.FgRgb(white, "Erase"))
-	fmt.Println(utils.FgRgb(green, "      Middle              ") + utils.FgRgb(white, "Clear Screen"))
+	// Секция KEYS
+	b.WriteString(yellowText("KEYS\n"))
+	b.WriteString(keyPrefix + "ESC" + comma + "Ctrl+C         " + descPrefix + "Exit\n")
+	b.WriteString(keyPrefix + "Tab" + comma + "F2             " + descPrefix + "Menu\n")
+	b.WriteString(keyPrefix + "Ctrl+S              " + descPrefix + "Save in txt file\n")
+	b.WriteString(keyPrefix + "Ctrl+O" + comma + "F3          " + descPrefix + "Load Image\n")
+	b.WriteString(keyPrefix + "Ctrl-H" + comma + "F1          " + descPrefix + "Help menu\n")
+	b.WriteString(keyPrefix + "Any char            " + descPrefix + "Set as a Symbol\n")
+	b.WriteString(keyPrefix + "F3                  " + descPrefix + "Shape menu\n")
+	b.WriteString("\n")
+
+	// Секция MOUSE
+	b.WriteString(yellowText("MOUSE\n"))
+	b.WriteString(keyPrefix + "Left                " + descPrefix + "Draw\n")
+	b.WriteString(keyPrefix + "Right               " + descPrefix + "Erase\n")
+	b.WriteString(keyPrefix + "Middle              " + descPrefix + "Clear Screen")
+	b.WriteString("\n")
+
+	// Выводим все одной операцией
+	fmt.Println(b.String())
 }

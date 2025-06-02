@@ -24,6 +24,7 @@ linters:
     #   deprecated
     - gomoddirectives
     - tenv
+    - mnd
 
 linters-settings:
   stylecheck:

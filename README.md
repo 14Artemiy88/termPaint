@@ -26,7 +26,7 @@ KEYS
       Ctrl+O, F3          Load Image
       Ctrl-H, F1          Help menu
       Any char            Set as a Symbol
-      F3                  SHape menu
+      F3                  Shape menu
 
 MOUSE
       Left                Draw
