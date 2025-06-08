@@ -17,10 +17,10 @@ func FgRgb(c pixel.Color, symbol string) string {
 	return fmt.Sprintf("\033[38;2;%d;%d;%dm%s", c.R, c.G, c.B, symbol)
 }
 
-func DrawString(X int, Y int, val string, color pixel.Color, screen [][]string) {
+func DrawString(xCoord int, yCoord int, val string, color pixel.Color, screen [][]string) {
 	str := strings.Split(val, "")
 	for k, symbol := range str {
-		SetByKeys(X+k, Y, symbol, color, screen)
+		SetByKeys(xCoord+k, yCoord, symbol, color, screen)
 	}
 }
 
@@ -28,9 +28,9 @@ func Isset(arr [][]string, first int, second int) bool {
 	return first > 0 && second > 0 && first < len(arr) && second < len(arr[first])
 }
 
-func SetByKeys(X int, Y int, val string, c pixel.Color, screen [][]string) [][]string {
-	if Isset(screen, Y, X) {
-		screen[Y][X] = FgRgb(c, val)
+func SetByKeys(xCoord int, yCoord int, val string, c pixel.Color, screen [][]string) [][]string {
+	if Isset(screen, yCoord, xCoord) {
+		screen[yCoord][xCoord] = FgRgb(c, val)
 	}
 
 	return screen

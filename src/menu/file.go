@@ -20,7 +20,7 @@ var (
 )
 
 type Message interface {
-	SetMessage(string)
+	SetMessage(message string)
 }
 
 func fileMenu(s Screen) {

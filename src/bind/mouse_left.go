@@ -13,23 +13,47 @@ import (
 	"github.com/14Artemiy88/termPaint/src/pixel"
 )
 
-func mouseLeft(X int, Y int, s Screen) {
-	if menu.Type == menu.SymbolColor && X < menu.SymbolColorWidth {
-		selectColor(Y)
-		selectSymbol(s, X, Y)
-	} else if menu.Type == menu.File && X < menu.FileListWidth {
-		selectFile(Y, s)
-	} else if menu.Type == menu.Shape && X < menu.ShapeWidth {
-		selectShape(Y)
-	} else if menu.Type == menu.Line && X < menu.LineWidth {
-		selectLine(s, Y)
-	} else {
-		draw.Draw(s, X, Y)
+func mouseLeft(xCoord int, yCoord int, screen Screen) {
+	if menu.Type != menu.None && xCoord < getMenuWidth(menu.Type) {
+		handleMenuAction(menu.Type, screen, xCoord, yCoord)
+
+		return
+	}
+
+	draw.Draw(screen, xCoord, yCoord)
+}
+
+func getMenuWidth(t menu.MenuType) int {
+	switch t {
+	case menu.SymbolColor:
+		return menu.SymbolColorWidth
+	case menu.File:
+		return menu.FileListWidth
+	case menu.Shape:
+		return menu.ShapeWidth
+	case menu.Line:
+		return menu.LineWidth
+	default:
+		return 0
 	}
 }
 
-func selectLine(s Screen, Y int) {
-	if line, ok := menu.LineList[Y]; ok {
+func handleMenuAction(t menu.MenuType, screen Screen, xCoord, yCoord int) {
+	switch t {
+	case menu.SymbolColor:
+		selectColor(yCoord)
+		selectSymbol(screen, xCoord, yCoord)
+	case menu.File:
+		selectFile(yCoord, screen)
+	case menu.Shape:
+		selectShape(yCoord)
+	case menu.Line:
+		selectLine(screen, yCoord)
+	}
+}
+
+func selectLine(s Screen, yCoord int) {
+	if line, ok := menu.LineList[yCoord]; ok {
 		cursor.CC.Store.Brush = line.LineType
 		if line.LineType == cursor.Dot {
 			cursor.CC.SetCursor(s.GetConfig().DefaultCursor)
@@ -39,14 +63,14 @@ func selectLine(s Screen, Y int) {
 	}
 }
 
-func selectShape(Y int) {
-	if sh, ok := menu.ShapeList[Y]; ok {
+func selectShape(yCoord int) {
+	if sh, ok := menu.ShapeList[yCoord]; ok {
 		cursor.CC.Store.Brush = sh.ShapeType
 	}
 }
 
-func selectSymbol(s Screen, X int, Y int) {
-	if symbol, ok := s.GetConfig().Symbols[Y][X]; ok {
+func selectSymbol(s Screen, xCoord int, yCoord int) {
+	if symbol, ok := s.GetConfig().Symbols[yCoord][xCoord]; ok {
 		cursor.CC.SetCursor(symbol)
 
 		if s.GetConfig().Notifications.SetSymbol {
@@ -55,8 +79,8 @@ func selectSymbol(s Screen, X int, Y int) {
 	}
 }
 
-func selectColor(Y int) {
-	if c, ok := menu.Colors[Y]; ok {
+func selectColor(yCoord int) {
+	if c, ok := menu.Colors[yCoord]; ok {
 		switch c {
 		case "r":
 			cursor.CC.Color.R = pixel.MinMaxColor(cursor.CC.Color.R)
@@ -68,8 +92,8 @@ func selectColor(Y int) {
 	}
 }
 
-func selectFile(Y int, s Screen) {
-	filePath, ok := menu.FileList[Y]
+func selectFile(yCoord int, s Screen) {
+	filePath, ok := menu.FileList[yCoord]
 	if !ok {
 		return
 	}

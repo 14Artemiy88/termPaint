@@ -36,7 +36,7 @@ type Config interface {
 }
 
 type Message interface {
-	SetMessage(string)
+	SetMessage(message string)
 }
 
 func (s *Screen) Init() tea.Cmd {

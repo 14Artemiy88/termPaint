@@ -8,8 +8,8 @@ import (
 )
 
 type Screen interface {
-	SetSave(bool)
-	SetShowInputSave(bool)
+	SetSave(save bool)
+	SetShowInputSave(showInputSave bool)
 	IsShowInputSave() bool
 	Init() tea.Cmd
 	Update(msg tea.Msg) (tea.Model, tea.Cmd)
@@ -19,7 +19,7 @@ type Screen interface {
 	GetPixel(y int, x int) string
 	GetPixels() [][]string
 	GetDirectory() string
-	SetDirectory(string)
+	SetDirectory(directory string)
 	GetWidth() int
 	GetHeight() int
 	ClearUnsavedPixels()

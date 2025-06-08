@@ -166,45 +166,45 @@ func (c *Cursor) DrawCursor(s Screen) [][]string {
 }
 
 func drawFillCursor(
-	c *Cursor,
+	cursor *Cursor,
 	clr pixel.Color,
 	changedSymbol string,
 	changedSymbols map[string]pixel.Coord,
-	N int,
+	counter int,
 	screen [][]string,
 ) {
 	var key string
 
 	symbols := make(map[string]pixel.Coord)
 
-	for _, p := range changedSymbols {
-		if utils.Isset(screen, p.Y+1, p.X) && screen[p.Y+1][p.X] == changedSymbol {
-			key = fmt.Sprintf("%d-%d", p.Y+1, p.X)
-			symbols[key] = pixel.Coord{Y: p.Y + 1, X: p.X}
+	for _, symbol := range changedSymbols {
+		if utils.Isset(screen, symbol.Y+1, symbol.X) && screen[symbol.Y+1][symbol.X] == changedSymbol {
+			key = fmt.Sprintf("%d-%d", symbol.Y+1, symbol.X)
+			symbols[key] = pixel.Coord{Y: symbol.Y + 1, X: symbol.X}
 		}
 
-		if utils.Isset(screen, p.Y-1, p.X) && screen[p.Y-1][p.X] == changedSymbol {
-			key = fmt.Sprintf("%d-%d", p.Y-1, p.X)
-			symbols[key] = pixel.Coord{Y: p.Y - 1, X: p.X}
+		if utils.Isset(screen, symbol.Y-1, symbol.X) && screen[symbol.Y-1][symbol.X] == changedSymbol {
+			key = fmt.Sprintf("%d-%d", symbol.Y-1, symbol.X)
+			symbols[key] = pixel.Coord{Y: symbol.Y - 1, X: symbol.X}
 		}
 
-		if utils.Isset(screen, p.Y, p.X+1) && screen[p.Y][p.X+1] == changedSymbol {
-			key = fmt.Sprintf("%d-%d", p.Y+1, p.X+1)
-			symbols[key] = pixel.Coord{Y: p.Y, X: p.X + 1}
+		if utils.Isset(screen, symbol.Y, symbol.X+1) && screen[symbol.Y][symbol.X+1] == changedSymbol {
+			key = fmt.Sprintf("%d-%d", symbol.Y+1, symbol.X+1)
+			symbols[key] = pixel.Coord{Y: symbol.Y, X: symbol.X + 1}
 		}
 
-		if utils.Isset(screen, p.Y, p.X-1) && screen[p.Y][p.X-1] == changedSymbol {
-			key = fmt.Sprintf("%d-%d", p.Y, p.X-1)
-			symbols[key] = pixel.Coord{Y: p.Y, X: p.X - 1}
+		if utils.Isset(screen, symbol.Y, symbol.X-1) && screen[symbol.Y][symbol.X-1] == changedSymbol {
+			key = fmt.Sprintf("%d-%d", symbol.Y, symbol.X-1)
+			symbols[key] = pixel.Coord{Y: symbol.Y, X: symbol.X - 1}
 		}
 	}
 
-	if len(symbols) > 0 && N > 0 {
+	if len(symbols) > 0 && counter > 0 {
 		for _, p := range symbols {
-			utils.SetByKeys(p.X, p.Y, c.Symbol, clr, screen)
+			utils.SetByKeys(p.X, p.Y, cursor.Symbol, clr, screen)
 		}
 
-		N--
-		drawFillCursor(c, clr, changedSymbol, symbols, N, screen)
+		counter--
+		drawFillCursor(cursor, clr, changedSymbol, symbols, counter, screen)
 	}
 }

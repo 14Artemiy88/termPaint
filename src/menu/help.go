@@ -86,13 +86,13 @@ func (m menuItem) DrawMenuItem(screen [][]string) [][]string {
 	green := pixel.GetConstColor("green")
 	white := pixel.GetConstColor("White")
 
-	for k, str := range m.item {
+	for index, str := range m.item {
 		lenKey := len(str["key"])
 		if lenKey > 0 {
-			utils.DrawString(3, m.Y+2+k, str["key"], green, screen)
+			utils.DrawString(3, m.Y+2+index, str["key"], green, screen)
 		}
 
-		utils.DrawString(16, m.Y+2+k, str["text"], white, screen)
+		utils.DrawString(16, m.Y+2+index, str["text"], white, screen)
 	}
 
 	return screen
