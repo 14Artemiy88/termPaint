@@ -36,16 +36,16 @@ func drawConfigMenu(s Screen) {
 	green := pixel.GetConstColor("green")
 	white := pixel.GetConstColor("white")
 	yellow := pixel.GetConstColor("yellow")
-	screen := s.GetPixels()
+	pixels := s.GetPixels()
 	v := reflect.ValueOf(*s.GetConfig())
 	typeOfConfig := v.Type()
 	title := "Config"
 	str := strings.Repeat("─", ConfigWidth-len(title)-2) + "┐"
 
-	ClearMenu(s, screen, ConfigWidth)
+	ClearMenu(s, pixels, ConfigWidth)
 
-	utils.DrawString(1, 1, title, yellow, screen)
-	utils.DrawString(len(title)+2, 1, str, gray, screen)
+	utils.DrawString(1, 1, title, yellow, pixels)
+	utils.DrawString(len(title)+2, 1, str, gray, pixels)
 
 	h := 3
 	height := s.GetHeight()
@@ -53,7 +53,7 @@ func drawConfigMenu(s Screen) {
 	for index := 0; index < v.NumField(); index++ {
 		if utils.InArray(typeOfConfig.Field(index).Name, availableFields) {
 			field := v.Field(index).Interface()
-			utils.DrawString(firstLvlX, h, typeOfConfig.Field(index).Name, white, screen)
+			utils.DrawString(firstLvlX, h, typeOfConfig.Field(index).Name, white, pixels)
 
 			clr := white
 
@@ -66,7 +66,7 @@ func drawConfigMenu(s Screen) {
 
 			switch reflect.TypeOf(field).String() {
 			case "string", "int", "bool":
-				utils.DrawString(valueX, h, fmt.Sprintf("%v", field), clr, screen)
+				utils.DrawString(valueX, h, fmt.Sprintf("%v", field), clr, pixels)
 
 				h++
 			case "map[string]int":
@@ -75,8 +75,8 @@ func drawConfigMenu(s Screen) {
 				for _, c := range []string{"r", "g", "b"} {
 					for _, k := range v.Field(index).MapKeys() {
 						if c == k.String() {
-							utils.DrawString(secondLvlX, h, strings.ToUpper(c), clr, screen)
-							utils.DrawString(valueX, h, fmt.Sprintf("%v", v.Field(index).MapIndex(k).Interface()), clr, screen)
+							utils.DrawString(secondLvlX, h, strings.ToUpper(c), clr, pixels)
+							utils.DrawString(valueX, h, fmt.Sprintf("%v", v.Field(index).MapIndex(k).Interface()), clr, pixels)
 
 							h++
 
@@ -98,8 +98,8 @@ func drawConfigMenu(s Screen) {
 						clr = red
 					}
 
-					utils.DrawString(secondLvlX, h, typeOfConfig.Field(i).Name, white, screen)
-					utils.DrawString(valueX, h, fmt.Sprintf("%v", v.Field(i).Interface()), clr, screen)
+					utils.DrawString(secondLvlX, h, typeOfConfig.Field(i).Name, white, pixels)
+					utils.DrawString(valueX, h, fmt.Sprintf("%v", v.Field(i).Interface()), clr, pixels)
 
 					h++
 					if h >= height-6 {
@@ -117,9 +117,9 @@ func drawConfigMenu(s Screen) {
 	title = "Note"
 	str = strings.Repeat("─", ConfigWidth-len(title)-2) + "┤"
 
-	utils.DrawString(1, height-4, title, yellow, screen)
-	utils.DrawString(len(title)+2, height-4, str, gray, screen)
-	utils.DrawString(firstLvlX, height-2, "All configuration parameters are", white, screen)
-	utils.DrawString(firstLvlX, height-1, "stored in", white, screen)
-	utils.DrawString(len("stored in")+4, height-1, "~/.config/termPaint", green, screen)
+	utils.DrawString(1, height-4, title, yellow, pixels)
+	utils.DrawString(len(title)+2, height-4, str, gray, pixels)
+	utils.DrawString(firstLvlX, height-2, "All configuration parameters are", white, pixels)
+	utils.DrawString(firstLvlX, height-1, "stored in", white, pixels)
+	utils.DrawString(len("stored in")+4, height-1, "~/.config/termPaint", green, pixels)
 }

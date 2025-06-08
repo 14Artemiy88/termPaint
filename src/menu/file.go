@@ -26,7 +26,7 @@ type Message interface {
 func fileMenu(s Screen) {
 	white := pixel.GetConstColor("white")
 
-	screen := s.GetPixels()
+	pixels := s.GetPixels()
 
 	files, err := os.ReadDir(s.GetDirectory())
 	if err != nil {
@@ -59,12 +59,12 @@ func fileMenu(s Screen) {
 	}
 
 	FileListWidth = width + 10
-	ClearMenu(s, screen, FileListWidth)
+	ClearMenu(s, pixels, FileListWidth)
 
 	title := "FilePath"
 	str := strings.Repeat("─", FileListWidth-len(title)-2) + "┐"
-	utils.DrawString(1, 1, title, pixel.GetConstColor("yellow"), screen)
-	utils.DrawString(len(title)+2, 1, str, pixel.GetConstColor("gray"), screen)
+	utils.DrawString(1, 1, title, pixel.GetConstColor("yellow"), pixels)
+	utils.DrawString(len(title)+2, 1, str, pixel.GetConstColor("gray"), pixels)
 
 	YCoord := 3
 
@@ -73,7 +73,7 @@ func fileMenu(s Screen) {
 		FileList = make(map[int]string, len(fileList)+len(dirList)+1)
 		FileList[2] = "../"
 
-		utils.DrawString(fileX, 2, "..", white, screen)
+		utils.DrawString(fileX, 2, "..", white, pixels)
 
 		for _, dirName := range dirList {
 			utils.DrawString(
@@ -81,7 +81,7 @@ func fileMenu(s Screen) {
 				YCoord,
 				fmt.Sprintf("\uE5FF  %v", dirName),
 				cian,
-				screen,
+				pixels,
 			)
 
 			FileList[YCoord] = dirName + "/"
@@ -100,7 +100,7 @@ func fileMenu(s Screen) {
 	for y, fileName := range fileList {
 		ext := filepath.Ext(fileName)
 		icon := extIcon[ext]
-		utils.DrawString(fileX, YCoord+y, fmt.Sprintf("%s  %s", icon, fileName), white, screen)
+		utils.DrawString(fileX, YCoord+y, fmt.Sprintf("%s  %s", icon, fileName), white, pixels)
 		FileList[YCoord+y] = fileName
 	}
 }

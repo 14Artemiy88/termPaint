@@ -45,13 +45,13 @@ var LineList = map[int]LineStruct{
 
 func drawLineMenu(s Screen) {
 	white := pixel.GetConstColor("white")
-	screen := s.GetPixels()
-	ClearMenu(s, screen, ShapeWidth)
+	pixels := s.GetPixels()
+	ClearMenu(s, pixels, ShapeWidth)
 
 	str := "Line " + strings.Repeat("─", LineWidth-len("Line")) + "┐"
-	utils.DrawString(1, 1, str, white, screen)
+	utils.DrawString(1, 1, str, white, pixels)
 
 	for y, line := range LineList {
-		utils.DrawString(3, y, line.LineMenu, white, screen)
+		utils.DrawString(3, y, line.LineMenu, white, pixels)
 	}
 }

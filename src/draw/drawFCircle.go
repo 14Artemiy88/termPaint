@@ -7,7 +7,7 @@ import (
 	"github.com/14Artemiy88/termPaint/src/pixel"
 )
 
-func fCircle(s Screen, xCoord int, yCoord int) {
+func fCircle(screen Screen, xCoord int, yCoord int) {
 	R := cursor.CC.Width / 2
 	k := 5
 
@@ -16,7 +16,7 @@ func fCircle(s Screen, xCoord int, yCoord int) {
 		ky := int(math.Round(float64(y) / float64(k)))
 
 		for i := -x; i <= x; i++ {
-			s.AddPixels(
+			screen.AddPixels(
 				pixel.Pixel{
 					Coord:  pixel.Coord{X: xCoord + i, Y: yCoord + ky},
 					Color:  cursor.CC.Color,

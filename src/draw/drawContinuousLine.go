@@ -6,7 +6,7 @@ import (
 	"github.com/14Artemiy88/termPaint/src/utils"
 )
 
-func continuousLineNew(s Screen, xCoord int, yCoord int) {
+func continuousLineNew(screen Screen, xCoord int, yCoord int) {
 	lineMap := map[string]string{
 		"": "─",
 
@@ -33,23 +33,23 @@ func continuousLineNew(s Screen, xCoord int, yCoord int) {
 
 	var line string
 	// сверху
-	if s.GetPixel(yCoord-1, xCoord) != " " {
+	if screen.GetPixel(yCoord-1, xCoord) != " " {
 		line += "u"
 	}
 	// снизу
-	if s.GetPixel(yCoord+1, xCoord) != " " {
+	if screen.GetPixel(yCoord+1, xCoord) != " " {
 		line += "d"
 	}
 	// слева
-	if s.GetPixel(yCoord, xCoord-1) != " " {
+	if screen.GetPixel(yCoord, xCoord-1) != " " {
 		line += "l"
 	}
 	// справа
-	if s.GetPixel(yCoord, xCoord+1) != " " {
+	if screen.GetPixel(yCoord, xCoord+1) != " " {
 		line += "r"
 	}
 
-	s.AddPixels(
+	screen.AddPixels(
 		pixel.Pixel{
 			Coord: pixel.Coord{
 				X: xCoord,

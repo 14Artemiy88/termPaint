@@ -92,24 +92,24 @@ func selectColor(yCoord int) {
 	}
 }
 
-func selectFile(yCoord int, s Screen) {
+func selectFile(yCoord int, screen Screen) {
 	filePath, ok := menu.FileList[yCoord]
 	if !ok {
 		return
 	}
 
-	dir := s.GetDirectory()
+	dir := screen.GetDirectory()
 	fullPath := filepath.Join(dir, filePath) // Используем Join для корректного пути
 
 	info, err := os.Stat(fullPath)
 	if err != nil {
-		s.GetMessage().SetMessage(err.Error())
+		screen.GetMessage().SetMessage(err.Error())
 
 		return
 	}
 
 	if info.IsDir() {
-		s.SetDirectory(fullPath)
+		screen.SetDirectory(fullPath)
 
 		return
 	}
@@ -121,14 +121,14 @@ func selectFile(yCoord int, s Screen) {
 	case ".txt":
 		content, err := os.ReadFile(fullPath)
 		if err != nil {
-			s.GetMessage().SetMessage(err.Error())
+			screen.GetMessage().SetMessage(err.Error())
 
 			return
 		}
 
-		s.LoadImage(string(content))
+		screen.LoadImage(string(content))
 
 	case ".jpg", ".jpeg", ".png":
-		s.LoadFromImage(fullPath)
+		screen.LoadFromImage(fullPath)
 	}
 }

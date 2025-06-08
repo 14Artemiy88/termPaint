@@ -70,18 +70,18 @@ var menu = []menuItem{
 const HelpWidth = 40
 
 func drawHelpMenu(s Screen) {
-	screen := s.GetPixels()
-	ClearMenu(s, screen, HelpWidth)
+	pixels := s.GetPixels()
+	ClearMenu(s, pixels, HelpWidth)
 
 	for _, mi := range menu {
-		mi.DrawMenuItem(screen)
+		mi.DrawMenuItem(pixels)
 	}
 }
 
-func (m menuItem) DrawMenuItem(screen [][]string) [][]string {
+func (m menuItem) DrawMenuItem(pixels [][]string) [][]string {
 	str := strings.Repeat("─", HelpWidth-2-len(m.title)) + m.end
-	utils.DrawString(1, m.Y, m.title, pixel.GetConstColor("yellow"), screen)
-	utils.DrawString(len(m.title)+2, m.Y, str, pixel.GetConstColor("gray"), screen)
+	utils.DrawString(1, m.Y, m.title, pixel.GetConstColor("yellow"), pixels)
+	utils.DrawString(len(m.title)+2, m.Y, str, pixel.GetConstColor("gray"), pixels)
 
 	green := pixel.GetConstColor("green")
 	white := pixel.GetConstColor("White")
@@ -89,11 +89,11 @@ func (m menuItem) DrawMenuItem(screen [][]string) [][]string {
 	for index, str := range m.item {
 		lenKey := len(str["key"])
 		if lenKey > 0 {
-			utils.DrawString(3, m.Y+2+index, str["key"], green, screen)
+			utils.DrawString(3, m.Y+2+index, str["key"], green, pixels)
 		}
 
-		utils.DrawString(16, m.Y+2+index, str["text"], white, screen)
+		utils.DrawString(16, m.Y+2+index, str["text"], white, pixels)
 	}
 
-	return screen
+	return pixels
 }

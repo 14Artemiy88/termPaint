@@ -5,14 +5,14 @@ import (
 	"github.com/14Artemiy88/termPaint/src/pixel"
 )
 
-func eSquare(s Screen, xCoord int, yCoord int) {
+func eSquare(screen Screen, xCoord int, yCoord int) {
 	for i := 0; i < cursor.CC.Height; i++ {
 		for j := 0; j < cursor.CC.Width; j++ {
 			if j > 0 && j < cursor.CC.Width-1 && i > 0 && i < cursor.CC.Height-1 {
 				continue
 			}
 
-			s.AddPixels(
+			screen.AddPixels(
 				pixel.Pixel{
 					Coord:  pixel.Coord{X: xCoord + j, Y: yCoord + i},
 					Color:  cursor.CC.Color,

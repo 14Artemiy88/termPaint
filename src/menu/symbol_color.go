@@ -27,35 +27,35 @@ var Colors = map[int]string{
 
 const colorX = 3
 
-func drawSymbolColorMenu(s Screen) {
-	screen := s.GetPixels()
-	ClearMenu(s, screen, SymbolColorWidth)
-	drawSymbolMenu(s, screen)
-	drawColorMenu(screen)
+func drawSymbolColorMenu(screen Screen) {
+	pixels := screen.GetPixels()
+	ClearMenu(screen, pixels, SymbolColorWidth)
+	drawSymbolMenu(screen, pixels)
+	drawColorMenu(pixels)
 
 	title := "Help"
 	str := strings.Repeat("─", SymbolColorWidth-len(title)-2) + "┤"
-	height := s.GetHeight()
-	utils.DrawString(1, height-3, title, pixel.GetConstColor("yellow"), screen)
-	utils.DrawString(len(title)+2, height-3, str, pixel.GetConstColor("gray"), screen)
-	utils.DrawString(2, height-1, "Press", pixel.GetConstColor("white"), screen)
-	utils.DrawString(len("Press")+3, height-1, "Ctrl+H", pixel.GetConstColor("green"), screen)
+	height := screen.GetHeight()
+	utils.DrawString(1, height-3, title, pixel.GetConstColor("yellow"), pixels)
+	utils.DrawString(len(title)+2, height-3, str, pixel.GetConstColor("gray"), pixels)
+	utils.DrawString(2, height-1, "Press", pixel.GetConstColor("white"), pixels)
+	utils.DrawString(len("Press")+3, height-1, "Ctrl+H", pixel.GetConstColor("green"), pixels)
 }
 
-func drawSymbolMenu(s Screen, screen [][]string) [][]string {
+func drawSymbolMenu(screen Screen, pixels [][]string) [][]string {
 	white := pixel.GetConstColor("white")
 	title := "Symbol"
 	str := strings.Repeat("─", SymbolColorWidth-len(title)-2) + "┐"
-	utils.DrawString(1, 1, title, pixel.GetConstColor("yellow"), screen)
-	utils.DrawString(len(title)+2, 1, str, pixel.GetConstColor("gray"), screen)
+	utils.DrawString(1, 1, title, pixel.GetConstColor("yellow"), pixels)
+	utils.DrawString(len(title)+2, 1, str, pixel.GetConstColor("gray"), pixels)
 
-	for y, line := range s.GetConfig().Symbols {
+	for y, line := range screen.GetConfig().Symbols {
 		for x, symbol := range line {
-			utils.SetByKeys(x, y, symbol, white, screen)
+			utils.SetByKeys(x, y, symbol, white, pixels)
 		}
 	}
 
-	return screen
+	return pixels
 }
 
 func drawColorMenu(screen [][]string) [][]string {
