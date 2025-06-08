@@ -66,7 +66,7 @@ func fileMenu(s Screen) {
 	utils.DrawString(1, 1, title, pixel.GetConstColor("yellow"), screen)
 	utils.DrawString(len(title)+2, 1, str, pixel.GetConstColor("gray"), screen)
 
-	Y := 3
+	YCoord := 3
 
 	if s.GetConfig().ShowFolder {
 		cian := pixel.GetConstColor("cian")
@@ -78,14 +78,14 @@ func fileMenu(s Screen) {
 		for _, dirName := range dirList {
 			utils.DrawString(
 				fileX,
-				Y,
+				YCoord,
 				fmt.Sprintf("\uE5FF  %v", dirName),
 				cian,
 				screen,
 			)
 
-			FileList[Y] = dirName + "/"
-			Y++
+			FileList[YCoord] = dirName + "/"
+			YCoord++
 		}
 	} else {
 		FileList = make(map[int]string, len(fileList)+1)
@@ -100,28 +100,28 @@ func fileMenu(s Screen) {
 	for y, fileName := range fileList {
 		ext := filepath.Ext(fileName)
 		icon := extIcon[ext]
-		utils.DrawString(fileX, Y+y, fmt.Sprintf("%s  %s", icon, fileName), white, screen)
-		FileList[Y+y] = fileName
+		utils.DrawString(fileX, YCoord+y, fmt.Sprintf("%s  %s", icon, fileName), white, screen)
+		FileList[YCoord+y] = fileName
 	}
 }
 
-func SaveImage(m Message, imageSaveDirectory string, image string) {
+func SaveImage(message Message, imageSaveDirectory string, image string) {
 	fileName := imageSaveDirectory + time.Now().Format(imageSaveDirectory)
 	if len(Input.Value) > 0 {
 		fileName = Input.Value + ".txt"
 	}
 
-	f, err := os.Create(fileName)
+	file, err := os.Create(fileName)
 	if err != nil {
-		m.SetMessage(err.Error())
+		message.SetMessage(err.Error())
 	}
 
 	defer func(f *os.File) {
 		err := f.Close()
 		if err != nil {
-			m.SetMessage(err.Error())
+			message.SetMessage(err.Error())
 		}
-	}(f)
+	}(file)
 
 	lines := strings.Split(image, "\n")
 
@@ -131,12 +131,12 @@ func SaveImage(m Message, imageSaveDirectory string, image string) {
 		newImage += line[1:len(line)-1] + "\n"
 	}
 
-	_, err = f.WriteString(newImage)
+	_, err = file.WriteString(newImage)
 	if err != nil {
-		m.SetMessage(err.Error())
+		message.SetMessage(err.Error())
 	}
 
-	m.SetMessage("Saved as " + f.Name())
+	message.SetMessage("Saved as " + file.Name())
 }
 
 func DrawSaveInput(screen [][]string) [][]string {

@@ -7,39 +7,39 @@ import (
 	"github.com/14Artemiy88/termPaint/src/pixel"
 )
 
-func fill(s Screen, changedSymbol string, changedSymbols map[string]pixel.Coord, N int) {
+func fill(s Screen, changedSymbol string, changedSymbols map[string]pixel.Coord, counter int) {
 	var key string
 
 	symbols := make(map[string]pixel.Coord)
 
-	for _, p := range changedSymbols {
-		if s.GetPixel(p.Y+1, p.X) == changedSymbol {
-			key = fmt.Sprintf("%d-%d", p.Y+1, p.X)
-			symbols[key] = pixel.Coord{Y: p.Y + 1, X: p.X}
+	for _, coord := range changedSymbols {
+		if s.GetPixel(coord.Y+1, coord.X) == changedSymbol {
+			key = fmt.Sprintf("%d-%d", coord.Y+1, coord.X)
+			symbols[key] = pixel.Coord{Y: coord.Y + 1, X: coord.X}
 		}
 
-		if s.GetPixel(p.Y-1, p.X) == changedSymbol {
-			key = fmt.Sprintf("%d-%d", p.Y-1, p.X)
-			symbols[key] = pixel.Coord{Y: p.Y - 1, X: p.X}
+		if s.GetPixel(coord.Y-1, coord.X) == changedSymbol {
+			key = fmt.Sprintf("%d-%d", coord.Y-1, coord.X)
+			symbols[key] = pixel.Coord{Y: coord.Y - 1, X: coord.X}
 		}
 
-		if s.GetPixel(p.Y, p.X+1) == changedSymbol {
-			key = fmt.Sprintf("%d-%d", p.Y+1, p.X+1)
-			symbols[key] = pixel.Coord{Y: p.Y, X: p.X + 1}
+		if s.GetPixel(coord.Y, coord.X+1) == changedSymbol {
+			key = fmt.Sprintf("%d-%d", coord.Y+1, coord.X+1)
+			symbols[key] = pixel.Coord{Y: coord.Y, X: coord.X + 1}
 		}
 
-		if s.GetPixel(p.Y, p.X-1) == changedSymbol {
-			key = fmt.Sprintf("%d-%d", p.Y, p.X-1)
-			symbols[key] = pixel.Coord{Y: p.Y, X: p.X - 1}
+		if s.GetPixel(coord.Y, coord.X-1) == changedSymbol {
+			key = fmt.Sprintf("%d-%d", coord.Y, coord.X-1)
+			symbols[key] = pixel.Coord{Y: coord.Y, X: coord.X - 1}
 		}
 	}
 
-	if len(symbols) > 0 && N > 0 {
+	if len(symbols) > 0 && counter > 0 {
 		for _, p := range symbols {
 			s.AddPixels(pixel.Pixel{Coord: p, Color: cursor.CC.Color, Symbol: cursor.CC.Symbol})
 		}
 
-		N--
-		fill(s, changedSymbol, symbols, N)
+		counter--
+		fill(s, changedSymbol, symbols, counter)
 	}
 }

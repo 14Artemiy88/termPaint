@@ -65,17 +65,17 @@ func drawColorMenu(screen [][]string) [][]string {
 	utils.DrawString(1, 15, title, pixel.GetConstColor("yellow"), screen)
 	utils.DrawString(len(title)+2, 15, str, pixel.GetConstColor("gray"), screen)
 
-	for y, line := range Colors {
+	for yCoord, line := range Colors {
 		switch line {
 		case "r":
-			utils.DrawString(colorX+2, y, strconv.Itoa(cursor.CC.Color.R), white, screen)
-			utils.SetByKeys(colorX, y, utils.FgRgb(pixel.Color{R: cursor.CC.Color.R}, "█"), white, screen)
+			utils.DrawString(colorX+2, yCoord, strconv.Itoa(cursor.CC.Color.R), white, screen)
+			utils.SetByKeys(colorX, yCoord, utils.FgRgb(pixel.Color{R: cursor.CC.Color.R}, "█"), white, screen)
 		case "g":
-			utils.DrawString(colorX+2, y, strconv.Itoa(cursor.CC.Color.G), white, screen)
-			utils.SetByKeys(colorX, y, utils.FgRgb(pixel.Color{G: cursor.CC.Color.G}, "█"), white, screen)
+			utils.DrawString(colorX+2, yCoord, strconv.Itoa(cursor.CC.Color.G), white, screen)
+			utils.SetByKeys(colorX, yCoord, utils.FgRgb(pixel.Color{G: cursor.CC.Color.G}, "█"), white, screen)
 		case "b":
-			utils.DrawString(colorX+2, y, strconv.Itoa(cursor.CC.Color.B), white, screen)
-			utils.SetByKeys(colorX, y, utils.FgRgb(pixel.Color{B: cursor.CC.Color.B}, "█"), white, screen)
+			utils.DrawString(colorX+2, yCoord, strconv.Itoa(cursor.CC.Color.B), white, screen)
+			utils.SetByKeys(colorX, yCoord, utils.FgRgb(pixel.Color{B: cursor.CC.Color.B}, "█"), white, screen)
 		}
 	}
 

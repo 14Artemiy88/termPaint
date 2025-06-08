@@ -36,25 +36,24 @@ func drawConfigMenu(s Screen) {
 	green := pixel.GetConstColor("green")
 	white := pixel.GetConstColor("white")
 	yellow := pixel.GetConstColor("yellow")
-
 	screen := s.GetPixels()
-	ClearMenu(s, screen, ConfigWidth)
 	v := reflect.ValueOf(*s.GetConfig())
 	typeOfConfig := v.Type()
 	title := "Config"
-	lenTitle := len(title)
-	str := strings.Repeat("─", ConfigWidth-lenTitle-2) + "┐"
+	str := strings.Repeat("─", ConfigWidth-len(title)-2) + "┐"
+
+	ClearMenu(s, screen, ConfigWidth)
 
 	utils.DrawString(1, 1, title, yellow, screen)
-	utils.DrawString(lenTitle+2, 1, str, gray, screen)
+	utils.DrawString(len(title)+2, 1, str, gray, screen)
 
 	h := 3
 	height := s.GetHeight()
 
-	for i := 0; i < v.NumField(); i++ {
-		if utils.InArray(typeOfConfig.Field(i).Name, availableFields) {
-			field := v.Field(i).Interface()
-			utils.DrawString(firstLvlX, h, typeOfConfig.Field(i).Name, white, screen)
+	for index := 0; index < v.NumField(); index++ {
+		if utils.InArray(typeOfConfig.Field(index).Name, availableFields) {
+			field := v.Field(index).Interface()
+			utils.DrawString(firstLvlX, h, typeOfConfig.Field(index).Name, white, screen)
 
 			clr := white
 
@@ -74,10 +73,10 @@ func drawConfigMenu(s Screen) {
 				h++
 
 				for _, c := range []string{"r", "g", "b"} {
-					for _, k := range v.Field(i).MapKeys() {
+					for _, k := range v.Field(index).MapKeys() {
 						if c == k.String() {
 							utils.DrawString(secondLvlX, h, strings.ToUpper(c), clr, screen)
-							utils.DrawString(valueX, h, fmt.Sprintf("%v", v.Field(i).MapIndex(k).Interface()), clr, screen)
+							utils.DrawString(valueX, h, fmt.Sprintf("%v", v.Field(index).MapIndex(k).Interface()), clr, screen)
 
 							h++
 
@@ -116,11 +115,10 @@ func drawConfigMenu(s Screen) {
 	}
 
 	title = "Note"
-	lenTitle = len(title)
-	str = strings.Repeat("─", ConfigWidth-lenTitle-2) + "┤"
+	str = strings.Repeat("─", ConfigWidth-len(title)-2) + "┤"
 
 	utils.DrawString(1, height-4, title, yellow, screen)
-	utils.DrawString(lenTitle+2, height-4, str, gray, screen)
+	utils.DrawString(len(title)+2, height-4, str, gray, screen)
 	utils.DrawString(firstLvlX, height-2, "All configuration parameters are", white, screen)
 	utils.DrawString(firstLvlX, height-1, "stored in", white, screen)
 	utils.DrawString(len("stored in")+4, height-1, "~/.config/termPaint", green, screen)

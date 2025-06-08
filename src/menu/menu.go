@@ -19,20 +19,20 @@ const (
 
 var Type MenuType
 
-func DrawMenu(s Screen) {
+func DrawMenu(screen Screen) {
 	switch Type {
 	case SymbolColor:
-		drawSymbolColorMenu(s)
+		drawSymbolColorMenu(screen)
 	case File:
-		fileMenu(s)
+		fileMenu(screen)
 	case Help:
-		drawHelpMenu(s)
+		drawHelpMenu(screen)
 	case Shape:
-		drawShapeMenu(s)
+		drawShapeMenu(screen)
 	case Line:
-		drawLineMenu(s)
+		drawLineMenu(screen)
 	case Config:
-		drawConfigMenu(s)
+		drawConfigMenu(screen)
 	case None:
 	}
 }

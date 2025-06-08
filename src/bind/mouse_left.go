@@ -5,6 +5,7 @@ import "C"
 import (
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/draw"
@@ -47,6 +48,7 @@ func selectShape(Y int) {
 func selectSymbol(s Screen, X int, Y int) {
 	if symbol, ok := s.GetConfig().Symbols[Y][X]; ok {
 		cursor.CC.SetCursor(symbol)
+
 		if s.GetConfig().Notifications.SetSymbol {
 			s.GetMessage().SetMessage("Set " + symbol)
 		}
@@ -67,27 +69,42 @@ func selectColor(Y int) {
 }
 
 func selectFile(Y int, s Screen) {
-	if filePath, ok := menu.FileList[Y]; ok {
-		dir := s.GetDirectory()
-		info, err := os.Stat(dir + filePath)
+	filePath, ok := menu.FileList[Y]
+	if !ok {
+		return
+	}
+
+	dir := s.GetDirectory()
+	fullPath := filepath.Join(dir, filePath) // Используем Join для корректного пути
+
+	info, err := os.Stat(fullPath)
+	if err != nil {
+		s.GetMessage().SetMessage(err.Error())
+
+		return
+	}
+
+	if info.IsDir() {
+		s.SetDirectory(fullPath)
+
+		return
+	}
+
+	menu.Type = menu.None
+	ext := strings.ToLower(filepath.Ext(fullPath))
+
+	switch ext {
+	case ".txt":
+		content, err := os.ReadFile(fullPath)
 		if err != nil {
 			s.GetMessage().SetMessage(err.Error())
+
+			return
 		}
-		if info.IsDir() {
-			s.SetDirectory(dir + filePath)
-		} else {
-			menu.Type = menu.None
-			ext := filepath.Ext(dir + filePath)
-			if ext == ".txt" {
-				content, err := os.ReadFile(dir + filePath)
-				if err != nil {
-					s.GetMessage().SetMessage(err.Error())
-				}
-				s.LoadImage(string(content))
-			}
-			if ext == ".jpg" || ext == ".png" {
-				s.LoadFromImage(dir + filePath)
-			}
-		}
+
+		s.LoadImage(string(content))
+
+	case ".jpg", ".jpeg", ".png":
+		s.LoadFromImage(fullPath)
 	}
 }

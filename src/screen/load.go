@@ -47,23 +47,23 @@ func (s *Screen) LoadFromImage(path string) {
 
 	s.UnsavedPixels = map[string]pixel.Pixel{}
 
-	var y int
+	var yCoord int
 
 	for i := bounds.Min.Y; i < bounds.Max.Y; i += int(float64(ratio) / pixel.Ratio) {
-		var x int
+		var xCoord int
 
 		for j := bounds.Min.X; j < bounds.Max.X; j += ratio {
 			clr := img.At(j, i)
 			r, g, b, _ := clr.RGBA()
 			symbol := utils.FgRgb(pixel.Color{R: int(r / 257), G: int(g / 257), B: int(b / 257)}, cursor.CC.Symbol)
-			s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y}, Symbol: symbol})
+			s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: xCoord, Y: yCoord}, Symbol: symbol})
 
-			x++
+			xCoord++
 		}
 
 		fmt.Print("\n")
 
-		y++
+		yCoord++
 	}
 }
 
@@ -93,22 +93,22 @@ func (s *Screen) LoadImage(screenString string) {
 func (s *Screen) loadWhite(lines []string, rows int, errors map[string]string) map[string]string {
 	white := pixel.GetConstColor("white")
 
-	for y := 0; y < rows; y++ {
-		line := strings.Split(lines[y], "")
+	for yCoord := 0; yCoord < rows; yCoord++ {
+		line := strings.Split(lines[yCoord], "")
 
 		var maxX int
 
-		for x, symbol := range line {
-			if x >= s.Width-1 {
+		for xCoord, symbol := range line {
+			if xCoord >= s.Width-1 {
 				if maxX == 0 {
-					maxX = x
+					maxX = xCoord
 					errors["columns"] = fmt.Sprintf("Image columns more then terminal columns (%d > %d)", maxX+1, s.Width)
 				}
 
 				maxX++
 			}
 
-			s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y}, Color: white, Symbol: symbol})
+			s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: xCoord, Y: yCoord}, Color: white, Symbol: symbol})
 		}
 	}
 
@@ -122,15 +122,15 @@ func (s *Screen) loadColored(lines []string, rows int, errors map[string]string)
 
 	var err error
 
-	for y := 0; y < rows; y++ {
-		line := strings.Replace(lines[y], utils.Reset, "", -1)
+	for yCoord := 0; yCoord < rows; yCoord++ {
+		line := strings.Replace(lines[yCoord], utils.Reset, "", -1)
 		symbolWithColorCode := strings.Split(line, "[38;2;")
-		x := 1
+		xCoord := 1
 
 		for _, part := range symbolWithColorCode {
 			if len(strings.TrimSpace(part)) == 0 {
-				for ; x < len(part); x++ {
-					s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y}, Color: clr, Symbol: " "})
+				for ; xCoord < len(part); xCoord++ {
+					s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: xCoord, Y: yCoord}, Color: clr, Symbol: " "})
 				}
 
 				continue
@@ -164,17 +164,17 @@ func (s *Screen) loadColored(lines []string, rows int, errors map[string]string)
 			trimSymbol := strings.TrimSpace(symbol)
 			if symbol != trimSymbol {
 				leTrimSymbol := len(trimSymbol)
-				s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y}, Color: clr, Symbol: trimSymbol})
+				s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: xCoord, Y: yCoord}, Color: clr, Symbol: trimSymbol})
 
 				for j := 0; j < lenSymbol-leTrimSymbol; j++ {
-					x++
-					s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y}, Color: clr, Symbol: " "})
+					xCoord++
+					s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: xCoord, Y: yCoord}, Color: clr, Symbol: " "})
 				}
 			} else {
-				s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: x, Y: y}, Color: clr, Symbol: symbol})
+				s.AddPixels(pixel.Pixel{Coord: pixel.Coord{X: xCoord, Y: yCoord}, Color: clr, Symbol: symbol})
 			}
 
-			x++
+			xCoord++
 		}
 	}
 
