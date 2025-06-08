@@ -44,7 +44,7 @@ var LineList = map[int]LineStruct{
 }
 
 func drawLineMenu(s Screen) {
-	white := pixel.GetConstColor("white")
+	white := pixel.GetConstColor(pixel.White)
 	pixels := s.GetPixels()
 	ClearMenu(s, pixels, ShapeWidth)
 

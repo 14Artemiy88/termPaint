@@ -22,8 +22,8 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 		s.ClearUnsavedPixels()
 
 	case tea.MouseWheelDown:
-		if c, ok := menu.Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {
-			switch c {
+		if cursor.CC.Brush == cursor.Pointer {
+			switch menu.GetColor(msg.Y) {
 			case "r":
 				cursor.CC.Color.R = pixel.Decrease(cursor.CC.Color.R)
 			case "g":
@@ -48,8 +48,8 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 		}
 
 	case tea.MouseWheelUp:
-		if c, ok := menu.Colors[msg.Y]; ok && cursor.CC.Brush == cursor.Pointer {
-			switch c {
+		if cursor.CC.Brush == cursor.Pointer {
+			switch menu.GetColor(msg.Y) {
 			case "r":
 				cursor.CC.Color.R = pixel.Increase(cursor.CC.Color.R)
 			case "g":

@@ -77,9 +77,9 @@ func version() {
 }
 
 func help() {
-	green := pixel.GetConstColor("green")
-	yellow := pixel.GetConstColor("yellow")
-	white := pixel.GetConstColor("white")
+	green := pixel.GetConstColor(pixel.Green)
+	yellow := pixel.GetConstColor(pixel.Yellow)
+	white := pixel.GetConstColor(pixel.White)
 
 	// Создаем буфер для вывода
 	var buf bytes.Buffer

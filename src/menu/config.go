@@ -31,21 +31,17 @@ var availableFields = []string{
 }
 
 func drawConfigMenu(s Screen) {
-	red := pixel.GetConstColor("red")
-	gray := pixel.GetConstColor("gray")
-	green := pixel.GetConstColor("green")
-	white := pixel.GetConstColor("white")
-	yellow := pixel.GetConstColor("yellow")
+	red := pixel.GetConstColor(pixel.Red)
+	green := pixel.GetConstColor(pixel.Green)
+	white := pixel.GetConstColor(pixel.White)
 	pixels := s.GetPixels()
 	v := reflect.ValueOf(*s.GetConfig())
 	typeOfConfig := v.Type()
-	title := "Config"
-	str := strings.Repeat("─", ConfigWidth-len(title)-2) + "┐"
 
 	ClearMenu(s, pixels, ConfigWidth)
 
-	utils.DrawString(1, 1, title, yellow, pixels)
-	utils.DrawString(len(title)+2, 1, str, gray, pixels)
+	// Заголовок
+	drawTitle(ConfigWidth, "Config", 1, "┐", pixels)
 
 	h := 3
 	height := s.GetHeight()
@@ -114,11 +110,9 @@ func drawConfigMenu(s Screen) {
 		}
 	}
 
-	title = "Note"
-	str = strings.Repeat("─", ConfigWidth-len(title)-2) + "┤"
+	// Заголовок 2
+	drawTitle(ConfigWidth, "Note", height-4, "┤", pixels)
 
-	utils.DrawString(1, height-4, title, yellow, pixels)
-	utils.DrawString(len(title)+2, height-4, str, gray, pixels)
 	utils.DrawString(firstLvlX, height-2, "All configuration parameters are", white, pixels)
 	utils.DrawString(firstLvlX, height-1, "stored in", white, pixels)
 	utils.DrawString(len("stored in")+4, height-1, "~/.config/termPaint", green, pixels)

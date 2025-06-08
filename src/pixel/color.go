@@ -14,6 +14,15 @@ const (
 	color250 = 250
 )
 
+const (
+	White  = "white"
+	Yellow = "yellow"
+	Gray   = "gray"
+	Green  = "green"
+	Cyan   = "cyan"
+	Red    = "red"
+)
+
 type Color struct {
 	R int
 	G int
@@ -22,17 +31,17 @@ type Color struct {
 
 func GetConstColor(color string) Color {
 	switch color {
-	case "white":
+	case White:
 		return Color{R: maxColor, G: maxColor, B: maxColor}
-	case "green":
+	case Green:
 		return Color{R: color2, G: color186, B: color31}
-	case "yellow":
+	case Yellow:
 		return Color{R: color190, G: color175, B: minColor}
-	case "gray":
+	case Gray:
 		return Color{R: color150, G: color150, B: color150}
-	case "cian":
+	case Cyan:
 		return Color{R: minColor, G: color200, B: color200}
-	case "red":
+	case Red:
 		return Color{R: color250, G: minColor, B: minColor}
 	default:
 		return Color{R: maxColor, G: maxColor, B: maxColor}

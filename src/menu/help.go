@@ -1,8 +1,6 @@
 package menu
 
 import (
-	"strings"
-
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 )
@@ -79,12 +77,11 @@ func drawHelpMenu(s Screen) {
 }
 
 func (m menuItem) DrawMenuItem(pixels [][]string) [][]string {
-	str := strings.Repeat("─", HelpWidth-2-len(m.title)) + m.end
-	utils.DrawString(1, m.Y, m.title, pixel.GetConstColor("yellow"), pixels)
-	utils.DrawString(len(m.title)+2, m.Y, str, pixel.GetConstColor("gray"), pixels)
+	// Заголовок
+	drawTitle(HelpWidth, m.title, m.Y, m.end, pixels)
 
-	green := pixel.GetConstColor("green")
-	white := pixel.GetConstColor("White")
+	green := pixel.GetConstColor(pixel.Green)
+	white := pixel.GetConstColor(pixel.White)
 
 	for index, str := range m.item {
 		lenKey := len(str["key"])

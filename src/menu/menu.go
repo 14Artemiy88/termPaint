@@ -38,8 +38,8 @@ func DrawMenu(screen Screen) {
 }
 
 func ClearMenu(screen Screen, pixels [][]string, width int) [][]string {
-	white := pixel.GetConstColor("white")
-	gray := pixel.GetConstColor("gray")
+	white := pixel.GetConstColor(pixel.White)
+	gray := pixel.GetConstColor(pixel.Gray)
 
 	for y := 0; y < screen.GetHeight(); y++ {
 		for x := 0; x < width; x++ {

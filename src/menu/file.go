@@ -24,7 +24,7 @@ type Message interface {
 }
 
 func fileMenu(s Screen) {
-	white := pixel.GetConstColor("white")
+	white := pixel.GetConstColor(pixel.White)
 
 	pixels := s.GetPixels()
 
@@ -61,15 +61,13 @@ func fileMenu(s Screen) {
 	FileListWidth = width + 10
 	ClearMenu(s, pixels, FileListWidth)
 
-	title := "FilePath"
-	str := strings.Repeat("─", FileListWidth-len(title)-2) + "┐"
-	utils.DrawString(1, 1, title, pixel.GetConstColor("yellow"), pixels)
-	utils.DrawString(len(title)+2, 1, str, pixel.GetConstColor("gray"), pixels)
+	// Заголовок
+	drawTitle(FileListWidth, "FilePath", 1, "┐", pixels)
 
 	YCoord := 3
 
 	if s.GetConfig().ShowFolder {
-		cian := pixel.GetConstColor("cian")
+		cyan := pixel.GetConstColor(pixel.Cyan)
 		FileList = make(map[int]string, len(fileList)+len(dirList)+1)
 		FileList[2] = "../"
 
@@ -80,7 +78,7 @@ func fileMenu(s Screen) {
 				fileX,
 				YCoord,
 				fmt.Sprintf("\uE5FF  %v", dirName),
-				cian,
+				cyan,
 				pixels,
 			)
 
@@ -148,13 +146,13 @@ func DrawSaveInput(screen [][]string) [][]string {
 	}
 
 	clearSaveInput(screen, width, 3)
-	utils.DrawString(1, 1, Input.Value+BlinkCursor+".txt", pixel.GetConstColor("white"), screen)
+	utils.DrawString(1, 1, Input.Value+BlinkCursor+".txt", pixel.GetConstColor(pixel.White), screen)
 
 	return screen
 }
 
 func clearSaveInput(screen [][]string, width int, height int) [][]string {
-	white := pixel.GetConstColor("white")
+	white := pixel.GetConstColor(pixel.White)
 
 	for y := -1; y < height; y++ {
 		for x := -1; x < width; x++ {

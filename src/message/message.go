@@ -31,7 +31,7 @@ func (m Message) SetMessage(text string) {
 func DrawMsg(messages []Message, width int, screen [][]string) [][]string {
 	clearMessage(screen, width+5, len(messages)+2)
 
-	white := pixel.GetConstColor("white")
+	white := pixel.GetConstColor(pixel.White)
 	for k, m := range messages {
 		utils.DrawString(1, 1+k, m.text, white, screen)
 	}
@@ -40,7 +40,7 @@ func DrawMsg(messages []Message, width int, screen [][]string) [][]string {
 }
 
 func clearMessage(screen [][]string, width int, height int) [][]string {
-	white := pixel.GetConstColor("white")
+	white := pixel.GetConstColor(pixel.White)
 
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {

@@ -80,15 +80,13 @@ func selectSymbol(s Screen, xCoord int, yCoord int) {
 }
 
 func selectColor(yCoord int) {
-	if c, ok := menu.Colors[yCoord]; ok {
-		switch c {
-		case "r":
-			cursor.CC.Color.R = pixel.MinMaxColor(cursor.CC.Color.R)
-		case "g":
-			cursor.CC.Color.G = pixel.MinMaxColor(cursor.CC.Color.G)
-		case "b":
-			cursor.CC.Color.B = pixel.MinMaxColor(cursor.CC.Color.B)
-		}
+	switch menu.GetColor(yCoord) {
+	case "r":
+		cursor.CC.Color.R = pixel.MinMaxColor(cursor.CC.Color.R)
+	case "g":
+		cursor.CC.Color.G = pixel.MinMaxColor(cursor.CC.Color.G)
+	case "b":
+		cursor.CC.Color.B = pixel.MinMaxColor(cursor.CC.Color.B)
 	}
 }
 

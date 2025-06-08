@@ -1,15 +1,13 @@
 package menu
 
 import (
-	"strconv"
-	"strings"
-
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
+	"strconv"
 )
 
-const ShapeWidth = 12
+const ShapeWidth = 15
 
 var ShapeList = map[int]ShapeStruct{
 	3:  {ShapeType: cursor.Dot, ShapeSymbol: "\uF444"},
@@ -28,15 +26,14 @@ type ShapeStruct struct {
 }
 
 func drawShapeMenu(s Screen) {
-	white := pixel.GetConstColor("white")
-	green := pixel.GetConstColor("green")
+	white := pixel.GetConstColor(pixel.White)
+	green := pixel.GetConstColor(pixel.Green)
 
 	pixels := s.GetPixels()
 	ClearMenu(s, pixels, ShapeWidth)
-	str := strings.Repeat("─", ShapeWidth-len("Shape")-2) + "┐"
 
-	utils.DrawString(1, 1, "Shape", pixel.GetConstColor("yellow"), pixels)
-	utils.DrawString(len("Shape")+2, 1, str, pixel.GetConstColor("gray"), pixels)
+	// Заголовок
+	drawTitle(ShapeWidth, "Shape", 1, "┐", pixels)
 
 	for y, sh := range ShapeList {
 		utils.DrawString(3, y, sh.ShapeSymbol, white, pixels)

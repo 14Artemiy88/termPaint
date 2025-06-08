@@ -91,7 +91,7 @@ func (s *Screen) LoadImage(screenString string) {
 }
 
 func (s *Screen) loadWhite(lines []string, rows int, errors map[string]string) map[string]string {
-	white := pixel.GetConstColor("white")
+	white := pixel.GetConstColor(pixel.White)
 
 	for yCoord := 0; yCoord < rows; yCoord++ {
 		line := strings.Split(lines[yCoord], "")
