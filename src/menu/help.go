@@ -69,7 +69,7 @@ const HelpWidth = 40
 
 func drawHelpMenu(s Screen) {
 	pixels := s.GetPixels()
-	ClearMenu(s, pixels, HelpWidth)
+	clearMenu(s, pixels, HelpWidth)
 
 	for _, mi := range menu {
 		mi.DrawMenuItem(pixels)

@@ -59,7 +59,7 @@ func fileMenu(s Screen) {
 	}
 
 	FileListWidth = width + 10
-	ClearMenu(s, pixels, FileListWidth)
+	clearMenu(s, pixels, FileListWidth)
 
 	// Заголовок
 	drawTitle(FileListWidth, "FilePath", 1, "┐", pixels)

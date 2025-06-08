@@ -5,6 +5,7 @@ import (
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
 	"strconv"
+	"sync"
 )
 
 const ShapeWidth = 15
@@ -26,11 +27,21 @@ type ShapeStruct struct {
 }
 
 func drawShapeMenu(s Screen) {
-	white := pixel.GetConstColor(pixel.White)
-	green := pixel.GetConstColor(pixel.Green)
+	// Статические переменные для кеширования
+	var (
+		white, green pixel.Color
+		pixels       [][]string
+		once         sync.Once
+	)
 
-	pixels := s.GetPixels()
-	ClearMenu(s, pixels, ShapeWidth)
+	// Инициализация цветов один раз за вызов
+	once.Do(func() {
+		white = pixel.GetConstColor(pixel.White)
+		green = pixel.GetConstColor(pixel.Green)
+		pixels = s.GetPixels()
+	})
+
+	clearMenu(s, pixels, ShapeWidth)
 
 	// Заголовок
 	drawTitle(ShapeWidth, "Shape", 1, "┐", pixels)

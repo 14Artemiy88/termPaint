@@ -78,20 +78,33 @@ func onFile(msg tea.MouseMsg) {
 }
 
 func onMenu(s Screen, msg tea.MouseMsg) {
+	// Сбрасываем кисть
 	cursor.CC.Brush = cursor.Empty
-	_, okSymbol := s.GetConfig().Symbols[msg.Y][msg.X]
 
-	c := menu.GetColor(msg.Y)
-	if c != "" && msg.X < menu.SymbolColorWidth {
+	// Получаем конфигурацию один раз
+	cfg := s.GetConfig()
+
+	// Проверяем символ
+	_, symbolExists := cfg.Symbols[msg.Y][msg.X]
+
+	// Проверяем цвет
+	color := ""
+	if msg.X < menu.SymbolColorWidth {
+		color = menu.GetColor(msg.Y)
+	}
+
+	// Обрабатываем выбор цвета
+	if color != "" {
 		menu.Input.Lock = true
-		menu.Input.Color = c
+		menu.Input.Color = color
 		cursor.CC.Brush = cursor.Pointer
 	} else {
 		menu.Input.Lock = false
 		menu.Input.Value = ""
 	}
 
-	if !okSymbol && c == "" {
+	// Обновляем позицию курсора
+	if !symbolExists && color == "" {
 		cursor.CC.X = menu.SymbolColorWidth + 1
 	}
 }

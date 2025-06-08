@@ -37,7 +37,7 @@ const colorX = 3
 
 func drawSymbolColorMenu(screen Screen) {
 	pixels := screen.GetPixels()
-	ClearMenu(screen, pixels, SymbolColorWidth)
+	clearMenu(screen, pixels, SymbolColorWidth)
 	drawSymbolMenu(screen, pixels)
 	drawColorMenu(pixels)
 

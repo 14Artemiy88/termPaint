@@ -38,7 +38,7 @@ func drawConfigMenu(s Screen) {
 	v := reflect.ValueOf(*s.GetConfig())
 	typeOfConfig := v.Type()
 
-	ClearMenu(s, pixels, ConfigWidth)
+	clearMenu(s, pixels, ConfigWidth)
 
 	// Заголовок
 	drawTitle(ConfigWidth, "Config", 1, "┐", pixels)
