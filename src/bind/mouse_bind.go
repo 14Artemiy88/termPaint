@@ -8,6 +8,11 @@ import (
 )
 
 func MouseBind(msg tea.MouseMsg, s Screen) {
+	// Выносим общие проверки
+	isPointer := cursor.CC.Brush == cursor.Pointer
+	canChangeSize := cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != s.GetConfig().Pointer
+	minSize := 1
+
 	switch msg.Type {
 	case tea.MouseMotion:
 		mouseMotion(msg, s)
@@ -22,7 +27,8 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 		s.ClearUnsavedPixels()
 
 	case tea.MouseWheelDown:
-		if cursor.CC.Brush == cursor.Pointer {
+		// Обработка изменения цвета
+		if isPointer {
 			switch menu.GetColor(msg.Y) {
 			case "r":
 				cursor.CC.Color.R = pixel.Decrease(cursor.CC.Color.R)
@@ -33,22 +39,22 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 			}
 		}
 
-		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != s.GetConfig().Pointer {
-			if msg.Ctrl {
-				if cursor.CC.Store.Brush == cursor.ESquare || cursor.CC.Store.Brush == cursor.FSquare {
-					if cursor.CC.Height > 1 {
-						cursor.CC.Height--
-					}
-				}
-			} else {
-				if cursor.CC.Width > 1 {
-					cursor.CC.Width--
-				}
+		// Обработка изменения размера
+		if !canChangeSize {
+			break
+		}
+
+		if msg.Ctrl {
+			if isSquareBrush(cursor.CC.Store.Brush) && cursor.CC.Height > minSize {
+				cursor.CC.Height--
 			}
+		} else if cursor.CC.Width > minSize {
+			cursor.CC.Width--
 		}
 
 	case tea.MouseWheelUp:
-		if cursor.CC.Brush == cursor.Pointer {
+		// Обработка изменения цвета
+		if isPointer {
 			switch menu.GetColor(msg.Y) {
 			case "r":
 				cursor.CC.Color.R = pixel.Increase(cursor.CC.Color.R)
@@ -59,16 +65,24 @@ func MouseBind(msg tea.MouseMsg, s Screen) {
 			}
 		}
 
-		if cursor.CC.Brush > cursor.Dot && cursor.CC.Symbol != s.GetConfig().Pointer {
-			if msg.Ctrl {
-				if cursor.CC.Store.Brush == cursor.ESquare || cursor.CC.Store.Brush == cursor.FSquare {
-					cursor.CC.Height++
-				}
-			} else {
-				cursor.CC.Width++
-			}
+		// Обработка изменения размера
+		if !canChangeSize {
+			break
 		}
-	case tea.MouseUnknown:
-	case tea.MouseRelease:
+
+		if msg.Ctrl {
+			if isSquareBrush(cursor.CC.Store.Brush) {
+				cursor.CC.Height++
+			}
+		} else {
+			cursor.CC.Width++
+		}
+
+	case tea.MouseUnknown, tea.MouseRelease:
 	}
+}
+
+// Вспомогательная функция для проверки квадратных кистей
+func isSquareBrush(brush cursor.Type) bool {
+	return brush == cursor.ESquare || brush == cursor.FSquare
 }

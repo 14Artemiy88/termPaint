@@ -19,17 +19,20 @@ func (s *Screen) LoadFromImage(path string) {
 	file, err := os.Open(path)
 	if err != nil {
 		s.Message.SetMessage(err.Error())
+		return
 	}
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
 			s.Message.SetMessage(err.Error())
+			return
 		}
 	}(file)
 
 	img, _, err := image.Decode(file)
 	if err != nil {
 		s.Message.SetMessage(err.Error())
+		return
 	}
 
 	bounds := img.Bounds()
