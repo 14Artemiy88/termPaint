@@ -1,11 +1,12 @@
 package menu
 
 import (
+	"strconv"
+	"sync"
+
 	"github.com/14Artemiy88/termPaint/src/cursor"
 	"github.com/14Artemiy88/termPaint/src/pixel"
 	"github.com/14Artemiy88/termPaint/src/utils"
-	"strconv"
-	"sync"
 )
 
 const ShapeWidth = 15

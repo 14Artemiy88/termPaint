@@ -98,10 +98,12 @@ func (c *Cursor) DrawCursor(s Screen) [][]string {
 		// 1. показывать вообще нет заливку при этом курсоре заранее
 		// 2, показывать заливку по нажатию клавиши Shift
 		// 3. переключать на Dot после заливки
-		changedSymbols := make(map[string]pixel.Coord)
-		key := fmt.Sprintf("%d-%d", c.Y, c.X)
-		changedSymbols[key] = pixel.Coord{X: c.X, Y: c.Y}
-		drawFillCursor(c, clr, screen[c.Y][c.X], changedSymbols, s.GetWidth(), screen)
+		//changedSymbols := make(map[string]pixel.Coord)
+		//key := fmt.Sprintf("%d-%d", c.Y, c.X)
+		//changedSymbols[key] = pixel.Coord{X: c.X, Y: c.Y}
+		//drawFillCursor(c, clr, screen[c.Y][c.X], changedSymbols, s.GetWidth(), screen)
+
+		utils.SetByKeys(c.X, c.Y, c.Symbol, clr, screen)
 	case Dot,
 		ContinuousLine,
 		SmoothContinuousLine,

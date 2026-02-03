@@ -1,10 +1,11 @@
 package menu
 
 import (
-	"github.com/14Artemiy88/termPaint/src/pixel"
-	"github.com/14Artemiy88/termPaint/src/utils"
 	"strings"
 	"sync"
+
+	"github.com/14Artemiy88/termPaint/src/pixel"
+	"github.com/14Artemiy88/termPaint/src/utils"
 )
 
 type MenuType int
